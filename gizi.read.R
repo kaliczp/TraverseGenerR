@@ -15,7 +15,8 @@ gizi.read <- function(file, firstrow = 1) {
     curr.order <- order(as.numeric(codes))
     values <- first[seq(2, length(first), 2)]
     ## Create data.frame based on selected first row
-    values.df <- as.data.frame(matrix(values[curr.order], nrow = 1))
+    values.df <- as.data.frame(matrix(values[curr.order], nrow = 1),
+                               stringsAsFactors = FALSE)
     names(values.df) <- paste0("X", codes[curr.order])
     ## If the processing begins not in the first row
     ## Generate empty rows
@@ -37,17 +38,16 @@ gizi.read <- function(file, firstrow = 1) {
                 ## Process values
                 curr.values <- first[seq(2, length(first), 2)]
                 curr.values.df <- as.data.frame(matrix(curr.values[curr.order],
-                                                       nrow = 1))
+                                                       nrow = 1),
+                                                stringsAsFactors = FALSE)
                 names(curr.values.df) <- curr.names
                 ## bind the row to the already processed data.frame
                 values.df <- rbind(values.df, curr.values.df)
             } else {
                 ## If codes or columns are different replace NA.    
-                curr.values.df <- data.frame
                 values.df <- rbind(values.df, NA)
             }
         } else {
-            curr.values.df <- data.frame
             values.df <- rbind(values.df, NA)
         }
     }
