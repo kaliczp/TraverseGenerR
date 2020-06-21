@@ -29,13 +29,32 @@ plot(tteszt[,1:2], asp=TRUE)
 write.csv(tteszt, "newteszt.csv", row.names = FALSE, quote = FALSE)
 
 ## Without instument hight!
-tttavs <- sqrt(diff(tteszt$x)^2 + diff(tteszt$y)^2 + diff(tteszt$z)^2)
-ttvszog <- -atan2(diff(tteszt$y),diff(tteszt$x))*180/pi
-(ttvszog-trunc(ttvszog))*60
-180-ttvszog
-ttmszogoda <- 90-asin(diff(tteszt$z)/tttavs)*180/pi
-(ttmszogoda-trunc(ttmszogoda))*60
-ttmszogvissza <- 90+asin(diff(tteszt$z)/tttavs)*180/pi
+meascalc <- function(coord) {
+    slop.dist <- sqrt(diff(coord$x)^2 + diff(coord$y)^2 + diff(coord$z)^2)
+    hor.angle <- -atan2(diff(coord$y),diff(coord$x))
+    hor.angle <- hor.angle*180/pi
+    hor.angle.back <- 180-hor.angle
+    zenit.for <- 90-asin(diff(coord$z)/slop.dist)*180/pi
+    zenit.back <- 90+asin(diff(coord$z)/slop.dist)*180/pi
+    fore <- data.frame(ns = coord$n[-nrow(coord)],
+                      nf = coord$n[-1],
+                      h = hor.angle,
+                      z = zenit.for,
+                      d = slop.dist
+                      )
+    back <- data.frame(ns = coord$n[-1],
+                      nf = coord$n[-nrow(coord)],
+                      h = hor.angle.back,
+                      z = zenit.back,
+                      d = slop.dist
+                      )
+    result <- rbind(fore, back)
+    result[order(result$ns, result$nf),]
+}
+
+ttres <- meascalc(tteszt)
+ttres$h <- angleconv(ttres$h)
+ttres$z <- angleconv(ttres$z)
 
 angleconv <- function(angle, round.sec = 0) {
     angle.trunc <- trunc(angle)
