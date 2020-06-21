@@ -1,6 +1,6 @@
 newcoo <- coo[10:9,]
 
-gener <- function(slope=6, ox=464800,oy=259400, oz=250){
+gener <- function(slope=6, firstnr = 100, ox=464800,oy=259400, oz=250){
     fulldist <- sample(400:500,1)
     angledist <- sample(50:100,1)
     segments.nr <- sample(5:7, 1)
@@ -13,6 +13,9 @@ gener <- function(slope=6, ox=464800,oy=259400, oz=250){
     frame$y <- frame$y + rnorm(nrow(frame), sd = 5)
     frame$z <- -slope/100*frame$y
     frame$k <- c("AP", rep("SP", segments.nr), "AP")
+    fixpoints <- sort(sample(1:9,2))*10
+    frame$n <- c(fixpoints[1], seq(firstnr, by = 10, length = segments.nr),
+                 fixpoints[2])
     ## Translate
     frame$x <- frame$x + ox
     frame$y <- frame$y + oy
@@ -21,4 +24,5 @@ gener <- function(slope=6, ox=464800,oy=259400, oz=250){
 }
 
 tteszt <- gener()
-plot(tteszt, asp=TRUE)
+plot(tteszt[,1:2], asp=TRUE)
+
