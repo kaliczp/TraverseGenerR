@@ -71,3 +71,69 @@ angleconv <- function(angle, round.sec = 0, input = "radian") {
     secs <- (mins - mins.trunc)*60
     paste(angle.trunc, mins.trunc, round(secs, round.sec), sep="-")
 }
+
+export.geo.gizi <- function(traverse) {
+    ## All station height lookup table
+    station.height <- traverse[,c("ns", "ih")]
+    station.height <- station.height[!duplicated(station.height), ]
+    ## Empty result
+    result <- character()
+    last.station <- 0
+    ## Processing row-by-row
+    for(row.num in 1:nrow(traverse)){
+        curr.station <- traverse[row.num, 1]
+        if(last.station != curr.station) {
+            result <- c(result,
+                        paste0("{2 ",
+                               curr.station,
+                               "} {6 ",
+                               traverse[row.num, "ih"],
+                               "}"
+                               )
+                        )
+        }
+        target.id <- traverse[row.num, "nf"]
+        result <- c(result,
+                    paste0("{5 ",
+                           target.id,
+                           "} {6 ", # Instrument height of target
+                           station.height[station.height == target.id, "ih"],
+                           "} {7 ",
+                           traverse[row.num, "h"],
+                           "} {8 ",
+                           traverse[row.num, "z"],
+                           "} {9 ",
+                           round(traverse[row.num, "d"], 5),
+                           "}"
+                           )
+                    )
+        last.station <- curr.station
+    }
+    result
+}
+
+export.coo.gizi <- function(coordinates) {
+    ## Empty result
+    result <- character()
+    last.station <- 0
+    ## Processing row-by-row
+    for(row.num in 1:nrow(coordinates)){
+        curr.station <- coordinates[row.num, "n"]
+        result <- c(result,
+                    paste0("{5 ",
+                           curr.station,
+                           "} {37 ",
+                           round(coordinates[row.num, "y"], 4),
+                           "} {38 ",
+                           round(coordinates[row.num, "x"], 4),
+                           "} {39 ",
+                           round(coordinates[row.num, "z"], 4),
+                           "}"
+                           )
+                    )
+    }
+    result
+}
+
+write(export.coo.gizi(tteszt), "newteszt.coo", sep="\n")
+write(export.geo.gizi(ttres), "newteszt.geo", sep="\n")
