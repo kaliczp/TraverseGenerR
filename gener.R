@@ -28,25 +28,30 @@ plot(tteszt[,1:2], asp=TRUE)
 
 write.csv(tteszt, "newteszt.csv", row.names = FALSE, quote = FALSE)
 
-## Without instument hight!
-meascalc <- function(coord) {
+meascalc <- function(coord, ins.height.range = c(1.450, 1.620)) {
+    ins.height  <- sample(seq(ins.height.range[1],
+                              ins.height.range[2], by=.001),
+                          nrow(coord))
+    coord$z <- coord$z + ins.height
     slop.dist <- sqrt(diff(coord$x)^2 + diff(coord$y)^2 + diff(coord$z)^2)
     hor.angle <- -atan2(diff(coord$y),diff(coord$x))
     hor.angle <- hor.angle*180/pi
-    hor.angle.back <- 180-hor.angle
+    hor.angle.back <- hor.angle + 180
     zenit.for <- 90-asin(diff(coord$z)/slop.dist)*180/pi
     zenit.back <- 90+asin(diff(coord$z)/slop.dist)*180/pi
     fore <- data.frame(ns = coord$n[-nrow(coord)],
                       nf = coord$n[-1],
                       h = hor.angle,
                       z = zenit.for,
-                      d = slop.dist
+                      d = slop.dist,
+                      ih = ins.height[-length(ins.height)]
                       )
     back <- data.frame(ns = coord$n[-1],
                       nf = coord$n[-nrow(coord)],
                       h = hor.angle.back,
                       z = zenit.back,
-                      d = slop.dist
+                      d = slop.dist,
+                      ih = ins.height[-1]
                       )
     result <- rbind(fore, back)
     result[order(result$ns, result$nf),]
