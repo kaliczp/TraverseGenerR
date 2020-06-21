@@ -35,10 +35,9 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620)) {
     coord$z <- coord$z + ins.height
     slop.dist <- sqrt(diff(coord$x)^2 + diff(coord$y)^2 + diff(coord$z)^2)
     hor.angle <- -atan2(diff(coord$y),diff(coord$x))
-    hor.angle <- hor.angle*180/pi
-    hor.angle.back <- hor.angle + 180
-    zenit.for <- 90-asin(diff(coord$z)/slop.dist)*180/pi
-    zenit.back <- 90+asin(diff(coord$z)/slop.dist)*180/pi
+    hor.angle.back <- hor.angle + pi
+    zenit.for <- pi/2 - asin(diff(coord$z)/slop.dist)
+    zenit.back <- pi/2 + asin(diff(coord$z)/slop.dist)
     fore <- data.frame(ns = coord$n[-nrow(coord)],
                       nf = coord$n[-1],
                       h = hor.angle,
@@ -62,7 +61,10 @@ ttres <- meascalc(tteszt)
 ttres$h <- angleconv(ttres$h)
 ttres$z <- angleconv(ttres$z)
 
-angleconv <- function(angle, round.sec = 0) {
+angleconv <- function(angle, round.sec = 0, input = "radian") {
+    if(input == "radian") {
+        angle  <-  angle * 180 / pi
+    }
     angle.trunc <- trunc(angle)
     mins <- (angle - angle.trunc)*60
     mins.trunc <- trunc(mins)
