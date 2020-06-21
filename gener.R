@@ -53,8 +53,9 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620)) {
                       d = slop.dist,
                       ih = ins.height[-1]
                       )
-    result <- rbind(fore, back)
-    result[order(result$ns, result$nf),]
+    result <- rbind(fore, back[-nrow(back),])
+    result.ord <- result[order(result$ns, result$nf),]
+    rbind(result.ord, back[nrow(back), ])
 }
 
 ttres <- meascalc(tteszt)
