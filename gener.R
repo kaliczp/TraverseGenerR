@@ -26,3 +26,14 @@ gener <- function(slope=6, firstnr = 100, ox=464800,oy=259400, oz=250){
 tteszt <- gener()
 plot(tteszt[,1:2], asp=TRUE)
 
+write.csv(tteszt, "newteszt.csv", row.names = FALSE, quote = FALSE)
+
+## Without instument hight!
+tttavs <- sqrt(diff(tteszt$x)^2 + diff(tteszt$y)^2 + diff(tteszt$z)^2)
+ttvszog <- -atan2(diff(tteszt$y),diff(tteszt$x))*180/pi
+(ttvszog-trunc(ttvszog))*60
+180-ttvszog
+ttmszogoda <- 90-asin(diff(tteszt$z)/tttavs)*180/pi
+(ttmszogoda-trunc(ttmszogoda))*60
+ttmszogvissza <- 90+asin(diff(tteszt$z)/tttavs)*180/pi
+
