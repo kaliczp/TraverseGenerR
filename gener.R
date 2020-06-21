@@ -37,3 +37,10 @@ ttmszogoda <- 90-asin(diff(tteszt$z)/tttavs)*180/pi
 (ttmszogoda-trunc(ttmszogoda))*60
 ttmszogvissza <- 90+asin(diff(tteszt$z)/tttavs)*180/pi
 
+angleconv <- function(angle, round.sec = 0) {
+    angle.trunc <- trunc(angle)
+    mins <- (angle - angle.trunc)*60
+    mins.trunc <- trunc(mins)
+    secs <- (mins - mins.trunc)*60
+    paste(angle.trunc, mins.trunc, round(secs, round.sec), sep="-")
+}
