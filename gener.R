@@ -22,9 +22,14 @@ gener <- function(slope=6, firstnr = 100, ox=464800,oy=259400, oz=250, orient = 
         orie.y <- c(rep(fulldist,orient[1]),rep(0,orient[2])) +
             rnorm(orient.nr, sd = 50)
         orie.z <- mean(frame$z) + rnorm(orient.nr, 20, 1)
-        frame <- rbind(frame, data.frame(x = orie.x, y = orie.y, z = orie.z,
-                                         k = rep("OP", orient.nr),
-                                         n = 1:orient.nr))
+        orient.df <- data.frame(x = orie.x, y = orie.y, z = orie.z,
+                                k = rep("OP", orient.nr),
+                                n = 1:orient.nr)
+        if(orient[1] > 0)
+            frame <- rbind(orient.df[1:orient[1],], frame)
+        if(orient[2] > 0)
+            orient.row.num <- (nrow(orient.df) - orient[2] + 1):nrow(orient.df) 
+            frame <- rbind(frame, orient.df[orient.row.num,])
     }
     ## Translate
     frame$x <- frame$x + ox
