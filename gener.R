@@ -9,7 +9,7 @@ gener <- function(slope=6, firstnr = 100, ox=464800,oy=259400, oz=250){
                         y=c(fulldist,
                             seq(fulldist, 0, -segment.length))
                         )
-    frame$x <- frame$x + rnorm(nrow(frame), sd = 20)
+    frame$x <- frame$x + rnorm(nrow(frame), sd = 10)
     frame$y <- frame$y + rnorm(nrow(frame), sd = 5)
     frame$z <- -slope/100*frame$y
     frame$k <- c("AP", rep("SP", segments.nr), "AP")
