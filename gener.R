@@ -135,5 +135,12 @@ export.coo.gizi <- function(coordinates) {
     result
 }
 
-write(export.coo.gizi(tteszt), "newteszt.coo", sep="\n")
+## Full process
+tteszt <- gener()
+plot(tteszt[,1:2], asp=TRUE)
+ttres <- meascalc(tteszt)
+write(export.coo.gizi(tteszt[c(1,nrow(tteszt)),]), "newteszt.coo", sep="\n")
 write(export.geo.gizi(ttres), "newteszt.geo", sep="\n")
+## Compare angles
+ttres$h <- angleconv(ttres$h)
+ttres$z <- angleconv(ttres$z)
