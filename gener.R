@@ -1,6 +1,6 @@
 newcoo <- coo[10:9,]
 
-gener <- function(slope=6, firstnr = 100, ox=464800,oy=259400, oz=250, orient = TRUE){
+gener <- function(slope=6, firstnr = 100, ox=464800,oy=259400, oz=250, orient = c(1,1)){
     fulldist <- sample(400:500,1)
     angledist <- sample(50:100,1)
     segments.nr <- sample(5:7, 1)
@@ -16,12 +16,15 @@ gener <- function(slope=6, firstnr = 100, ox=464800,oy=259400, oz=250, orient = 
     fixpoints <- sort(sample(1:9,2))*10
     frame$n <- c(fixpoints[1], seq(firstnr, by = 10, length = segments.nr),
                  fixpoints[2])
-    if(orient) {
-        orie.x <- sample(700:1000,2)
-        orie.y <- c(fulldist,0) + rnorm(2, sd = 50)
-        orie.z <- mean(frame$z) + rnorm(2, 20, 1)
+    orient.nr  <- sum(orient)
+    if(orient.nr > 0) {
+        orie.x <- sample(700:1000, orient.nr)
+        orie.y <- c(rep(fulldist,orient[1]),rep(0,orient[2])) +
+            rnorm(orient.nr, sd = 50)
+        orie.z <- mean(frame$z) + rnorm(orient.nr, 20, 1)
         frame <- rbind(frame, data.frame(x = orie.x, y = orie.y, z = orie.z,
-                                         k = rep("OP", 2), n = c(1, 2)))
+                                         k = rep("OP", orient.nr),
+                                         n = 1:orient.nr))
     }
     ## Translate
     frame$x <- frame$x + ox
