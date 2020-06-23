@@ -55,6 +55,7 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE) {
                           nrow(coord))
     coord$z <- coord$z + ins.height
     slop.dist <- sqrt(diff(coord$x)^2 + diff(coord$y)^2 + diff(coord$z)^2)
+    slop.dist <- round(slop.dist,3)
     hor.angle <- -atan2(diff(coord$y),diff(coord$x))
     hor.angle.back <- hor.angle + pi
     zenit.for <- pi/2 - asin(diff(coord$z)/slop.dist)
@@ -77,7 +78,14 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE) {
                       )
     result <- rbind(fore, back[-nrow(back),])
     result.ord <- result[order(result$ns, result$nf),]
-    rbind(result.ord, back[nrow(back), ])
+    result.ok <- rbind(result.ord, back[nrow(back), ])
+    ## Are there any negative angle?
+    negh.row <- result.ok$h < 0
+    if(any(negh.row)) {
+        ## Correct negative angles
+        result.ok[negh.row, "h"]  <- result.ok[negh.row, "h"] + 2*pi
+    }
+    result.ok
 }
 
 (ttres <- meascalc(tteszt))
