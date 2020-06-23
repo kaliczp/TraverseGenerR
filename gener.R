@@ -60,18 +60,18 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE) {
     zenit.for <- pi/2 - asin(diff(coord$z)/slop.dist)
     zenit.back <- pi/2 + asin(diff(coord$z)/slop.dist)
     fore <- data.frame(ns = coord$n[-nrow(coord)],
+                      ih = ins.height[-length(ins.height)],
                       nf = coord$n[-1],
                       h = hor.angle,
                       z = zenit.for,
-                      d = slop.dist,
-                      ih = ins.height[-length(ins.height)]
+                      d = slop.dist
                       )
     back <- data.frame(ns = coord$n[-1],
+                      ih = ins.height[-1],
                       nf = coord$n[-nrow(coord)],
                       h = hor.angle.back,
                       z = zenit.back,
-                      d = slop.dist,
-                      ih = ins.height[-1]
+                      d = slop.dist
                       )
     result <- rbind(fore, back[-nrow(back),])
     result.ord <- result[order(result$ns, result$nf),]
