@@ -165,9 +165,14 @@ export.coo.gizi <- function(coordinates) {
 
 ## Full process
 tteszt <- gener()
-plot(tteszt[,1:2], asp=TRUE)
+## pdf(width = 2.5)
+par(mar=c(0,0,0,0))
+plot(tteszt[tteszt$k != "OP",1:2], asp=TRUE, axes = FALSE, xlab="", ylab="", pch=4)
+lines(tteszt[tteszt$k != "OP",1:2])
+text(tteszt[,c("x","y")], lab=tteszt$n, adj=c(1.2,0))
+text(tteszt[,c("x","y")], lab=tteszt$k, adj=c(1.2,1.2))
 ttres <- meascalc(tteszt)
-write(export.coo.gizi(tteszt[c(1,nrow(tteszt)),]), "newteszt.coo", sep="\n")
+write(export.coo.gizi(tteszt[tteszt$k == "AP",]), "newteszt.coo", sep="\n")
 write(export.geo.gizi(ttres), "newteszt.geo", sep="\n")
 ## Compare angles
 ttres$h <- angleconv(ttres$h)
