@@ -60,15 +60,17 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE) {
     zenit.for <- pi/2 - asin(diff(coord$z)/slop.dist)
     zenit.back <- pi/2 + asin(diff(coord$z)/slop.dist)
     fore <- data.frame(ns = coord$n[-nrow(coord)],
-                      ih = ins.height[-length(ins.height)],
-                      nf = coord$n[-1],
+                      ihs = ins.height[-length(ins.height)],
+                      nfb = coord$n[-1],
+                      ihfb = ins.height[-1],
                       h = hor.angle,
                       z = zenit.for,
                       d = slop.dist
                       )
     back <- data.frame(ns = coord$n[-1],
-                      ih = ins.height[-1],
-                      nf = coord$n[-nrow(coord)],
+                      ihs = ins.height[-1],
+                      nfb = coord$n[-nrow(coord)],
+                      ihfb = ins.height[-length(ins.height)],
                       h = hor.angle.back,
                       z = zenit.back,
                       d = slop.dist
@@ -78,7 +80,7 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE) {
     rbind(result.ord, back[nrow(back), ])
 }
 
-ttres <- meascalc(tteszt)
+(ttres <- meascalc(tteszt))
 ttres$h <- angleconv(ttres$h)
 ttres$z <- angleconv(ttres$z)
 
@@ -94,31 +96,28 @@ angleconv <- function(angle, round.sec = 0, input = "radian") {
 }
 
 export.geo.gizi <- function(traverse) {
-    ## All station height lookup table
-    station.height <- traverse[,c("ns", "ih")]
-    station.height <- station.height[!duplicated(station.height), ]
     ## Empty result
     result <- character()
     last.station <- 0
     ## Processing row-by-row
     for(row.num in 1:nrow(traverse)){
-        curr.station <- traverse[row.num, 1]
+        curr.station <- traverse[row.num, "ns"]
         if(last.station != curr.station) {
             result <- c(result,
                         paste0("{2 ",
                                curr.station,
                                "} {6 ",
-                               traverse[row.num, "ih"],
+                               traverse[row.num, "ihs"],
                                "}"
                                )
                         )
         }
-        target.id <- traverse[row.num, "nf"]
+        target.id <- traverse[row.num, "nfb"]
         result <- c(result,
                     paste0("{5 ",
                            target.id,
                            "} {6 ", # Instrument height of target
-                           station.height[station.height == target.id, "ih"],
+                           traverse[row.num, "ihfb"],
                            "} {7 ",
                            traverse[row.num, "h"],
                            "} {8 ",
