@@ -121,6 +121,15 @@ export.geo.gizi <- function(traverse) {
                         )
         }
         target.id <- traverse[row.num, "nfb"]
+        if(is.na(traverse[row.num, "z"])) {
+            zenit.dist <- "}"
+        } else {
+            zenit.dist <- paste0("} {8 ",
+                                 traverse[row.num, "z"],
+                                 "} {9 ",
+                                 round(traverse[row.num, "d"], 5),
+                                 "}")
+        }
         result <- c(result,
                     paste0("{5 ",
                            target.id,
@@ -128,11 +137,7 @@ export.geo.gizi <- function(traverse) {
                            traverse[row.num, "ihfb"],
                            "} {7 ",
                            traverse[row.num, "h"],
-                           "} {8 ",
-                           traverse[row.num, "z"],
-                           "} {9 ",
-                           round(traverse[row.num, "d"], 5),
-                           "}"
+                           zenit.dist
                            )
                     )
         last.station <- curr.station
