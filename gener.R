@@ -27,9 +27,11 @@ gener <- function(slope=6, firstnr = 100, ox=464800,oy=259400, oz=250, orient = 
                                 n = 1:orient.nr)
         if(orient[1] > 0)
             frame <- rbind(orient.df[1:orient[1],], frame)
-        if(orient[2] > 0)
+        if(orient[2] > 0) {
             orient.row.num <- (nrow(orient.df) - orient[2] + 1):nrow(orient.df) 
             frame <- rbind(frame, orient.df[orient.row.num,])
+        }
+        row.names(frame) <- NULL
     }
     ## Translate
     frame$x <- frame$x + ox
