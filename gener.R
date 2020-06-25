@@ -70,6 +70,40 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE) {
     hor.angle.back <- hor.angle + pi
     zenit.for <- pi/2 - asin(diff(coord$z)/slop.dist)
     zenit.back <- pi/2 + asin(diff(coord$z)/slop.dist)
+    if(orient) {
+        ## Are multiple points orientated?
+        orient.sep <- diff(orient.idx) > 1
+        ## More points oriented?
+        if(any(orient.sep)) {
+            ## Separate start and end
+            orient.sep <- which(diff(orient.idx) > 1)
+            ## from start point
+            first.orient.idx <- row.names(orient.df)[1:orient.sep]
+            first.orient.df <- rbind(orient.df[first.orient.idx,],
+                                     coord[1,])
+            ## 2pi - angle + pi
+            first.hor.angle.ori <- pi - atan2(diff(first.orient.df$y),
+                                         diff(first.orient.df$x))
+            ## from end point
+            last.orient.idx <- row.names(orient.df)[(orient.sep+1):nrow(orient.df)]
+            last.orient.df <- rbind(orient.df[last.orient.idx,],
+                                    coord[nrow(coord),])
+            last.hor.angle.ori <- pi - atan2(diff(last.orient.df$y),
+                                         diff(last.orient.df$x))
+            ori.fin <- data.frame(ns = c(first.orient.df[nrow(first.orient.df), "n"],
+                                         last.orient.df[nrow(first.orient.df), "n"]),
+                                  ihs = ins.height[1],
+                                  nfb = c(first.orient.df[1, "n"],
+                                          last.orient.df[1, "n"]),
+                                  ihfb = 0,
+                                  h = c(first.hor.angle.ori,last.hor.angle.ori),
+                                  z = NA,
+                                  d = NA
+                      )
+        } else {
+            ## If only one point oriented first or last?
+        }
+    }
     fore <- data.frame(ns = coord$n[-nrow(coord)],
                       ihs = ins.height[-length(ins.height)],
                       nfb = coord$n[-1],
@@ -87,8 +121,14 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE) {
                       d = slop.dist
                       )
     result <- rbind(fore, back[-nrow(back),])
+    if(orient) {
+        result <- rbind(result, ori.fin[1,])
+    }
     result.ord <- result[order(result$ns, result$nf),]
     result.ok <- rbind(result.ord, back[nrow(back), ])
+    if(orient) {
+        result.ok <- rbind(result.ok, ori.fin[nrow(ori.fin),])
+    }
     ## Are there any negative angle?
     negh.row <- result.ok$h < 0
     if(any(negh.row)) {
