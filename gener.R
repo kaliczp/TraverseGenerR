@@ -187,7 +187,7 @@ lines(tteszt[tteszt$k != "OP",1:2])
 text(tteszt[,c("x","y")], lab=tteszt$n, adj=c(1.2,0))
 text(tteszt[,c("x","y")], lab=tteszt$k, adj=c(1.2,1.2))
 ttres <- meascalc(tteszt)
-write(export.coo.gizi(tteszt[tteszt$k == "AP",]), "newteszt.coo", sep="\n")
+write(export.coo.gizi(tteszt[tteszt$k == "AP" | tteszt$k == "OP" ,]), "newteszt.coo", sep="\n")
 write(export.geo.gizi(ttres), "newteszt.geo", sep="\n")
 ## Compare angles
 ttres$h <- angleconv(ttres$h)
