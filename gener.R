@@ -48,9 +48,17 @@ write.csv(tteszt, "newteszt.csv", row.names = FALSE, quote = FALSE)
 
 meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE) {
     if(orient) {
+        ## Are there orient really?
         orient.idx <- coord$k == "OP"
-        orient <- coord[orient.idx, ]
-        coord <- coord[!orient.idx, ]
+        if(!any(orient.idx)) {
+            orient = FALSE
+        }
+    }
+    if(orient) {
+        ## Separate orientation and standard measurenets
+        orient.idx <- which(orient.idx)
+        orient.df <- coord[orient.idx, ]
+        coord <- coord[-orient.idx, ]
     }
     ins.height  <- sample(seq(ins.height.range[1],
                               ins.height.range[2], by=.001),
