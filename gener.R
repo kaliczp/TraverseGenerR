@@ -139,6 +139,43 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE) {
 }
 
 (ttres <- meascalc(tteszt))
+
+twoface <- function(measdata) {
+    meas.face <- cbind(measdata[,1:4], fce = NA, measdata[, 5:ncol(measdata)])
+    meas.face$fce <- factor(rep(c("I"), nrow(meas.face)), levels = c("I","II"))
+    meas.colnames <- colnames(meas.face)
+    result <- as.data.frame(matrix(ncol = length(meas.colnames)))
+    colnames(result) <- meas.colnames
+    for(row.num in 1:nrow(meas.face)){
+        ## Angles
+        act.error <- abs(rnorm(2,sd=20))*10^(-6)
+        actualrow <- meas.face[row.num, ]
+        actualrow$h  <- actualrow$h + act.error[1]
+        nextrow <- actualrow
+        nextrow$h  <- nextrow$h + pi + act.error[1]
+        actualrow$z  <- actualrow$z + act.error[2]
+        nextrow$z  <- 2*pi - nextrow$z + act.error[2]
+        ## Distance
+        dist.err <- sample(c(-0.001, 0, 0, 0, 0.001), 2, replace = TRUE)
+        actualrow$d <- actualrow$d + dist.err[1]
+        nextrow$d <- nextrow$d + dist.err[2]
+        nextrow$fce <- "II"
+        result <- rbind(result, actualrow, nextrow)
+    }
+    result <- result[-1,]
+    bigangle <- function(x) {
+        bigger.nr <- which(x >= 2*pi)
+        if(length(bigger.nr) > 0) {
+            x[bigger.nr] <- x[bigger.nr] - 2 * pi
+        }
+        x
+    }
+    result$h  <- bigangle(result$h)
+    result$z  <- bigangle(result$z)
+    result
+}
+ttface <- twoface(ttres)
+
 ttres$h <- angleconv(ttres$h)
 ttres$z <- angleconv(ttres$z)
 
