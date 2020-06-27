@@ -179,15 +179,19 @@ ttface <- twoface(ttres)
 ttres$h <- angleconv(ttres$h)
 ttres$z <- angleconv(ttres$z)
 
-angleconv <- function(angle, round.sec = 0, input = "radian") {
+angleconv <- function(angle, round.sec = 0, input = "radian", output = "sexagesimal") {
     if(input == "radian") {
         angle  <-  angle * 180 / pi
     }
-    angle.trunc <- trunc(angle)
-    mins <- (angle - angle.trunc)*60
-    mins.trunc <- trunc(mins)
-    secs <- (mins - mins.trunc)*60
-    paste(angle.trunc, mins.trunc, round(secs, round.sec), sep="-")
+    if(output == "sexagesimal") {
+        angle.trunc <- trunc(angle)
+        mins <- (angle - angle.trunc)*60
+        mins.trunc <- trunc(mins)
+        secs <- (mins - mins.trunc)*60
+        return(paste(angle.trunc, mins.trunc, round(secs, round.sec), sep="-"))
+    } else {
+        return(angle)
+    }
 }
 
 export.geo.gizi <- function(traverse) {
