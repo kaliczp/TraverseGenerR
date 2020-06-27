@@ -259,17 +259,51 @@ export.coo.gizi <- function(coordinates) {
     result
 }
 
+plot.traverse <- function(traverse, tofile = FALSE) {
+    if(tofile)
+        pdf(width = 2.5)
+    par(mar=c(0,0,0,0))
+    ## Plot traverse point with line
+    plot(traverse[traverse$k != "OP",1:2],
+         asp=TRUE, axes = FALSE, xlab="", ylab="", pch=4)
+    lines(traverse[traverse$k != "OP",1:2])
+    ## Point numbers
+    text(traverse[,c("x","y")], lab=traverse$n, adj=c(1.2,0))
+    ## Point codes
+    text(traverse[,c("x","y")], lab=traverse$k, adj=c(1.2,1.2))
+    ## First orientation arrow
+    arrows(traverse[2,1], traverse[2,2], # from
+           traverse[2,1]+40, traverse[2,2], # to
+           lty="dashed", angle = 15)
+    ## Text for first
+    ## number
+    text(traverse[2, 1] + 40, traverse[2, 2],
+         lab=traverse[1, "n"], adj=c(0,0))
+    ## code
+    text(traverse[2,1] + 40, traverse[2, 2],
+         lab=traverse[1, "k"], adj=c(0,1.2))
+    ## Second orientation arrow
+    arrows(traverse[nrow(traverse)-1,1], traverse[nrow(traverse)-1,2], #from
+           traverse[nrow(traverse)-1,1]+40, traverse[nrow(traverse)-1,2], #to
+           lty="dashed", angle = 15)
+    ## Text for second
+    ## number
+    text(traverse[nrow(traverse)-1,1] + 40, traverse[nrow(traverse)-1,2],
+         lab=traverse[nrow(traverse),"n"], adj=c(0,0))
+    ## code
+    text(traverse[nrow(traverse)-1,1] + 40, traverse[nrow(traverse)-1,2],
+         lab=traverse[nrow(traverse),"k"], adj=c(0,1.2))
+    ## Close file
+    if(tofile)
+        dev.off()
+}
+
 ## Full process
 tteszt <- gener()
-## pdf(width = 2.5)
-par(mar=c(0,0,0,0))
-plot(tteszt[tteszt$k != "OP",1:2], asp=TRUE, axes = FALSE, xlab="", ylab="", pch=4)
-lines(tteszt[tteszt$k != "OP",1:2])
-text(tteszt[,c("x","y")], lab=tteszt$n, adj=c(1.2,0))
-text(tteszt[,c("x","y")], lab=tteszt$k, adj=c(1.2,1.2))
 ttres <- meascalc(tteszt)
 write(export.coo.gizi(tteszt[tteszt$k == "AP" | tteszt$k == "OP" ,]), "newteszt.coo", sep="\n")
 write(export.geo.gizi(ttres), "newteszt.geo", sep="\n")
+plot.traverse(tteszt)
 ## two faces
 ttface <- twoface(ttres)
 ## Compare angles
