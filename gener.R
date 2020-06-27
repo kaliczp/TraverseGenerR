@@ -266,6 +266,8 @@ text(tteszt[,c("x","y")], lab=tteszt$k, adj=c(1.2,1.2))
 ttres <- meascalc(tteszt)
 write(export.coo.gizi(tteszt[tteszt$k == "AP" | tteszt$k == "OP" ,]), "newteszt.coo", sep="\n")
 write(export.geo.gizi(ttres), "newteszt.geo", sep="\n")
+## two faces
+ttface <- twoface(ttres)
 ## Compare angles
 ttres$h <- angleconv(ttres$h)
 ttres$z <- angleconv(ttres$z)
