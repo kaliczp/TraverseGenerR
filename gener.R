@@ -308,6 +308,9 @@ plot.traverse <- function(traverse, tofile = FALSE, north = NULL) {
         y.arr.end <- y.mean + 30
         arrows(x.mean - 20, y.mean, x.arr.end, y.arr.end)
         text(x.arr.end, y.arr.end, "N", adj = c(0.5, -0.5))
+        lines(x = c(x.mean - 50, x.mean),
+              y = rep(y.mean - 40, 2))
+        text(x = x.mean - 25, y = y.mean - 35, "50 m", adj = c(0.5, 0))
     }
     ## Close file
     if(tofile)
