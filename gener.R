@@ -265,7 +265,9 @@ plot.traverse <- function(traverse, tofile = FALSE) {
     par(mar=c(0,0,0,0))
     ## Plot traverse point with line
     plot(traverse[traverse$k != "OP",1:2],
-         asp=TRUE, axes = FALSE, xlab="", ylab="", pch=4)
+         asp=TRUE, axes = FALSE, xlab="", ylab="", type = "n")
+    points(traverse[traverse$k != "OP",1:2],
+           pch=4)
     lines(traverse[traverse$k != "OP",1:2])
     ## Point numbers
     text(traverse[,c("x","y")], lab=traverse$n, adj=c(1.2,0))
