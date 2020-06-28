@@ -263,16 +263,24 @@ plot.traverse <- function(traverse, tofile = FALSE) {
     if(tofile)
         pdf(width = 2.5)
     par(mar=c(0,0,0,0))
+    ## Mean points for plots
+    x.mean <- mean(traverse$x)
+    y.mean <- mean(traverse$y)
+    ## Filter orientation points out
+    traverse.xy <- traverse[traverse$k != "OP", 1:2]
+    traverse.lab <- traverse[traverse$k != "OP", 4:5]
+    ## Extend traverse with meand and lower then x minima.
+    trav.extend <- data.frame(x = c(x.mean, min(traverse.xy$x - 30)),
+                                    y = rep(y.mean, 2))
     ## Plot traverse point with line
-    plot(traverse[traverse$k != "OP",1:2],
+    plot(rbind(traverse.xy, trav.extend),
          asp=TRUE, axes = FALSE, xlab="", ylab="", type = "n")
-    points(traverse[traverse$k != "OP",1:2],
-           pch=4)
-    lines(traverse[traverse$k != "OP",1:2])
+    points(traverse.xy, pch=4)
+    lines(traverse.xy)
     ## Point numbers
-    text(traverse[,c("x","y")], lab=traverse$n, adj=c(1.2,0))
+    text(traverse.xy, lab=traverse.lab$n, adj=c(1.2,0))
     ## Point codes
-    text(traverse[,c("x","y")], lab=traverse$k, adj=c(1.2,1.2))
+    text(traverse.xy, lab=traverse.lab$k, adj=c(1.2,1.2))
     ## First orientation arrow
     arrows(traverse[2,1], traverse[2,2], # from
            traverse[2,1]+40, traverse[2,2], # to
