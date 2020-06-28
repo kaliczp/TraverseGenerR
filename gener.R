@@ -259,7 +259,7 @@ export.coo.gizi <- function(coordinates) {
     result
 }
 
-plot.traverse <- function(traverse, tofile = FALSE) {
+plot.traverse <- function(traverse, tofile = FALSE, north = NULL) {
     if(tofile)
         pdf(width = 2.5)
     par(mar=c(0,0,0,0))
@@ -303,6 +303,12 @@ plot.traverse <- function(traverse, tofile = FALSE) {
     ## code
     text(traverse[nrow(traverse)-1,1] + 40, traverse[nrow(traverse)-1,2],
          lab=traverse[nrow(traverse),"k"], adj=c(0,1.2))
+    if(!is.null(north)) {
+        x.arr.end <- x.mean - 20
+        y.arr.end <- y.mean + 30
+        arrows(x.mean - 20, y.mean, x.arr.end, y.arr.end)
+        text(x.arr.end, y.arr.end, "N", adj = c(0.5, -0.5))
+    }
     ## Close file
     if(tofile)
         dev.off()
