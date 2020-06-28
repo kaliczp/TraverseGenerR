@@ -261,7 +261,7 @@ export.coo.gizi <- function(coordinates) {
 
 plot.traverse <- function(traverse, tofile = FALSE, north = NULL) {
     if(tofile)
-        pdf(width = 2.5)
+        pdf(width = 3)
     par(mar=c(0,0,0,0))
     ## Mean points for plots
     x.mean <- mean(traverse$x)
@@ -308,8 +308,8 @@ plot.traverse <- function(traverse, tofile = FALSE, north = NULL) {
         y.arr.end <- y.mean + 30
         arrows(x.mean - 20, y.mean, x.arr.end, y.arr.end)
         text(x.arr.end, y.arr.end, "N", adj = c(0.5, -0.5))
-        lines(x = c(x.mean - 50, x.mean),
-              y = rep(y.mean - 40, 2))
+        lines(x = c(rep(x.mean - 50, 2), rep(x.mean, 2)),
+              y = c(y.mean - 35, rep(y.mean - 40, 2), y.mean - 35))
         text(x = x.mean - 25, y = y.mean - 35, "50 m", adj = c(0.5, 0))
     }
     ## Close file
@@ -322,7 +322,7 @@ tteszt <- gener()
 ttres <- meascalc(tteszt)
 write(export.coo.gizi(tteszt[tteszt$k == "AP" | tteszt$k == "OP" ,]), "newteszt.coo", sep="\n")
 write(export.geo.gizi(ttres), "newteszt.geo", sep="\n")
-plot.traverse(tteszt)
+plot.traverse(tteszt, north = 0)
 ## two faces
 ttface <- twoface(ttres)
 ## Compare angles
