@@ -33,10 +33,11 @@ genertopo <- function(length = 500, width=200, height=200, perc=4) {
 
 topo <- genertopo()
 
-topo.loess <- loess(z ~ x * y, topo,span=0.25, normalize=F)
+topo.loess <- loess(z ~ x * y, topo,span=0.5, normalize=F)
 topo.ma <- list(x=seq(0,200,10),y=seq(0,500,length.out = 21))
 topo.lo <- predict(topo.loess, expand.grid(topo.ma), se=T)
 library(MASS)
 eqscplot(topo.ma, typ="n")
 contour(topo.ma$x, topo.ma$y, topo.lo$fit, add=T)
 points(topo[,1:2])
+text(topo[,"x"], topo[,"y"], round(topo[,"z"]), adj=c(0,1))
