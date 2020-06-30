@@ -1,4 +1,4 @@
-genertopo <- function(length = 500, width=200, height=200, perc=4, east.dist = 50) {
+genertopo <- function(length = 500, width=300, height=200, perc=4, east.dist = 50) {
     road.end <- height + perc * length/100
     ## Corner points: lowerleft, lower right, upper left, upper right.
     corner.df  <-  data.frame(x = c(0, width, 0, width),
@@ -51,7 +51,7 @@ genertopo <- function(length = 500, width=200, height=200, perc=4, east.dist = 5
 topo <- genertopo()
 
 topo.loess <- loess(z ~ x * y, topo,span=0.5, normalize=F)
-topo.ma <- list(x=seq(0,200,10),y=seq(0,500,length.out = 21))
+topo.ma <- list(x=seq(0,300,length.out=21),y=seq(0,500,length.out = 21))
 topo.lo <- predict(topo.loess, expand.grid(topo.ma), se=T)
 library(MASS)
 eqscplot(topo.ma, typ="n")
