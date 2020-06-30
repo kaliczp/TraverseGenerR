@@ -1,4 +1,4 @@
-genertopo <- function(length = 500, width=200, height=200, perc=4) {
+genertopo <- function(length = 500, width=200, height=200, perc=4, east.dist = 50) {
     road.end <- height + perc * length/100
     ## Corner points: lowerleft, lower right, upper left, upper right.
     corner.df  <-  data.frame(x = c(0, width, 0, width),
@@ -16,16 +16,21 @@ genertopo <- function(length = 500, width=200, height=200, perc=4) {
                            )
     ## Edge points
     edge.points <- 5
-    corner.idx  <- c(1, edge.points + 2)# Corner index to remove 
+    corner.idx  <- c(1, edge.points + 2)# Corner index to remove
+    ## y from south to north
     edge.y  <- seq(0,
                    length,
                    length.out = edge.points + 2)[-corner.idx]
-    ## East edge
-    east.df <- data.frame(x = rep(width, edge.points),
-                          y = edge.y,
+    ## East edge moves easter only southest point removed
+    east.x  <- seq(width,
+                   width - east.dist,
+                   length.out = edge.points + 2)[-corner.idx[1]]
+    ## Only south east corner removed from z
+    east.df <- data.frame(x = east.x,
+                          y = c(edge.y, length), # Northern edge added
                           z = seq(corner.df[2, "z"],
                                   height,
-                                  length.out = edge.points + 2)[-corner.idx]
+                                  length.out = edge.points + 2)[-corner.idx[1]]
                           )
     ## West edge
     west.df <- data.frame(x = rep(0, edge.points),
