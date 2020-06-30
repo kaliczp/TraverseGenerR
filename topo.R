@@ -15,12 +15,25 @@ genertopo <- function(length = 500, width=200, height=200, perc=4) {
                            y = seq(0, length, length.out = neutr.points),
                            z = seq(road.end, height, length.out = neutr.points)
                            )
+    ## Edge points
+    edge.points <- 5
+    corner.idx  <- c(1, edge.points + 2)# Corner index to remove 
+    edge.y  <- seq(0,
+                   length,
+                   length.out = edge.points + 2)[-corner.idx]
     ## East edge
-    east.points <- 5
-    east.y  <- seq(0, length, length.out = east.points + 2)[-c(1, east.points + 2)]
-    east.df <- data.frame(x = rep(width, east.points),
-                          y = east.y,
-                          z = seq(corner.df[2, "z"], height, length.out = east.points)
+    east.df <- data.frame(x = rep(width, edge.points),
+                          y = edge.y,
+                          z = seq(corner.df[2, "z"],
+                                  height,
+                                  length.out = edge.points + 2)[-corner.idx]
+                          )
+    ## West edge
+    west.df <- data.frame(x = rep(0, edge.points),
+                          y = edge.y,
+                          z = seq(corner.df[1, "z"],
+                                  corner.df[3, "z"],
+                                  length.out = edge.points + 2)[-corner.idx]
                           )
     ## Divider between planned and ori road
     div.points = 3
@@ -28,7 +41,7 @@ genertopo <- function(length = 500, width=200, height=200, perc=4) {
                              y = seq(0, length/3, length.out = div.points),
                              z = rep(height - perc * length/100, div.points)
                              )
-    rbind(corner.df, neutr.df, east.df, divider.df)
+    rbind(corner.df, neutr.df, east.df, west.df, divider.df)
 }
 
 topo <- genertopo()
