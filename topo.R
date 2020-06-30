@@ -8,7 +8,6 @@ genertopo <- function(length = 500, width=200, height=200, perc=4) {
                                     height + rnorm(1, sd = 3), height
                                     )
                               )
-    divid.df <- c()
     ## Neutral line at quarter of width from bottom to top
     neutr.points = 6
     neutr.df <- data.frame(x = rep(width/4, neutr.points),
