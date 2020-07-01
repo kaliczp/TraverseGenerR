@@ -320,6 +320,8 @@ plot.traverse <- function(traverse, tofile = FALSE, north = NULL) {
 ## Full process
 tteszt <- gener(ox=80, oy=0)
 tteszt[2:(nrow(tteszt)-1), "z"] <- predict(topo.loess, data.frame(x=tteszt$x, y=tteszt$y))[-c(1,nrow(tteszt))]
+## Points on topo
+points(tteszt[, c("x","y")], col=4)
 tteszt$x <- tteszt$x + 464800
 tteszt$y <- tteszt$y + 259400
 ttres <- meascalc(tteszt)
