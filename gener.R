@@ -343,6 +343,11 @@ write(export.coo.gizi(tteszt[tteszt$k == "AP" | tteszt$k == "OP" ,]), "newteszt.
 write(export.geo.gizi(ttres), "newteszt.geo", sep="\n")
 write(export.geo.gizi(ttres.addpt), "newtesztadd.geo", sep="\n")
 plot.traverse(tteszt.first, north = 0)
+## Additional point plotted
+lines(tteszt.addpt[, c("x","y")])
+points(tteszt.addpt[2, c("x","y")], pch = 4)
+text(tteszt.addpt[2, c("x","y")], lab=tteszt.addpt[2, "n"], adj=c(1.2,0))
+text(tteszt.addpt[2, c("x","y")], lab=tteszt.addpt[2, "k"], adj=c(1.2,1.2))
 ## two faces
 ttface <- twoface(ttres)
 ## Compare angles
