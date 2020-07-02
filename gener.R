@@ -1,6 +1,6 @@
 newcoo <- coo[10:9,]
 
-gener <- function(slope=6, firstnr = 100, ox=464800,oy=259400, oz=250, orient = c(1,1)){
+gener <- function(slope=6, firstnr = 100, ox=464800,oy=259400, oz=250, orient = c(1,1), additional = TRUE){
     fulldist <- sample(400:500,1)
     angledist <- sample(50:100,1)
     segments.nr <- sample(5:7, 1)
@@ -16,6 +16,16 @@ gener <- function(slope=6, firstnr = 100, ox=464800,oy=259400, oz=250, orient = 
     fixpoints <- sort(sample(1:9,2))*10
     frame$n <- c(fixpoints[1], seq(firstnr, by = 10, length = segments.nr),
                  fixpoints[2])
+    if(additional) {
+        ## Additional point generation mean of first two points
+        addtnl <- colMeans(frame[c(1,3), c("x", "y", "z")])
+        addtnl.df <- data.frame(x = addtnl["x"] + rnorm(1,sd = 5),
+                                y = addtnl["y"] + rnorm(1,sd = 5),
+                                z = addtnl["z"] + rnorm(1,sd = 5),
+                                k = "APP",
+                                n = firstnr + 1)
+        frame <- rbind(frame, addtnl.df)
+    }
     orient.nr  <- sum(orient)
     if(orient.nr > 0) {
         orie.x <- sample(700:1000, orient.nr)
@@ -324,10 +334,15 @@ tteszt[2:(nrow(tteszt)-1), "z"] <- predict(topo.loess, data.frame(x=tteszt$x, y=
 points(tteszt[, c("x","y")], col=4)
 tteszt$x <- tteszt$x + 464800
 tteszt$y <- tteszt$y + 259400
-ttres <- meascalc(tteszt)
+addpt.nr <- which(tteszt$k == "APP")
+tteszt.first <- tteszt[-addpt.nr, ]
+ttres <- meascalc(tteszt.first)
+tteszt.addpt <- rbind(tteszt[2,],tteszt[addpt.nr, ], tteszt[4,])
+ttres.addpt <- meascalc(tteszt.addpt)
 write(export.coo.gizi(tteszt[tteszt$k == "AP" | tteszt$k == "OP" ,]), "newteszt.coo", sep="\n")
 write(export.geo.gizi(ttres), "newteszt.geo", sep="\n")
-plot.traverse(tteszt, north = 0)
+write(export.geo.gizi(ttres.addpt), "newtesztadd.geo", sep="\n")
+plot.traverse(tteszt.first, north = 0)
 ## two faces
 ttface <- twoface(ttres)
 ## Compare angles
