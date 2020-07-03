@@ -22,7 +22,7 @@ gener <- function(slope=6, firstnr = 100, ox=464800,oy=259400, oz=250, orient = 
         addtnl.df <- data.frame(x = addtnl["x"] + rnorm(1,sd = 5),
                                 y = addtnl["y"] + rnorm(1,sd = 5),
                                 z = addtnl["z"] + rnorm(1,sd = 5),
-                                k = "APP",
+                                k = "SPP",
                                 n = firstnr + 1)
         frame <- rbind(frame, addtnl.df)
     }
@@ -334,20 +334,20 @@ tteszt[2:(nrow(tteszt)-1), "z"] <- predict(topo.loess, data.frame(x=tteszt$x, y=
 points(tteszt[, c("x","y")], col=4)
 tteszt$x <- tteszt$x + 464800
 tteszt$y <- tteszt$y + 259400
-addpt.nr <- which(tteszt$k == "APP")
+addpt.nr <- which(tteszt$k == "SPP")
 tteszt.first <- tteszt[-addpt.nr, ]
 ttres <- meascalc(tteszt.first)
-tteszt.addpt <- rbind(tteszt[2,],tteszt[addpt.nr, ], tteszt[4,])
+tteszt.addpt <- rbind(tteszt[1:2,],tteszt[addpt.nr, ], tteszt[4,])
 ttres.addpt <- meascalc(tteszt.addpt)
 write(export.coo.gizi(tteszt[tteszt$k == "AP" | tteszt$k == "OP" ,]), "newteszt.coo", sep="\n")
 write(export.geo.gizi(ttres), "newteszt.geo", sep="\n")
 write(export.geo.gizi(ttres.addpt), "newtesztadd.geo", sep="\n")
 plot.traverse(tteszt.first, north = 0)
 ## Additional point plotted
-lines(tteszt.addpt[, c("x","y")])
-points(tteszt.addpt[2, c("x","y")], pch = 4)
-text(tteszt.addpt[2, c("x","y")], lab=tteszt.addpt[2, "n"], adj=c(1.2,0))
-text(tteszt.addpt[2, c("x","y")], lab=tteszt.addpt[2, "k"], adj=c(1.2,1.2))
+lines(tteszt.addpt[-1, c("x","y")])
+points(tteszt.addpt[3, c("x","y")], pch = 4)
+text(tteszt.addpt[3, c("x","y")], lab=tteszt.addpt[3, "n"], adj=c(1.2,0))
+text(tteszt.addpt[3, c("x","y")], lab=tteszt.addpt[3, "k"], adj=c(1.2,1.2))
 ## two faces
 ttface <- twoface(ttres)
 ## Compare angles
