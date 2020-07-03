@@ -362,3 +362,5 @@ ttface <- twoface(ttres)
 ## Compare angles
 ttres$h <- angleconv(ttres$h)
 ttres$z <- angleconv(ttres$z)
+
+datgen("tesztfile")
