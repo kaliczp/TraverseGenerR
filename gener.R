@@ -327,6 +327,15 @@ plot.traverse <- function(traverse, tofile = FALSE, north = NULL) {
         dev.off()
 }
 
+## Initial traverse
+tteszt <- gener(orient=c(0,0),firstnr=200,additional=FALSE)
+ttres <- meascalc(tteszt)
+write(export.coo.gizi(tteszt), "newteszt.coo", sep="\n")
+write(export.geo.gizi(ttres), "newteszt.geo", sep="\n")
+pdf(width=2)
+plot.traverse(tteszt, north = 0)
+dev.off()
+
 ## Full process
 tteszt <- gener(ox=80, oy=0)
 tteszt[2:(nrow(tteszt)-1), "z"] <- predict(topo.loess, data.frame(x=tteszt$x, y=tteszt$y))[-c(1,nrow(tteszt))]
