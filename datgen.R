@@ -55,7 +55,7 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
                       sep = "*")
                 )
     WriteDATRow("T_OBJ_ATTRBD")
-    HRSZ1 <- paste0("0", sample(10:100, 1), "/1")
+    HRSZ1 <- paste0("0", sample(10:100, 1))
     area1 <- 1245
     mod.date  <- format(act.date - sample(3900:4100, 1), "%Y%m%d")
     WriteDATRow(paste(1,
