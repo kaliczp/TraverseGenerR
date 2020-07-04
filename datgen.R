@@ -112,7 +112,7 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
     WriteDATRow(paste(1,
                       HRSZ1,
                       1, # lower left corner point id
-                      60, # orientation
+                      90, # orientation
                       6, # font size
                       0, # valid date
                       "T_OBJ_ATTRBD",
@@ -120,6 +120,16 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
                       11, # property HRSZ
                       sep = "*")
                 )
-    WriteDATRow("2*zkmk*2*77.1*2*0*T_OBJ_ATTRBD*1*14")
+    WriteDATRow(paste(2,
+                      "E",
+                      1, # lower left corner point id
+                      90, # orientation
+                      2, # font size
+                      0, # valid date
+                      "T_OBJ_ATTRBD",
+                      1, # row id
+                      14, # property HRSZ
+                      sep = "*")
+                )
     close(fileConn)
 }
