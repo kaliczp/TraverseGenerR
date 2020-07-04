@@ -1,9 +1,13 @@
 datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "Kis Pista", teacher = "Kalicz Péter") {
     act.date <- Sys.Date()
-    filefull <- paste0(file, ".dat")
+    ## Generate additional points
+    ## Write row wiht cat
     WriteDATRow <- function(x, append = TRUE)
         cat(paste0(x,"*\r"), file = fileConn, sep = "\n", append = append)
+    ## File initialisation
+    filefull <- paste0(file, ".dat")
     fileConn <- file(filefull, "w")
+    ## Header line
     init <- paste(file, # filename without extension
                   paste0(settlement,"_jogerős"), # some title
                   "Soproni Egyetem", # source organisation
@@ -27,17 +31,21 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
                 )
     ## Borders
     WriteDATRow("T_HATARVONAL")
-    WriteDATRow("1*1*1*2*0*")
-    WriteDATRow("2*1*1*3*0*")
-    WriteDATRow("3*1*3*5*0*")
-    WriteDATRow("4*1*5*2*0*")
-    WriteDATRow("5*1*5*4*0*")
-    WriteDATRow("6*1*4*2*0*")
+    ## First poly edges
+    WriteDATRow("1*1*1*2*0*") # south border
+    WriteDATRow("2*1*1*3*0*") # west border
+    WriteDATRow("3*1*3*5*0*") # north border
+    WriteDATRow("4*1*5*2*0*") # east border
+    ## Second poly plus
+    WriteDATRow("5*1*5*4*0*") # north border
+    WriteDATRow("6*1*4*2*0*") # east line
     WriteDATRow("T_HATAR")
+    ## First poly
     WriteDATRow("1*1*1*-")
     WriteDATRow("1*2*2*+")
     WriteDATRow("1*3*3*+")
     WriteDATRow("1*4*4*+")
+    ## Second poly
     WriteDATRow("2*1*5*+")
     WriteDATRow("2*2*6*+")
     WriteDATRow("2*3*4*-")
@@ -54,7 +62,9 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
                       "1*3*0*1*0*0**4315",
                       sep = "*")
                 )
+    ## Area attributes
     WriteDATRow("T_OBJ_ATTRBD")
+    ## Generate data
     hrsz1 <- sample(10:100, 1)
     HRSZ1 <- paste0("0", hrsz1)
     HRSZ2 <- paste0("0", hrsz1 + sample(1:5, 1))
