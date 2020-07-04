@@ -368,4 +368,4 @@ topo.eov <- topo
 topo.eov$x <- round(topo.eov$x,3) + 464800
 topo.eov$y <- round(topo.eov$y,3) + 259400
 topo.eov$z <- round(topo.eov$z,3)
-datgen(topo.eov, "tesztfile")
+datgen(topo.eov[topo.eov$dat,], "tesztfile")

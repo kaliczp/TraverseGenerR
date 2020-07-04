@@ -45,7 +45,15 @@ genertopo <- function(length = 500, width=300, height=200, perc=4, east.dist = 5
                              y = seq(0, length/3, length.out = div.points),
                              z = rep(height - perc * length/100, div.points)
                              )
-    rbind(corner.df, neutr.df, east.df, west.df, divider.df)
+    result <- rbind(corner.df, neutr.df, east.df, west.df, divider.df)
+    cbind(result, dat = c(rep(T, 4), # corner points
+                          rep(F, neutr.points),
+                          rep(F, edge.points),
+                          T,
+                          rep(F, edge.points),
+                          rep(F, div.points)
+                          )
+          )
 }
 
 topo <- genertopo(perc=3, east.dist = 150)
@@ -58,4 +66,4 @@ eqscplot(topo.ma, typ="n")
 contour(topo.ma$x, topo.ma$y, topo.lo$fit, add=T)
 points(topo[,1:2])
 text(topo[,"x"], topo[,"y"], round(topo[,"z"]), adj=c(0,1))
-
+points(topo[topo$dat, c("x","y")], pch = 4)
