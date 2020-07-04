@@ -76,19 +76,19 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
                 )
     WriteDATRow("T_OBJ_ATTRBE")
     WriteDATRow(paste(1,
-                      "BE02",
+                      "BE03",
                       1, # area id
-                      "a",
+                      "-",
                       HRSZ1,
                       area1,
-                      0, # value
+                      "", # value
                       8, # Forest
                       2, # location rural
-                      0,
-                      1269, # prev. valid rec.
+                      1,
+                      1, # prev. valid rec.
                       mod.date,
-                      "***0*120*1",
-                      1, # codepoint
+                      "***0*120*",
+                      "", # codepoint
                       sep = "*")
                 )
     WriteDATRow("T_OBJ_ATTRBF")
@@ -97,13 +97,13 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
                       1, # area id
                       4, # quality code
                       8, # forest
-                      2, # rural
-                      0,
-                      5743, # last valid
+                      1, # rural
+                      1,
+                      1, # last valid
                       0,
                       118,
-                      1,
-                      1,
+                      "",
+                      "",
                       HRSZ1,
                       area1,
                       sep = "*")
