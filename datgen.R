@@ -1,4 +1,5 @@
 datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "Kis Pista", teacher = "Kalicz Péter") {
+    act.date <- Sys.Date()
     filefull <- paste0(file, ".dat")
     WriteDATRow <- function(x, append = TRUE)
         cat(paste0(x,"*\r"), file = fileConn, sep = "\n", append = append)
@@ -9,7 +10,7 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
                   teacher, # resp. person
                   "-", # target organisation
                   student,
-                  format(Sys.Date(), "%Y%m%d"), # Actual date
+                  format(act.date, "%Y%m%d"), # Actual date
                   "DATR 4.4.0", # software version
                   "2015.07.01 1.1", # file version
                   sep = "*")
@@ -53,5 +54,69 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
                       "1*3*0*1*0*0**4315",
                       sep = "*")
                 )
+    WriteDATRow("T_OBJ_ATTRBD")
+    HRSZ1 <- paste0("0", sample(10:100, 1), "/1")
+    area1 <- 1245
+    mod.date  <- format(act.date - sample(3900:4100, 1), "%Y%m%d")
+    WriteDATRow(paste(1,
+                      "BD02",
+                      1, # area id
+                      HRSZ1,
+                      "",
+                      2, # location rural
+                      area1,
+                      "*********2*2",
+                      mod.date,
+                      "****0*114*1",
+                      1, # codepoint
+                      sep = "*")
+                )
+    WriteDATRow("T_OBJ_ATTRBE")
+    WriteDATRow(paste(1,
+                      "BE02",
+                      1, # area id
+                      "a",
+                      HRSZ1,
+                      area1,
+                      0, # value
+                      8, # Forest
+                      2, # location rural
+                      0,
+                      1269, # prev. valid rec.
+                      mod.date,
+                      "***0*120*1",
+                      1, # codepoint
+                      sep = "*")
+                )
+    WriteDATRow("T_OBJ_ATTRBF")
+    WriteDATRow(paste(1,
+                      "BF01",
+                      1, # area id
+                      4, # quality code
+                      8, # forest
+                      2, # rural
+                      0,
+                      5743, # last valid
+                      0,
+                      118,
+                      1,
+                      1,
+                      HRSZ1,
+                      area1,
+                      sep = "*")
+                )
+    WriteDATRow("T_FELIRAT")
+    WriteDATRow(paste(1,
+                      HRSZ1,
+                      1, # lower left corner point id
+                      60, # orientation
+                      6, # font size
+                      0, # valid date
+                      "T_OBJ_ATTRBD",
+                      1, # row id
+                      11, # property HRSZ
+                      sep = "*")
+                )
+    WriteDATRow("2*zkmk*2*77.1*2*0*T_OBJ_ATTRBD*1*14")
     close(fileConn)
 }
