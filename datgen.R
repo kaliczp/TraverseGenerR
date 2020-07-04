@@ -19,8 +19,8 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
     WriteDATRow("T_PONT")
     sorsz <- 1:nrow(x)
     WriteDATRow(paste(sorsz,
-                      x$x,
                       x$y,
+                      x$x,
                       x$z,
                       "0*0",
                       sep="*")
