@@ -1,8 +1,10 @@
 newcoo <- coo[10:9,]
 
-gener <- function(slope=6, firstnr = 100, ox=464800,oy=259400, oz=250, orient = c(1,1), additional = TRUE){
-    fulldist <- sample(400:500,1)
-    angledist <- sample(50:100,1)
+gener <- function(slope=6, firstnr = 100, angledist = NULL, fulldist = NULL, ox=464800,oy=259400, oz=250, orient = c(1,1), additional = TRUE){
+    if(is.null(fulldist))
+        fulldist <- sample(400:500,1)
+    if(is.null(angledist))
+        angledist <- sample(50:100,1)
     segments.nr <- sample(5:7, 1)
     segment.length <- fulldist/segments.nr
     frame <- data.frame(x=c(angledist,rep(0,segments.nr+1)),
