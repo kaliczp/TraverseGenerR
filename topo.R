@@ -39,11 +39,18 @@ genertopo <- function(length = 500, width=300, height=200, perc=4, east.dist = 5
                                   corner.df[3, "z"],
                                   length.out = edge.points + 2)[-corner.idx]
                           )
+    ## Shrink north-west edge
+    corner.df[3, "z"] <- corner.df[3, "z"] - 10
+    neutr.df[nrow(neutr.df), "z"] <- neutr.df[nrow(neutr.df), "z"] - 4
+    west.df[length(west.df),"z"] <- west.df[length(west.df),"z"] -4
+    ## Rise north-east corner
+    corner.df[4, "z"] <- corner.df[4, "z"] + 5
     ## Divider between planned and ori road
     div.points = 3
     divider.df <- data.frame(x = rep(2 * width/3, div.points),
                              y = seq(0, length/3, length.out = div.points),
-                             z = rep(height - perc * length/100, div.points)
+                             z = seq(corner.df[2, "z"] - 8, corner.df[2, "z"] - 5,
+                                     length = div.points)
                              )
     result <- rbind(corner.df, neutr.df, east.df, west.df, divider.df)
     cbind(result, dat = c(rep(T, 4), # corner points

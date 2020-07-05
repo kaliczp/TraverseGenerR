@@ -1,6 +1,11 @@
 datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "Kis Pista", teacher = "Kalicz Péter") {
     act.date <- Sys.Date()
     ## Generate additional points
+    ## Two points for road
+    road.pt <- x[c(2,5),]
+    road.pt$x <- road.pt$x + 12
+    road.pt$y <- road.pt$y + 12
+    x <- rbind(x, road.pt)
     ## Write row wiht cat
     WriteDATRow <- function(x, append = TRUE)
         cat(paste0(x,"*\r"), file = fileConn, sep = "\n", append = append)
@@ -37,8 +42,12 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
     WriteDATRow("3*1*3*5*0*") # north border
     WriteDATRow("4*1*5*2*0*") # east border
     ## Second poly plus
-    WriteDATRow("5*1*5*4*0*") # north border
-    WriteDATRow("6*1*4*2*0*") # east line
+    WriteDATRow("5*1*7*4*0*") # north border
+    WriteDATRow("6*1*4*6*0*") # east line
+    ## Road end
+    WriteDATRow("7*1*6*2*0*") # south short
+    WriteDATRow("8*1*5*7*0*") # north short
+    WriteDATRow("9*1*7*6*0*") # est edge
     WriteDATRow("T_HATAR")
     ## First poly
     WriteDATRow("1*1*1*-")
@@ -48,10 +57,16 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
     ## Second poly
     WriteDATRow("2*1*5*+")
     WriteDATRow("2*2*6*+")
-    WriteDATRow("2*3*4*-")
+    WriteDATRow("2*3*9*-")
+    ## Road
+    WriteDATRow("3*1*4*-")
+    WriteDATRow("3*2*8*+")
+    WriteDATRow("3*3*9*+")
+    WriteDATRow("3*4*7*+")
     WriteDATRow("T_FELULET")
     WriteDATRow("1*1*1*+")
     WriteDATRow("2*1*2*+")
+    WriteDATRow("3*1*3*+")
     ## Points attributes
     WriteDATRow("T_OBJ_ATTRAC")
     objkod.pt <- seq(objkod, by = 1, length.out = length(sorsz))
@@ -66,8 +81,10 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
     WriteDATRow("T_OBJ_ATTRBD")
     ## Generate data
     hrsz1 <- sample(10:100, 1)
+    hrsz2 <- hrsz1 + sample(1:5, 1)
     HRSZ1 <- paste0("0", hrsz1)
-    HRSZ2 <- paste0("0", hrsz1 + sample(1:5, 1))
+    HRSZ2 <- paste0("0", hrsz2)
+    HRSZ3 <- paste0("0", hrsz2 + sample(1:5, 1))
     area1 <- 1245
     area2  <- 1150
     mod.Dat <- act.date - sample(900:4100, 1)
@@ -165,6 +182,22 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
                       "",
                       HRSZ2,
                       area2,
+                      sep = "*")
+                )
+    WriteDATRow("T_OBJ_ATTRDC")
+    WriteDATRow(paste(1,
+                      "DC07",
+                      3, # area id
+                      1, # length id
+                      0, # szam
+                      12, # pavement
+                      "**", # Additional data
+                      "*", #
+                      1,
+                      0,
+                      114,
+                      "",
+                      "",
                       sep = "*")
                 )
     WriteDATRow("T_FELIRAT")
