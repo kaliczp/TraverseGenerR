@@ -75,17 +75,24 @@ for(ttnev in 1:nrow(nevsor)) {
     addpt.nr <- which(tteszt$k == "SPP")
     tteszt.first <- tteszt[-addpt.nr, ]
     ttres <- meascalc(tteszt.first)
-    tteszt.addpt <- rbind(tteszt[1:2,],tteszt[addpt.nr, ], tteszt[4,], tteszt[nrow(tteszt),])
+    ## Another additional point
+    addpt.df <- tteszt[addpt.nr, ]
+    addpt.df <- rbind(addpt.df, addpt.df)
+    addpt.df[2, "n"] <- addpt.df[2, "n"] +1
+    addpt.df$y <- tteszt.first[4, "y"] + c(2, 1) *  diff(tteszt.first[4:3, "y"])/3
+    addpt.df$x <- tteszt.first[3, "x"] + c(4, 2) *  diff(tteszt.first[3:2, "x"])/6
+    tteszt.addpt <- rbind(tteszt[1:2,], addpt.df, tteszt[4,], tteszt[nrow(tteszt),])
     ttres.addpt <- meascalc(tteszt.addpt)
     ttres.addpt <- ttres.addpt[-nrow(ttres.addpt),]
     write(export.coo.gizi(tteszt[tteszt$k == "AP" | tteszt$k == "OP" ,]), "newteszt.coo", sep="\n")
+    ## Plot traverse with orientation and node
     pdf(paste0(StudentFilename,".pdf"), width = 3)
     plot.traverse(tteszt.first, north = 0)
     ## Additional point plotted
     lines(tteszt.addpt[-c(1,nrow(tteszt.addpt)), c("x","y")])
-    points(tteszt.addpt[3, c("x","y")], pch = 4)
-    text(tteszt.addpt[3, c("x","y")], lab=tteszt.addpt[3, "n"], adj=c(1.2,0))
-    text(tteszt.addpt[3, c("x","y")], lab=tteszt.addpt[3, "k"], adj=c(1.2,1.2))
+    points(tteszt.addpt[3:4, c("x","y")], pch = 4)
+    text(tteszt.addpt[3:4, c("x","y")], lab=tteszt.addpt[3:4, "n"], adj=c(-0.2,0))
+    text(tteszt.addpt[3:4, c("x","y")], lab=tteszt.addpt[3:4, "k"], adj=c(-0.2,1.2))
     dev.off()
 }
 
