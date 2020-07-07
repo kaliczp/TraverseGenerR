@@ -5,7 +5,13 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
     road.pt <- x[c(2,5),]
     road.pt$x <- road.pt$x + 12
     road.pt$y <- road.pt$y + 12
-    x <- rbind(x, road.pt)
+    southeast.corner <- road.pt[1,]
+    se.diff.x <- road.pt[1,"x"]- x[2, "x"]
+    se.diff.y <- road.pt[1,"y"] - x[2, "y"]
+    southeast.corner$x <- southeast.corner$x + sample(5:10,1) * se.diff.x
+    southeast.corner$y <- southeast.corner$y + sample(5:10,1) * se.diff.y
+    southeast.corner$z <- southeast.corner$z + sample(5:15,1)
+    x <- rbind(x, road.pt, southeast.corner)
     ## Write row wiht cat
     WriteDATRow <- function(x, append = TRUE)
         cat(paste0(x,"*\r"), file = fileConn, sep = "\n", append = append)
@@ -43,11 +49,12 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
     WriteDATRow("4*1*5*2*0*") # east border
     ## Second poly plus
     WriteDATRow("5*1*7*4*0*") # north border
-    WriteDATRow("6*1*4*6*0*") # east line
+    WriteDATRow("6*1*4*8*0*") # east line
+    WriteDATRow("7*1*8*6*0*") # south line
     ## Road end
-    WriteDATRow("7*1*6*2*0*") # south short
-    WriteDATRow("8*1*5*7*0*") # north short
-    WriteDATRow("9*1*7*6*0*") # est edge
+    WriteDATRow("8*1*6*2*0*") # south short
+    WriteDATRow("9*1*5*7*0*") # north short
+    WriteDATRow("10*1*7*6*0*") # est edge
     WriteDATRow("T_HATAR")
     ## First poly
     WriteDATRow("1*1*1*-")
@@ -57,12 +64,13 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
     ## Second poly
     WriteDATRow("2*1*5*+")
     WriteDATRow("2*2*6*+")
-    WriteDATRow("2*3*9*-")
+    WriteDATRow("2*3*7*+")
+    WriteDATRow("2*4*10*-")
     ## Road
     WriteDATRow("3*1*4*-")
-    WriteDATRow("3*2*8*+")
-    WriteDATRow("3*3*9*+")
-    WriteDATRow("3*4*7*+")
+    WriteDATRow("3*2*9*+")
+    WriteDATRow("3*3*10*+")
+    WriteDATRow("3*4*8*+")
     WriteDATRow("T_FELULET")
     WriteDATRow("1*1*1*+")
     WriteDATRow("2*1*2*+")
