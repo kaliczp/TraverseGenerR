@@ -58,7 +58,7 @@ plot(tteszt[,1:2], asp=TRUE)
 
 write.csv(tteszt, "newteszt.csv", row.names = FALSE, quote = FALSE)
 
-meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE) {
+meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, generror = FALSE) {
     if(orient) {
         ## Are there orient really?
         orient.idx <- coord$k == "OP"
@@ -146,6 +146,12 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE) {
     if(any(negh.row)) {
         ## Correct negative angles
         result.ok[negh.row, "h"]  <- result.ok[negh.row, "h"] + 2*pi
+    }
+    if(generror) {
+        sec.rad <- (1/60/60)*pi/180 # one second in rad
+        result.ok$h <- result.ok$h + rnorm(nrow(result.ok), sd = 3 * sec.rad)
+        result.ok$z <- result.ok$z + rnorm(nrow(result.ok), sd = 3 * sec.rad)
+        result.ok$z <- result.ok$z + rnorm(nrow(result.ok), sd = 0.0004)
     }
     result.ok
 }
