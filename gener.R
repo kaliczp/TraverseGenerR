@@ -72,9 +72,14 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, g
         orient.df <- coord[orient.idx, ]
         coord <- coord[-orient.idx, ]
     }
-    ins.height  <- sample(seq(ins.height.range[1],
-                              ins.height.range[2], by=.001),
-                          nrow(coord))
+    if(length(ins.height.range) == nrow(coord)) {
+        ins.height <- ins.height.range
+    } else {
+        warning("Instrument height generated!")
+        ins.height  <- sample(seq(ins.height.range[1],
+                                  ins.height.range[2], by=.001),
+                              nrow(coord))
+    }
     coord$z <- coord$z + ins.height
     slop.dist <- sqrt(diff(coord$x)^2 + diff(coord$y)^2 + diff(coord$z)^2)
     slop.dist <- round(slop.dist,3)
