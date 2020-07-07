@@ -299,28 +299,30 @@ plot.traverse <- function(traverse, tofile = NULL, north = NULL) {
     text(traverse.xy, lab=traverse.lab$n, adj=c(1.2,0))
     ## Point codes
     text(traverse.xy, lab=traverse.lab$k, adj=c(1.2,1.2))
-    ## First orientation arrow
-    arrows(traverse[2,1], traverse[2,2], # from
-           traverse[2,1]+40, traverse[2,2], # to
-           lty="dashed", angle = 15)
-    ## Text for first
-    ## number
-    text(traverse[2, 1] + 40, traverse[2, 2],
-         lab=traverse[1, "n"], adj=c(0,0))
-    ## code
-    text(traverse[2,1] + 40, traverse[2, 2],
-         lab=traverse[1, "k"], adj=c(0,1.2))
-    ## Second orientation arrow
-    arrows(traverse[nrow(traverse)-1,1], traverse[nrow(traverse)-1,2], #from
-           traverse[nrow(traverse)-1,1]+40, traverse[nrow(traverse)-1,2], #to
-           lty="dashed", angle = 15)
-    ## Text for second
-    ## number
-    text(traverse[nrow(traverse)-1,1] + 40, traverse[nrow(traverse)-1,2],
-         lab=traverse[nrow(traverse),"n"], adj=c(0,0))
-    ## code
-    text(traverse[nrow(traverse)-1,1] + 40, traverse[nrow(traverse)-1,2],
-         lab=traverse[nrow(traverse),"k"], adj=c(0,1.2))
+    if(any(traverse$k == "OP")) {
+        ## First orientation arrow
+        arrows(traverse[2,1], traverse[2,2], # from
+               traverse[2,1]+40, traverse[2,2], # to
+               lty="dashed", angle = 15)
+        ## Text for first
+        ## number
+        text(traverse[2, 1] + 40, traverse[2, 2],
+             lab=traverse[1, "n"], adj=c(0,0))
+        ## code
+        text(traverse[2,1] + 40, traverse[2, 2],
+             lab=traverse[1, "k"], adj=c(0,1.2))
+        ## Second orientation arrow
+        arrows(traverse[nrow(traverse)-1,1], traverse[nrow(traverse)-1,2], #from
+               traverse[nrow(traverse)-1,1]+40, traverse[nrow(traverse)-1,2], #to
+               lty="dashed", angle = 15)
+        ## Text for second
+        ## number
+        text(traverse[nrow(traverse)-1,1] + 40, traverse[nrow(traverse)-1,2],
+             lab=traverse[nrow(traverse),"n"], adj=c(0,0))
+        ## code
+        text(traverse[nrow(traverse)-1,1] + 40, traverse[nrow(traverse)-1,2],
+             lab=traverse[nrow(traverse),"k"], adj=c(0,1.2))
+    }
     if(!is.null(north)) {
         x.arr.end <- x.mean - 20
         y.arr.end <- y.mean + 30
