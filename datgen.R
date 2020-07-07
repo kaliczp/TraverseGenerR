@@ -86,7 +86,8 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
     HRSZ2 <- paste0("0", hrsz2)
     HRSZ3 <- paste0("0", hrsz2 + sample(1:5, 1))
     area1 <- 1245
-    area2  <- 1150
+    area2 <- 1150
+    area3 <- 1000
     mod.Dat <- act.date - sample(900:4100, 1)
     mod.date  <- format(mod.Dat, "%Y%m%d")
     law.code <- paste(sample(2:20,1),sample(300:500,1),format(mod.Dat, "%Y"), sep="/")
@@ -111,6 +112,20 @@ datgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "
                       "",
                       2, # location rural
                       area2,
+                      "********2*1*487",
+                      mod.date,
+                      law.code, # Changing law
+                      "***0*114*",
+                      "", # codepoint
+                      sep = "*")
+                )
+    WriteDATRow(paste(3,
+                      "BD02",
+                      3, # area id
+                      HRSZ3,
+                      "",
+                      2, # location rural
+                      area3,
                       "********2*1*487",
                       mod.date,
                       law.code, # Changing law
