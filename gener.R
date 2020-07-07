@@ -356,8 +356,9 @@ tteszt$y <- tteszt$y + 259400
 addpt.nr <- which(tteszt$k == "SPP")
 tteszt.first <- tteszt[-addpt.nr, ]
 ttres <- meascalc(tteszt.first)
-tteszt.addpt <- rbind(tteszt[1:2,],tteszt[addpt.nr, ], tteszt[4,])
+tteszt.addpt <- rbind(tteszt[1:2,],tteszt[addpt.nr, ], tteszt[4,], tteszt[nrow(tteszt),])
 ttres.addpt <- meascalc(tteszt.addpt)
+ttres.addpt <- ttres.addpt[-nrow(ttres.addpt),]
 write(export.coo.gizi(tteszt[tteszt$k == "AP" | tteszt$k == "OP" ,]), "newteszt.coo", sep="\n")
 write(export.geo.gizi(ttres), "newteszt.geo", sep="\n")
 write(export.geo.gizi(ttres.addpt), "newtesztadd.geo", sep="\n")
