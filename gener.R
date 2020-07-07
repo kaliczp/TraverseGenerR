@@ -277,9 +277,9 @@ export.coo.gizi <- function(coordinates) {
     result
 }
 
-plot.traverse <- function(traverse, tofile = FALSE, north = NULL) {
-    if(tofile)
-        pdf(width = 3)
+plot.traverse <- function(traverse, tofile = NULL, north = NULL) {
+    if(!is.null(tofile))
+        pdf(file = tofile, width = 3)
     par(mar=c(0,0,0,0))
     ## Mean points for plots
     x.mean <- mean(traverse$x)
@@ -287,7 +287,7 @@ plot.traverse <- function(traverse, tofile = FALSE, north = NULL) {
     ## Filter orientation points out
     traverse.xy <- traverse[traverse$k != "OP", 1:2]
     traverse.lab <- traverse[traverse$k != "OP", 4:5]
-    ## Extend traverse with meand and lower then x minima.
+    ## Extend traverse with mean and lower then x minima.
     trav.extend <- data.frame(x = c(x.mean, min(traverse.xy$x - 30)),
                                     y = rep(y.mean, 2))
     ## Plot traverse point with line
@@ -331,7 +331,7 @@ plot.traverse <- function(traverse, tofile = FALSE, north = NULL) {
         text(x = x.mean - 25, y = y.mean - 35, "50 m", adj = c(0.5, 0))
     }
     ## Close file
-    if(tofile)
+    if(!is.null(tofile))
         dev.off()
 }
 
