@@ -74,7 +74,6 @@ for(ttnev in 1:nrow(nevsor)) {
     ## Additional point plotted
     addpt.nr <- which(tteszt$k == "SPP")
     tteszt.first <- tteszt[-addpt.nr, ]
-    ttres <- meascalc(tteszt.first)
     ## Another additional point
     addpt.df <- tteszt[addpt.nr, ]
     addpt.df <- rbind(addpt.df, addpt.df)
