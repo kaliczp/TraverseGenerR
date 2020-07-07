@@ -1,6 +1,7 @@
 nevsor <- read.csv2("nevsor.csv", strings = F)
 
 for(ttnev in 1:nrow(nevsor)) {
+    StudentFilename <- sub(" ", "",nevsor[ttnev, "Név"])
     set.seed(nevsor[ttnev, "seed"])
     eszak  <- sample(450:650,1)
     szeles <- sample(270:360,1)
@@ -15,8 +16,10 @@ for(ttnev in 1:nrow(nevsor)) {
     (ut.neutr.dist <- (3/4 *szeles) - ut.tavs)
     short.edge <- sample(50:70,1)
     long.edge <- eszak - 50
-    tteszt <- gener(fulldist = long.edge, angledist = short.edge, ox=szeles/4, oy=0)
+    tteszt <- gener(fulldist = long.edge, angledist = short.edge, ox=szeles/4,
+                    oy=nevsor[ttnev, "Ycorrect"])
     tteszt[2:(nrow(tteszt)-1), "z"] <- predict(topo.loess, data.frame(x=tteszt$x, y=tteszt$y))[-c(1,nrow(tteszt))]
+    ## Topo point generation
     felmer.df <- expand.grid(x = seq(0, szeles - ut.tavs + 50, by = 20),
                              y = seq(long.edge - 80, eszak, by = 20)
                              )
@@ -34,14 +37,56 @@ for(ttnev in 1:nrow(nevsor)) {
     topo.eov$x <- round(topo.eov$x,3) + nevsor[ttnev, "easting"]
     topo.eov$y <- round(topo.eov$y,3) + nevsor[ttnev, "northing"]
     topo.eov$z <- round(topo.eov$z,3)
-    act.ang <- nevsor[ttnev, "Angle"] * pi /180
-    topo.eov$x <- topo.eov$x * cos(act.ang) -
-        topo.eov$y * sin(act.ang)
-    topo.eov$y <- topo.eov$x * sin(act.ang) +
-        topo.eov$y * cos(act.ang)
-    datgen(topo.eov[topo.eov$dat,], sub(" ", "",nevsor[ttnev, "Név"]),
+    ## act.ang <- nevsor[ttnev, "Angle"] * pi /180
+    ## topo.eov$x <- topo.eov$x * cos(act.ang) -
+    ##     topo.eov$y * sin(act.ang)
+    ## topo.eov$y <- topo.eov$x * sin(act.ang) +
+    ##     topo.eov$y * cos(act.ang)
+    datgen(topo.eov[topo.eov$dat,], StudentFilename,
            settlement = nevsor[ttnev, "Telep"],
            student = nevsor[ttnev, "Név"])
+    ######################################################################
+    ## Measurement generation
+    ## Without orientation, old instrument
+    trav.noorient <- tteszt[tteszt$k == "AP" | tteszt$k == "SP",]
+    plot.traverse(trav.noorient, tofile = paste0(StudentFilename,".pdf"))
+    ## Traverse transformation
+    travnoo.eov <- trav.noorient
+    travnoo.eov$x <- round(travnoo.eov$x,3) + nevsor[ttnev, "easting"]
+    travnoo.eov$y <- round(travnoo.eov$y,3) + nevsor[ttnev, "northing"]
+    travnoo.eov$z <- round(travnoo.eov$z,3)
+    ## travnoo.eov$x <- travnoo.eov$x * cos(act.ang) -
+    ##     travnoo.eov$y * sin(act.ang)
+    ## travnoo.eov$y <- travnoo.eov$x * sin(act.ang) +
+    ##     travnoo.eov$y * cos(act.ang)
+    ## travnoo.eov$x <- round(travnoo.eov$x,3)
+    ## travnoo.eov$y <- round(travnoo.eov$y,3)
+    write(export.coo.gizi(travnoo.eov[travnoo.eov$k == "AP",]), paste0(StudentFilename,".coo"), sep="\n")
+    ttres <- meascalc(travnoo.eov, orient = FALSE, generror = TRUE)
+    write(export.geo.gizi(ttres), paste0(StudentFilename,".geo"), sep="\n")
+    write.csv2(travnoo.eov[travnoo.eov$k == "AP",], paste0(StudentFilename,"coo.csv"), row.names = FALSE)
+    ttres.degree <- ttres
+    ttres.degree$h <- angleconv(ttres.degree$h)
+    ttres.degree$z <- angleconv(ttres.degree$z)
+    write.csv2(ttres.degree, paste0(StudentFilename,"geo.csv"), row.names = FALSE, quot = FALSE)
+######################################################################
+### Orientation
+    ## Additional point plotted
+    addpt.nr <- which(tteszt$k == "SPP")
+    tteszt.first <- tteszt[-addpt.nr, ]
+    ttres <- meascalc(tteszt.first)
+    tteszt.addpt <- rbind(tteszt[1:2,],tteszt[addpt.nr, ], tteszt[4,], tteszt[nrow(tteszt),])
+    ttres.addpt <- meascalc(tteszt.addpt)
+    ttres.addpt <- ttres.addpt[-nrow(ttres.addpt),]
+    write(export.coo.gizi(tteszt[tteszt$k == "AP" | tteszt$k == "OP" ,]), "newteszt.coo", sep="\n")
+    pdf(paste0(StudentFilename,".pdf"), width = 3)
+    plot.traverse(tteszt.first, north = 0)
+    ## Additional point plotted
+    lines(tteszt.addpt[-c(1,nrow(tteszt.addpt)), c("x","y")])
+    points(tteszt.addpt[3, c("x","y")], pch = 4)
+    text(tteszt.addpt[3, c("x","y")], lab=tteszt.addpt[3, "n"], adj=c(1.2,0))
+    text(tteszt.addpt[3, c("x","y")], lab=tteszt.addpt[3, "k"], adj=c(1.2,1.2))
+    dev.off()
 }
 
 ## PLOT
