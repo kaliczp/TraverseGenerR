@@ -104,7 +104,23 @@ for(ttnev in 1:nrow(nevsor)) {
     text(tteszt.addpt[3:4, c("x","y")], lab=tteszt.addpt[3:4, "n"], adj=c(-0.2,0))
     text(tteszt.addpt[3:4, c("x","y")], lab=tteszt.addpt[3:4, "k"], adj=c(-0.2,1.2))
     dev.off()
+    ## Export.csv
+    write.csv2(trav.eov, paste0(StudentFilename,"coo.csv"), row.names = FALSE)
+    ttres.full.degree <- ttres.full
+    ttres.full.degree$h <- angleconv(ttres.full.degree$h)
+    ttres.full.degree$z <- angleconv(ttres.full.degree$z)
+    write.csv2(ttres.full.degree, paste0(StudentFilename,"geo.csv"), row.names = FALSE, quot = FALSE)
 }
+
+### Export to gizi
+trav.eov <- tteszt[tteszt$k == "AP" | tteszt$k == "OP",]
+trav.eov$x <- round(trav.eov$x,3) + nevsor[ttnev, "easting"]
+trav.eov$y <- round(trav.eov$y,3) + nevsor[ttnev, "northing"]
+trav.eov$z <- round(trav.eov$z,3)
+write(export.coo.gizi(trav.eov), paste0(StudentFilename,".coo"), sep="\n")
+write(export.geo.gizi(ttres.full), paste0(StudentFilename,".geo"), sep="\n")
+
+
 
 ## PLOT
 library(MASS)
