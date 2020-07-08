@@ -80,6 +80,7 @@ for(ttnev in 1:nrow(nevsor)) {
     addpt.df[2, "n"] <- addpt.df[2, "n"] +1
     addpt.df$y <- tteszt.first[4, "y"] + c(2, 1) *  diff(tteszt.first[4:3, "y"])/3
     addpt.df$x <- tteszt.first[3, "x"] + c(4, 2) *  diff(tteszt.first[3:2, "x"])/6
+    addpt.df$z <- round(predict(topo.loess, addpt.df[,1:3]),3)
     tteszt.addpt <- rbind(tteszt[1:2,], addpt.df, tteszt[4,],
                           tteszt[c(nrow(tteszt)-2,nrow(tteszt)),])
     ttres.addpt <- meascalc(tteszt.addpt, ins.height.range = c(
