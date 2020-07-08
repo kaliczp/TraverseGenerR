@@ -115,6 +115,44 @@ for(ttnev in 1:nrow(nevsor)) {
     ttres.full.degree$h <- angleconv(ttres.full.degree$h)
     ttres.full.degree$z <- angleconv(ttres.full.degree$z)
     write.csv2(ttres.full.degree, paste0(StudentFilename,"geo.csv"), row.names = FALSE, quot = FALSE)
+### Bose plus points
+    Bose.df$z <- Bose.df$z + rnorm(nrow(Bose.df), sd = 0.04)
+    BoseW1 <- Bose.df
+    BoseW1$x <- BoseW1$x - rnorm(nrow(BoseW1), 10, sd = 1)
+    BoseW1$y <- BoseW1$y - rnorm(nrow(BoseW1), sd = 1)
+    BoseW1$z <- predict(topo.loess, BoseW1[, 1:2]) + rnorm(nrow(BoseW1), sd = 0.05)
+    BoseW2 <- Bose.df
+    BoseW2$x <- BoseW2$x - rnorm(nrow(BoseW2), 20, sd = 2)
+    BoseW2$y <- BoseW2$y - rnorm(nrow(BoseW2), sd = 2)
+    BoseW2$z <- predict(topo.loess, BoseW2[, 1:2]) + rnorm(nrow(BoseW2), sd = 0.1)
+    BoseE1 <- Bose.df
+    BoseE1$x <- BoseE1$x + rnorm(nrow(BoseE1), 10, sd = 1)
+    BoseE1$y <- BoseE1$y + rnorm(nrow(BoseE1), sd = 1)
+    BoseE1$z <- predict(topo.loess, BoseE1[, 1:2]) + rnorm(nrow(BoseE1), sd = 0.05)
+    BoseE2 <- Bose.df
+    BoseE2$x <- BoseE2$x + rnorm(nrow(BoseE1), 20, sd = 2)
+    BoseE2$y <- BoseE2$y + rnorm(nrow(BoseE1), sd = 2)
+    BoseE2$z <- predict(topo.loess, BoseE2[, 1:2]) + rnorm(nrow(BoseE2), sd = 0.1)
+    ## Topo point generation south
+    felmerS.df <- expand.grid(x = seq(0, max(BoseW2$x), by = 20),
+                             y = seq(0, 70, by = 20)
+                             )
+    felmerS.df$x <- felmerS.df$x + runif(nrow(felmerS.df), min = .5, max = 2)
+    felmerS.df$y <- felmerS.df$y + runif(nrow(felmerS.df), min = .5, max = 2)
+    felmerS.df$z <- predict(topo.loess, felmerS.df[, 1:2]) + rnorm(nrow(felmerS.df), sd = 0.1)
+    felmer.df$z <- predict(topo.loess, felmer.df[, 1:2]) + rnorm(nrow(felmer.df), sd = 0.1)
+    felmerall.df <- rbind(felmer.df,
+                          Bose.df,
+                          BoseW1,
+                          BoseW2,
+                          BoseE1,
+                          BoseE2,
+                          felmerS.df)
+    felmerall.df$x <- round(felmerall.df$x,2) + nevsor[ttnev, "easting"]
+    felmerall.df$y <- round(felmerall.df$y,2) + nevsor[ttnev, "northing"]
+    felmerall.df$z <- round(felmerall.df$z,2)
+    colnames(felmerall.df) <- c("EOV.Y", "EOV.X", "Z")
+    write.csv2(felmerall.df, paste0(StudentFilename,"points.csv"), row.names = FALSE, quot = FALSE)
 }
 
 ### Export to gizi
