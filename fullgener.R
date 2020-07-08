@@ -106,6 +106,10 @@ for(ttnev in 1:nrow(nevsor)) {
     text(tteszt.addpt[3:4, c("x","y")], lab=tteszt.addpt[3:4, "k"], adj=c(-0.2,1.2))
     dev.off()
     ## Export.csv
+    trav.eov <- tteszt.addpt[tteszt.addpt$k == "AP" | tteszt.addpt$k == "OP",]
+    trav.eov$x <- round(trav.eov$x,3) + nevsor[ttnev, "easting"]
+    trav.eov$y <- round(trav.eov$y,3) + nevsor[ttnev, "northing"]
+    trav.eov$z <- round(trav.eov$z,3)
     write.csv2(trav.eov, paste0(StudentFilename,"coo.csv"), row.names = FALSE)
     ttres.full.degree <- ttres.full
     ttres.full.degree$h <- angleconv(ttres.full.degree$h)
