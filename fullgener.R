@@ -208,3 +208,4 @@ dev.set(3)
 plot(Bose.df[,2:3])
 dev.set(2)
 
+write(paste0(export.m5(paste0("KaliczPéter",Sys.Date()), coor = travnoo.eov[travnoo.eov$k == "AP",]),"\r"), "data.m5", sep="\n")
