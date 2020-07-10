@@ -155,7 +155,26 @@ for(ttnev in 1:nrow(nevsor)) {
     felmerall.df$y <- round(felmerall.df$y,2) + nevsor[ttnev, "northing"]
     felmerall.df$z <- round(felmerall.df$z,2)
     felmerall.df <- felmerall.df[!is.na(felmerall.df$z),]
-    colnames(felmerall.df) <- c("EOV.Y", "EOV.X", "Z")
+### Generation of point numbers
+    felmer.nr <- nrow(felmer.df)
+    felmerS.nr <- nrow(felmerS.df)
+    Bose.nr <- nrow(Bose.df)
+    fullbose.nr <- Bose.nr * 5
+    fullbose.mat <- matrix(seq((felmer.nr + 1), by = 1, length.out = fullbose.nr),
+                           nrow = 5)
+    for(ttcol in 1:ncol(fullbose.mat))
+        fullbose.mat[, ttcol] <- fullbose.mat[sample(1:5,5), ttcol]
+    felmerS.first.nr <- felmer.nr + fullbose.nr + 1
+    full.nr <- c(sample(1:felmer.nr, felmer.nr),
+                 as.vector(fullbose.mat[-3,]),
+                 sample(seq(felmerS.first.nr, by = +1, length.out = felmerS.nr),
+                        felmerS.nr),
+                 as.vector(fullbose.mat[3,]) # same order as above
+                 )
+    felmerall.df <- cbind(full.nr, felmerall.df)
+    colnames(felmerall.df) <- c("nr", "EOV.Y", "EOV.X", "Z", "k")
+    felmerall.df <- felmerall.df[order(felmerall.df$nr),]
+    felmerall.df$nr <- felmerall.df$nr + 2000
     write.csv2(felmerall.df, paste0(StudentFilename,"points.csv"), row.names = FALSE, quot = FALSE)
 }
 
