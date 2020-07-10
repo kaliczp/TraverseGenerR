@@ -54,5 +54,10 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                                       ), unit2 = "", unit3 = "", unit4 = ""
                        )
     row.num <- 2
+    result <- c(result, make.row(code2 = "05", field2 = 1, unit2 = "",
+                                 code3 = "06", field3 = 1, unit3 = "",
+                                 code4 = "49", field4 = 0, unit4 = ""
+                                 )
+                )
     paste("For M5|Adr", result)
 }
