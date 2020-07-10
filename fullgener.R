@@ -142,13 +142,15 @@ for(ttnev in 1:nrow(nevsor)) {
     felmerS.df$y <- felmerS.df$y + runif(nrow(felmerS.df), min = .5, max = 2)
     felmerS.df$z <- predict(topo.loess, felmerS.df[, 1:2]) + rnorm(nrow(felmerS.df), sd = 0.1)
     felmer.df$z <- predict(topo.loess, felmer.df[, 1:2]) + rnorm(nrow(felmer.df), sd = 0.1)
-    felmerall.df <- rbind(felmer.df,
-                          Bose.df,
+    felmertopo.df <- rbind(felmer.df,
                           BoseW1,
                           BoseW2,
                           BoseE1,
                           BoseE2,
                           felmerS.df)
+    Bose.df$k <- "B"
+    felmertopo.df$k  <- "T"
+    felmerall.df <- rbind(felmertopo.df, Bose.df)
     felmerall.df$x <- round(felmerall.df$x,2) + nevsor[ttnev, "easting"]
     felmerall.df$y <- round(felmerall.df$y,2) + nevsor[ttnev, "northing"]
     felmerall.df$z <- round(felmerall.df$z,2)
