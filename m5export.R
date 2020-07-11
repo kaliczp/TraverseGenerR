@@ -17,6 +17,7 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
     }
     make.row <- function(code1 = make.paramcode(), # default param
                          field1 = "",
+                         f1align = "left",
                          code2 = "",
                          field2 = "",
                          unit2 = "m",
@@ -28,7 +29,8 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                          unit4 = "m",
                          closing = " ") {
         paste(align.field(fieldtext = row.num, width = 5, alignment = "right"),
-              align.field(paste(code1, field1), width = 31),
+              paste(code1,
+                    align.field(field1, width = 27, alignment = f1align)),
               paste(align.field(code2, width = 2),
                     align.field(field2, width = 14, alignment = "right"),
                     align.field(unit2, width = 4)
