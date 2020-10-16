@@ -61,5 +61,105 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                                  code4 = "49", field4 = 0, unit4 = ""
                                  )
                 )
+    ## Processing coordinates
+    if(!is.null(coordinates)) {
+        for(coordrow.num in 1:nrow(coordinates)) {
+            row.num <- row.num + 1
+            act.field1 <- paste0(align.field(coordinates[coordrow.num, "k"],
+                                             width = 5,
+                                             alignment = "right"
+                                             ),
+                                 align.field(coordinates[coordrow.num, "n"],
+                                             width = 12,
+                                             alignment = "right"
+                                             )
+                                 )
+            result <- c(result,
+                        make.row(make.paramcode("PI", 1),
+                                 field1 = act.field1,
+                                 f1align = "right",
+                                 code2 = "Y",
+                                 field2 = coordinates[coordrow.num, "x"],
+                                 code3 = "X",
+                                 field3 = coordinates[coordrow.num, "y"],
+                                 code4 = "Z",
+                                 field4 = coordinates[coordrow.num, "z"],
+                                 closing = "I"
+                                 )
+                        )
+        }
+    }
+    if(!is.null(angle)) {
+        station.nr <- -1
+        for(anglerow.num in 1:nrow(angle)) {
+            row.num <- row.num + 1
+            if(station.nr != angle[anglerow.num, "ns"]) {
+                ## New station
+                station.nr <- angle[anglerow.num, "ns"]
+                row.num <- row.num +1
+                act.field1 <- paste0(align.field("S",
+                                                 width = 5,
+                                                 alignment = "right"
+                                                 ),
+                                     align.field(station.nr,
+                                                 width = 12,
+                                                 alignment = "right"
+                                                 )
+                                     )
+                result <- c(result,
+                            make.row(make.paramcode("PI", 1),
+                                     field1 = act.field1,
+                                     f1align = "right",
+                                     code2 = "s",
+                                     field2 = "1.000",
+                                     code3 = "Om",
+                                     field3 = "90.000",
+                                     unit3 = "DMS",
+                                     code4 = "ih",
+                                     field4 = angle[anglerow.num, "ihs"]
+                                     )
+                            )
+            }
+            ## New point in actual station
+            code.act <- "SP"
+            ## Target height for actual measurement
+            result <- c(result,
+                        make.row(field1 = "INPUT",
+                                 f1align = "left",
+                                 code2 = "s",
+                                 field2 = "1.000",
+                                 unit2 = "",
+                                 code3 = "th",
+                                 field3 = angle[anglerow.num, "ihfb"],
+                                 code4 = "ih",
+                                 field4 = angle[anglerow.num, "ihs"]
+                                 )
+                        )
+            act.field1 <- paste0(align.field(code.act,
+                                             width = 5,
+                                             alignment = "right"
+                                             ),
+                                 align.field(angle[anglerow.num, "nfb"],
+                                             width = 12,
+                                             alignment = "right"
+                                             )
+                                 )
+            result <- c(result,
+                        make.row(make.paramcode("PI", 1),
+                                 field1 = act.field1,
+                                 f1align = "right",
+                                 code2 = "SD",
+                                 field2 = angle[anglerow.num, "d"],
+                                 code3 = "Hz",
+                                 field3 = angle[anglerow.num, "h"],
+                                 unit3 = "DMS",
+                                 code4 = "V1",
+                                 field4 = angle[anglerow.num, "z"],
+                                 unit4 = "DMS",
+                                 closing = "M"
+                                 )
+                        )
+        }
+    }
     paste("For M5|Adr", result)
 }

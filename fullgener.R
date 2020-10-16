@@ -208,4 +208,14 @@ dev.set(3)
 plot(Bose.df[,2:3])
 dev.set(2)
 
-write(paste0(export.m5(paste0("KaliczPéter",Sys.Date()), coor = travnoo.eov[travnoo.eov$k == "AP",]),"\r"), "data.m5", sep="\n")
+ttres.degree <- ttres
+ttres.degree$h <- angleconv(ttres.degree$h, format = "dot", round.sec = 1)
+ttres.degree$z <- angleconv(ttres.degree$z, format = "dot", round.sec = 1)
+
+write(paste0(export.m5(paste0("KaliczPéter",Sys.Date()), angle =ttres.degree, coor = travnoo.eov[travnoo.eov$k == "AP",]),"\r"), "data.m5", sep="\n")
+
+export.m5(paste0("KaliczPéter",Sys.Date()), angle = ttres.degree, coor = travnoo.eov[travnoo.eov$k == "AP",])
+
+ttfelmerall.df <- felmerall.df[,c(2:5,1),]
+names(ttfelmerall.df) <- c("x", "y", "z", "k", "n")
+write(paste0(export.m5(paste0("KaliczPéter",Sys.Date()), coor = ttfelmerall.df),"\r"), "data.m5", sep="\n")

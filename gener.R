@@ -202,7 +202,7 @@ ttface <- twoface(ttres)
 ttres$h <- angleconv(ttres$h)
 ttres$z <- angleconv(ttres$z)
 
-angleconv <- function(angle, round.sec = 0, input = "radian", output = "sexagesimal") {
+angleconv <- function(angle, round.sec = 0, input = "radian", output = "sexagesimal", format = "dash") {
     if(input == "radian") {
         angle  <-  angle * 180 / pi
     }
@@ -211,7 +211,14 @@ angleconv <- function(angle, round.sec = 0, input = "radian", output = "sexagesi
         mins <- (angle - angle.trunc)*60
         mins.trunc <- trunc(mins)
         secs <- (mins - mins.trunc)*60
-        return(paste(angle.trunc, mins.trunc, round(secs, round.sec), sep="-"))
+        if(format == "dash") {
+            return(paste(angle.trunc, mins.trunc, round(secs, round.sec), sep="-"))
+        } else {
+            rounded.secs <- round(secs, round.sec)
+            if(round.sec > 0)
+                rounded.secs <- sub("\\.","", rounded.secs)
+            return(paste(angle.trunc, paste0(mins.trunc, rounded.secs), sep="."))
+        }
     } else {
         return(angle)
     }
