@@ -23,20 +23,35 @@ for(ttnev in 1:nrow(nevsor)) {
     ## Sokszög
     ## Ház előtti és ház mögötti pont
     travhaz <- data.frame(x = szeles/2 + rnorm(2),
-                          y = c(hosszu + sample(2:10,1) + rnorm(1), # Utca
-                              hosszu/2 - sample(0:(hosszu/4),1) # Udvar
-                              ),
+                          y = c(hosszu + sample(2:10,1), # Utca
+                              hosszu/2 - sample(0:(hosszu/4),1)  # Udvar
+                              ) + rnorm(2),
                           z = magas,
                           k = "SP",
                           n = c(110, 120)
                           )
     travhaz[,"x"] <- round(travhaz[,"x"], 3)
     travhaz[,"y"] <- round(travhaz[,"y"], 3)
+    ## Tájékozó pontok
+    travorient <- travhaz
+    travorient[1, "k"] <- "OP"
+    travorient[, "n"] <- c(sample(1:9,1)*10, 100)
+    travorient[2, "y"]  <- travorient[1, "y"] + sample(2:10,1) #Utca vége y
+    travorient[2, "x"]  <- travorient[1, "x"] + sample(50:100,1) #Utca vége x
+    ## Tájékozó távoli
+    travorient[1, "y"] <- sample(-1500:1500,1)
+    travorient[1, "x"] <- sample(200:1500,1)
+    ## Randomizáció
+    travorient[,"x"] <- round(travorient[,"x"] + rnorm(2), 3)
+    travorient[,"y"] <- round(travorient[,"y"] + rnorm(2), 3)
+    travorient[,"z"] <- round(travorient[,"z"] + rnorm(2, sd=3), 3)
+    travfull <- rbind(travorient, travhaz)
 }
 
-plot(haz[,1:2], asp=T, ylim=c(0,hosszu+20))
+plot(haz[,1:2], asp=T, xlim = c(-60, 150), ylim=c(0,hosszu+20))
 text(x = haz[,"x"], y = haz[,"y"], lab=row.names(haz), adj=c(0,1))
 points(travhaz[,1:2])
+points(travorient[,1:2])
 
 ## 1 tájékozó és három SP
 travhaz <- travnoo.eov[1:4,]
