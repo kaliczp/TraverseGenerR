@@ -119,6 +119,21 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, g
                       )
         } else {
             ## If only one point oriented first or last?
+            ## Currently only first implemented
+            ## from start point
+            orient.df <- rbind(orient.df[orient.idx,],
+                                     coord[1,])
+            ## 2pi - angle + pi
+            hor.angle.ori <- pi - atan2(diff(orient.df$y),
+                                         diff(orient.df$x))
+            ori.fin <- data.frame(ns = orient.df[nrow(orient.df), "n"],
+                                  ihs = ins.height[1],
+                                  nfb = orient.df[1, "n"],
+                                  ihfb = 0,
+                                  h = hor.angle.ori,
+                                  z = NA,
+                                  d = NA
+                      )
         }
     }
     fore <- data.frame(ns = coord$n[-nrow(coord)],
