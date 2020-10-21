@@ -11,7 +11,15 @@ for(ttnev in 1:nrow(nevsor)) {
     haz <- data.frame(x=rep(0,4), y=rep(0,4), z=rep(magas,4))
     haz[2:3,"x"] <- szeles
     haz[3:4,"y"] <- hosszu
+    ## Szomszéd telkek
+    haz[5,"x"] <- round(haz[4,"x"] - szeles + rnorm(1),2)
+    haz[6,"x"] <- round(haz[3,"x"] + szeles + rnorm(1),2)
+    haz[5:6,"y"] <- hosszu
+    haz[5:6,"z"] <- magas
 }
+
+plot(haz[,1:2], asp=T)
+text(x = haz[,"x"], y = haz[,"y"], lab=row.names(haz), adj=c(0,1))
 
 ## 1 tájékozó és három SP
 travhaz <- travnoo.eov[1:4,]
