@@ -16,6 +16,10 @@ for(ttnev in 1:nrow(nevsor)) {
     haz[6,"x"] <- round(haz[3,"x"] + szeles + rnorm(1),2)
     haz[5:6,"y"] <- hosszu
     haz[5:6,"z"] <- magas
+    ## Épület 10x10m-es
+    elokert <- hosszu - sample(2:10, 1)
+    haz[7:10, "y"] <- elokert - c(0,0,10,10)
+    haz[7:10, "x"] <- szeles - c(0,10,0,10)
 }
 
 plot(haz[,1:2], asp=T)
