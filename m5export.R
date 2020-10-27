@@ -96,7 +96,6 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
             if(station.nr != angle[anglerow.num, "ns"]) {
                 ## New station
                 station.nr <- angle[anglerow.num, "ns"]
-                row.num <- row.num +1
                 act.field1 <- paste0(align.field("S",
                                                  width = 5,
                                                  alignment = "right"
@@ -119,6 +118,8 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                                      field4 = angle[anglerow.num, "ihs"]
                                      )
                             )
+                ## Increase row number for the first input of the station
+                row.num <- row.num +1
             }
             ## New point in actual station
             code.act <- "SP"
@@ -135,6 +136,8 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                                  field4 = angle[anglerow.num, "ihs"]
                                  )
                         )
+            ## Increase row number for the next measurement of the station
+            row.num <- row.num +1
             act.field1 <- paste0(align.field(code.act,
                                              width = 5,
                                              alignment = "right"
