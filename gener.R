@@ -219,7 +219,8 @@ ttres$z <- angleconv(ttres$z)
 
 angleconv <- function(angle, round.sec = 0, input = "radian", output = "sexagesimal", format = "dash") {
     if(input == "radian") {
-        angle  <-  angle * 180 / pi
+        oriangle <- as.numeric(angle)
+        angle  <-  oriangle * 180 / pi
     }
     if(output == "sexagesimal") {
         angle.trunc <- trunc(angle)
@@ -232,7 +233,8 @@ angleconv <- function(angle, round.sec = 0, input = "radian", output = "sexagesi
             rounded.secs <- round(secs, round.sec)
             if(round.sec > 0)
                 rounded.secs <- sub("\\.","", rounded.secs)
-            return(paste(angle.trunc, paste0(mins.trunc, rounded.secs), sep="."))
+            sexagesimal.asc <- paste(angle.trunc, paste0(mins.trunc, rounded.secs), sep=".")
+            return(as.numeric(sexagesimal.asc))
         }
     } else {
         return(angle)
