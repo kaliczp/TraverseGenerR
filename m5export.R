@@ -111,6 +111,7 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                                      f1align = "right",
                                      code2 = "s",
                                      field2 = "1.000",
+                                     unit2 = "",
                                      code3 = "Om",
                                      field3 = "90.000",
                                      unit3 = "DMS",
