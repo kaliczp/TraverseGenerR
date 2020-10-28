@@ -147,18 +147,39 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                                              alignment = "right"
                                              )
                                  )
+            ## Field 2 NA?
+            if(is.na(angle[anglerow.num, "d"])) {
+                act.code2 <- "  "
+                act.field2 <- "  "
+                act.unit2 <- " "
+            } else {
+                act.code2 <- "SD"
+                act.field2 <- angle[anglerow.num, "d"]
+                act.unit2 <- "m"
+            }
+            ## Field 4 NA?
+            if(is.na(angle[anglerow.num, "z"])) {
+                act.code4 <- "  "
+                act.field4 <- "  "
+                act.unit4 <- " "
+            } else {
+                act.code4 <- "V1"
+                act.field4 <- angle[anglerow.num, "z"]
+                act.unit4 <- "DMS"
+            }
             result <- c(result,
                         make.row(make.paramcode("PI", 1),
                                  field1 = act.field1,
                                  f1align = "right",
-                                 code2 = "SD",
-                                 field2 = angle[anglerow.num, "d"],
+                                 code2 = act.code2,
+                                 field2 = act.field2,
+                                 unit2 = act.unit2,
                                  code3 = "Hz",
                                  field3 = angle[anglerow.num, "h"],
                                  unit3 = "DMS",
-                                 code4 = "V1",
-                                 field4 = angle[anglerow.num, "z"],
-                                 unit4 = "DMS",
+                                 code4 = act.code4,
+                                 field4 = act.field4,
+                                 unit4 = act.unit4,
                                  closing = "M"
                                  )
                         )
