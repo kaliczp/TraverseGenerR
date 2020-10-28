@@ -64,7 +64,7 @@ for(ttnev in 1:nrow(nevsor)) {
     ## Szög konvertálás
     ttres.degree <- ttres
     ttres.degree$h <- angleconv(ttres.degree$h, format = "dot", round.sec = 1)
-    ttres.degree$z <- angleconv(ttres.degree$z, format = "dot", round.sec = 1)
+    ttres.degree[-1,"z"] <- angleconv(ttres.degree[-1,"z"], format = "dot", round.sec = 1)
     ttres.degree[1,"z"] <- NA
     ## Exportálás
     write(paste0(export.m5(paste0("Kalicz",Sys.Date()), angle =ttres.degree, coor = travfull[c(1:2,4),]),"\r"), paste0(StudentFilename,".m5"), sep="\n")

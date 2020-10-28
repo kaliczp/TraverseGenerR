@@ -226,8 +226,17 @@ angleconv <- function(angle, round.sec = 0, input = "radian", output = "sexagesi
         angle.trunc <- trunc(angle)
         mins <- (angle - angle.trunc)*60
         mins.trunc <- trunc(mins)
+        ## Padding mins
+        mins.one.digit <- mins.trunc < 10
         secs <- (mins - mins.trunc)*60
+        if(any(mins.one.digit)) {
+            mins.trunc[mins.one.digit] <- paste0("0", mins.trunc[mins.one.digit])
+        }
         rounded.secs <- round(secs, round.sec)
+        secs.one.digit <- rounded.secs < 10
+        if(any(secs.one.digit)) {
+            rounded.secs[secs.one.digit] <- paste0("0", rounded.secs[secs.one.digit])
+        }
         if(format == "dash") {
             return(paste(angle.trunc, mins.trunc, rounded.secs, sep="-"))
         } else {
