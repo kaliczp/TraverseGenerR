@@ -20,6 +20,12 @@ for(ttnev in 1:nrow(nevsor)) {
     elokert <- hosszu - sample(2:10, 1)
     haz[7:10, "y"] <- elokert - c(0,0,10,10)
     haz[7:10, "x"] <- szeles - c(0,10,0,10)
+    haz[7:10, "z"] <- magas
+    ## z random
+    haz[,"z"] <- round(haz[,"z"] + rnorm(nrow(haz), sd=.1), 3)
+    ## x, y random
+    haz[,"x"] <- round(haz[,"x"] + rnorm(nrow(haz), sd=.005), 3)
+    haz[,"y"] <- round(haz[,"y"] + rnorm(nrow(haz), sd=.005), 3)
     ## Sokszög
     ## Ház előtti és ház mögötti pont
     travhaz <- data.frame(x = szeles/2 + rnorm(2),
