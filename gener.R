@@ -227,10 +227,10 @@ angleconv <- function(angle, round.sec = 0, input = "radian", output = "sexagesi
         mins <- (angle - angle.trunc)*60
         mins.trunc <- trunc(mins)
         secs <- (mins - mins.trunc)*60
+        rounded.secs <- round(secs, round.sec)
         if(format == "dash") {
-            return(paste(angle.trunc, mins.trunc, round(secs, round.sec), sep="-"))
+            return(paste(angle.trunc, mins.trunc, rounded.secs, sep="-"))
         } else {
-            rounded.secs <- round(secs, round.sec)
             if(round.sec > 0)
                 rounded.secs <- sub("\\.","", rounded.secs)
             sexagesimal.asc <- paste(angle.trunc, paste0(mins.trunc, rounded.secs), sep=".")
