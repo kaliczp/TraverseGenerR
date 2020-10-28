@@ -234,7 +234,7 @@ angleconv <- function(angle, round.sec = 0, input = "radian", output = "sexagesi
             if(round.sec > 0)
                 rounded.secs <- sub("\\.","", rounded.secs)
             sexagesimal.asc <- paste(angle.trunc, paste0(mins.trunc, rounded.secs), sep=".")
-            return(as.numeric(sexagesimal.asc))
+            return(sexagesimal.asc)
         }
     } else {
         return(angle)
