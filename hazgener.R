@@ -51,30 +51,35 @@ for(ttnev in 1:nrow(nevsor)) {
     travorient[,"x"] <- round(travorient[,"x"] + rnorm(2), 3)
     travorient[,"y"] <- round(travorient[,"y"] + rnorm(2), 3)
     travorient[,"z"] <- round(travorient[,"z"] + rnorm(2, sd=3), 3)
+    ## Felmérő, tájékozó SP egyesítése
     travfull <- rbind(travorient, travhaz)
+    ## Eltolás
+    travfull[,"x"] <- travfull[,"x"] + nevsor[ttnev, "easting"]
+    travfull[,"y"] <- travfull[,"y"] + nevsor[ttnev, "northing"]
+    haz[,"x"] <- haz[,"x"] + nevsor[ttnev, "easting"]
+    haz[,"y"] <- haz[,"y"] + nevsor[ttnev, "northing"]
+    ## 1 tájékozó és három SP
+    ttres <- meascalc(travfull, orient = TRUE, generror = TRUE)
+    ttres <- ttres[-nrow(ttres),]
+    ## Szög konvertálás
+    ttres.degree <- ttres
+    ttres.degree$h <- angleconv(ttres.degree$h, format = "dot", round.sec = 1)
+    ttres.degree$z <- angleconv(ttres.degree$z, format = "dot", round.sec = 1)
+    ttres.degree[1,"z"] <- NA
+    ## Exportálás
+    write(paste0(export.m5(paste0("Kalicz",Sys.Date()), angle =ttres.degree, coor = travfull[c(1:2,4),]),"\r"), paste0(StudentFilename,".m5"), sep="\n")
 }
 
-plot(haz[,1:2], asp=T, xlim = c(-60, 150), ylim=c(0,hosszu+20))
+plot(haz[,1:2], asp=T, xlim = c(-60, 150), ylim=c(0,hosszu+20), ask = TRUE)
 text(x = haz[,"x"], y = haz[,"y"], lab=row.names(haz), adj=c(0,1))
 points(travhaz[,1:2])
 points(travorient[,1:2])
 
-## 1 tájékozó és három SP
-travhaz <- travnoo.eov[1:4,]
-travhaz[1,"k"] <- "OP"
-ttres <- meascalc(travhaz, orient = TRUE, generror = TRUE)
-ttres <- ttres[-nrow(ttres),]
+plot(travfull[,1:2],asp=T)
+points(haz[,1:2])
+
+plot(haz[,1:2], asp=T)
 
 ## GeoEasy teszt
 write(export.coo.gizi(travhaz[1:2,]), paste0(StudentFilename,".coo"), sep="\n")
 write(export.geo.gizi(ttres), paste0(StudentFilename,".geo"), sep="\n")
-
-ttres.degree <- ttres
-ttres.degree$h <- angleconv(ttres.degree$h, format = "dot", round.sec = 1)
-ttres.degree$z <- angleconv(ttres.degree$z, format = "dot", round.sec = 1)
-ttres.degree[1,"z"] <- NA
-
-write(paste0(export.m5(paste0("KaliczPéter",Sys.Date()), coor = travhaz.eov),"\r"), "data.m5", sep="\n")
-
-write(paste0(export.m5(paste0("Kalicz",Sys.Date()), angle =ttres.degree, coor = travhaz),"\r"), "data.m5", sep="\n")
-
