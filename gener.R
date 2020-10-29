@@ -227,22 +227,16 @@ angleconv <- function(angle, round.sec = 0, input = "radian", output = "sexagesi
         mins <- (angle - angle.trunc)*60
         mins.trunc <- trunc(mins)
         ## Padding mins
-        mins.one.digit <- mins.trunc < 10
+        mins.asc <- sprintf("%02d", mins.trunc)
         secs <- (mins - mins.trunc)*60
-        if(any(mins.one.digit)) {
-            mins.trunc[mins.one.digit] <- paste0("0", mins.trunc[mins.one.digit])
-        }
-        rounded.secs <- round(secs, round.sec)
-        secs.one.digit <- rounded.secs < 10
-        if(any(secs.one.digit)) {
-            rounded.secs[secs.one.digit] <- paste0("0", rounded.secs[secs.one.digit])
-        }
+        secs.format <- ifelse(round.sec == 0, "%02.0f", paste0("%0", 3 + round.sec, ".", round.sec, "f"))
+        secs.asc <- sprintf(secs.format, secs)
         if(format == "dash") {
-            return(paste(angle.trunc, mins.trunc, rounded.secs, sep="-"))
+            return(paste(angle.trunc, mins.asc, secs.asc, sep="-"))
         } else {
             if(round.sec > 0)
-                rounded.secs <- sub("\\.","", rounded.secs)
-            sexagesimal.asc <- paste(angle.trunc, paste0(mins.trunc, rounded.secs), sep=".")
+                secs.asc <- sub("\\.","", secs.asc)
+            sexagesimal.asc <- paste(angle.trunc, paste0(mins.asc, secs.asc), sep=".")
             return(sexagesimal.asc)
         }
     } else {
