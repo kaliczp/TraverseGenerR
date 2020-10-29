@@ -113,7 +113,7 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                                      field2 = "1.000",
                                      unit2 = "",
                                      code3 = "Om",
-                                     field3 = "90.000",
+                                     field3 = "90.00000",
                                      unit3 = "DMS",
                                      code4 = "ih",
                                      field4 = angle[anglerow.num, "ihs"]
