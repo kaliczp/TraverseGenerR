@@ -28,7 +28,7 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                          field4 = "",
                          unit4 = "m",
                          closing = " ") {
-        paste(align.field(fieldtext = row.num, width = 5, alignment = "right"),
+        paste(
               paste(code1,
                     align.field(field1, width = 27, alignment = f1align)),
               paste(align.field(code2, width = 2),
@@ -50,12 +50,10 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
     ## Empty result
     result <- character()
     ## Create header
-    row.num <- 1
     result <- make.row(field1 = paste("Project",
                                       align.field(projectname, width = 20)
                                       ), unit2 = "", unit3 = "", unit4 = ""
                        )
-    row.num <- 2
     result <- c(result, make.row(code2 = "05", field2 = 1, unit2 = "",
                                  code3 = "06", field3 = 1, unit3 = "",
                                  code4 = "49", field4 = 0, unit4 = ""
@@ -64,7 +62,6 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
     ## Processing coordinates
     if(!is.null(coordinates)) {
         for(coordrow.num in 1:nrow(coordinates)) {
-            row.num <- row.num + 1
             act.field1 <- paste0(align.field(coordinates[coordrow.num, "k"],
                                              width = 5,
                                              alignment = "right"
@@ -92,7 +89,6 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
     if(!is.null(angle)) {
         station.nr <- -1
         for(anglerow.num in 1:nrow(angle)) {
-            row.num <- row.num + 1
             if(station.nr != angle[anglerow.num, "ns"]) {
                 ## New station
                 station.nr <- angle[anglerow.num, "ns"]
@@ -119,8 +115,6 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                                      field4 = angle[anglerow.num, "ihs"]
                                      )
                             )
-                ## Increase row number for the first input of the station
-                row.num <- row.num +1
             }
             ## New point in actual station
             code.act <- "SP"
@@ -137,8 +131,6 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                                  field4 = angle[anglerow.num, "ihs"]
                                  )
                         )
-            ## Increase row number for the next measurement of the station
-            row.num <- row.num +1
             act.field1 <- paste0(align.field(code.act,
                                              width = 5,
                                              alignment = "right"
@@ -186,5 +178,8 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                         )
         }
     }
-    paste("For M5|Adr", result)
+    ## Line address number generation
+    lineno <- 1:length(result)
+    lineno.field <- align.field(fieldtext = lineno, width = 5, alignment = "right")
+    paste("For M5", paste("Adr", lineno.field), result, sep ="|")
 }
