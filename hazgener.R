@@ -66,6 +66,8 @@ for(ttnev in 1:nrow(nevsor)) {
     ttres.degree$h <- angleconv(ttres.degree$h, format = "dot", round.sec = 1)
     ttres.degree[-1,"z"] <- angleconv(ttres.degree[-1,"z"], format = "dot", round.sec = 1)
     ttres.degree[1,"z"] <- NA
+    ## Magassági hiba
+    travfull$z <- round(travfull$z + rnorm(nrow(travfull), sd = 0.007),3)
     ## Exportálás
     write(paste0(export.m5(paste0("Kalicz",Sys.Date()), angle =ttres.degree, coor = travfull[c(1:2,4),]),"\r"), paste0(StudentFilename,".m5"), sep="\n")
 }
