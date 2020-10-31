@@ -171,7 +171,7 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, g
         sec.rad <- (1/60/60)*pi/180 # one second in rad
         result.ok$h <- result.ok$h + rnorm(nrow(result.ok), sd = 3 * sec.rad)
         result.ok$z <- result.ok$z + rnorm(nrow(result.ok), sd = 3 * sec.rad)
-        result.ok$z <- result.ok$z + rnorm(nrow(result.ok), sd = 0.0004)
+        result.ok$d <- round(result.ok$d + rnorm(nrow(result.ok), sd = 0.0004), 3)
     }
     result.ok
 }
