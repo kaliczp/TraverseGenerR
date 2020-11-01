@@ -86,6 +86,7 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                         )
         }
     }
+    ## Processing measurements
     if(!is.null(angle)) {
         station.nr <- -1
         for(anglerow.num in 1:nrow(angle)) {
@@ -117,7 +118,7 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                             )
             }
             ## New point in actual station
-            code.act <- "SP"
+            code.act <- angle[anglerow.num, "k"]
             ## Target height for actual measurement
             result <- c(result,
                         make.row(field1 = "INPUT",
