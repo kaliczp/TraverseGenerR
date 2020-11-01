@@ -63,8 +63,10 @@ for(ttnev in 1:nrow(nevsor)) {
     ## Északról délre növekvő a pontszám miatt
     haz <- haz[order(haz$y, decreasing = TRUE),]
     haz$n <- 1001:(1001 + nrow(haz) - 1)
+    travfulltopo <- rbind(travfull[1:3,], haz[1:6,], travfull[4,], haz[7:10,])
+    row.names(travfulltopo) <- NULL
     ## 1 tájékozó és három SP
-    ttres <- meascalc(travfull, orient = TRUE, generror = TRUE)
+    ttres <- meascalc(travfulltopo, orient = TRUE, generror = TRUE, topo = TRUE)
     ttres <- ttres[-nrow(ttres),]
     ## Szög konvertálás
     ttres.degree <- ttres

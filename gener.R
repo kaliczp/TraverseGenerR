@@ -58,19 +58,36 @@ plot(tteszt[,1:2], asp=TRUE)
 
 write.csv(tteszt, "newteszt.csv", row.names = FALSE, quote = FALSE)
 
-meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, generror = FALSE) {
+meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, generror = FALSE, topo = FALSE) {
     if(orient) {
         ## Are there orient really?
         orient.idx <- coord$k == "OP"
         if(!any(orient.idx)) {
             orient = FALSE
+            warning("There are not any orientation points!")
         }
     }
     if(orient) {
-        ## Separate orientation and standard measurenets
+        ## Separate orientation and standard measurements
         orient.idx <- which(orient.idx)
         orient.df <- coord[orient.idx, ]
         coord <- coord[-orient.idx, ]
+    }
+    if(topo) {
+        ## Are there topo points really?
+        topo.idx <- coord$n > 1000
+        if(!any(topo.idx)) {
+            topo = FALSE
+            warning("There are not any topo points!")
+        }
+    }
+    if(topo) {
+        ## Separate topo points and standard measurements
+        topo.idx <- which(topo.idx)
+        topo.df <- coord[topo.idx, ]
+        coord <- coord[-topo.idx, ]
+        ## Select station numbers for topo points
+        ## Planned calculation
     }
     if(length(ins.height.range) == nrow(coord)) {
         ins.height <- ins.height.range
