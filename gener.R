@@ -132,7 +132,9 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, g
                                   ihfb = 0,
                                   h = c(first.hor.angle.ori,last.hor.angle.ori),
                                   z = NA,
-                                  d = NA
+                                  d = NA,
+                                  k = c(first.orient.df[1, "k"],
+                                        last.orient.df[1, "k"])
                       )
         } else {
             ## If only one point oriented first or last?
@@ -149,7 +151,8 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, g
                                   ihfb = 0,
                                   h = hor.angle.ori,
                                   z = NA,
-                                  d = NA
+                                  d = NA,
+                                  k = orient.df[1, "k"]
                       )
         }
     }
@@ -159,7 +162,8 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, g
                       ihfb = ins.height[-1],
                       h = hor.angle,
                       z = zenit.for,
-                      d = slop.dist
+                      d = slop.dist,
+                      k = coord$k[-1]
                       )
     back <- data.frame(ns = coord$n[-1],
                       ihs = ins.height[-1],
@@ -167,7 +171,8 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, g
                       ihfb = ins.height[-length(ins.height)],
                       h = hor.angle.back,
                       z = zenit.back,
-                      d = slop.dist
+                      d = slop.dist,
+                      k = coord$k[-nrow(coord)]
                       )
     result <- rbind(fore, back[-nrow(back),])
     if(orient) {
