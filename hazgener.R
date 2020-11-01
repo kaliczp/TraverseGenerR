@@ -16,11 +16,13 @@ for(ttnev in 1:nrow(nevsor)) {
     haz[6,"x"] <- round(haz[3,"x"] + szeles + rnorm(1),2)
     haz[5:6,"y"] <- hosszu
     haz[5:6,"z"] <- magas
+    haz$k  <- "t"
     ## Épület 10x10m-es
     elokert <- hosszu - sample(2:10, 1)
     haz[7:10, "y"] <- elokert - c(0,0,10,10)
     haz[7:10, "x"] <- szeles - c(0,10,0,10)
     haz[7:10, "z"] <- magas
+    haz[7:10, "k"] <- "e"
     ## z random
     haz[,"z"] <- round(haz[,"z"] + rnorm(nrow(haz), sd=.1), 3)
     ## x, y random
@@ -58,6 +60,9 @@ for(ttnev in 1:nrow(nevsor)) {
     travfull[,"y"] <- travfull[,"y"] + nevsor[ttnev, "northing"]
     haz[,"x"] <- haz[,"x"] + nevsor[ttnev, "easting"]
     haz[,"y"] <- haz[,"y"] + nevsor[ttnev, "northing"]
+    ## Északról délre növekvő a pontszám miatt
+    haz <- haz[order(haz$y, decreasing = TRUE),]
+    haz$n <- 1001:(1001 + nrow(haz) - 1)
     ## 1 tájékozó és három SP
     ttres <- meascalc(travfull, orient = TRUE, generror = TRUE)
     ttres <- ttres[-nrow(ttres),]
@@ -80,7 +85,12 @@ points(travorient[,1:2])
 plot(travfull[,1:2],asp=T)
 points(haz[,1:2])
 
-plot(haz[,1:2], asp=T)
+plot(haz[,1:2], asp=T, type="n")
+grid()
+text(haz$x, haz$y, haz$k)
+text(haz$x, haz$y, haz$n, adj=c(1,0))
+
+
 
 ## GeoEasy teszt
 write(export.coo.gizi(travhaz[1:2,]), paste0(StudentFilename,".coo"), sep="\n")
