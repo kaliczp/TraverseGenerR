@@ -58,7 +58,7 @@ plot(tteszt[,1:2], asp=TRUE)
 
 write.csv(tteszt, "newteszt.csv", row.names = FALSE, quote = FALSE)
 
-meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, generror = FALSE, topo = FALSE) {
+meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, generror = FALSE, topo = FALSE, topo.target.height = 1.7) {
     if(orient) {
         ## Are there orient really?
         orient.idx <- coord$k == "OP"
@@ -84,10 +84,54 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, g
     if(topo) {
         ## Separate topo points and standard measurements
         topo.idx <- which(topo.idx)
-        topo.df <- coord[topo.idx, ]
-        coord <- coord[-topo.idx, ]
         ## Select station numbers for topo points
-        ## Planned calculation
+        new.topostation <- topo.idx[diff(topo.idx) > 1]
+        if(length(new.topostation) > 0) {
+            new.topostation.loc <- c(1, new.topostation - 1)
+        } else {
+            new.topostation.loc <- 1
+        }
+        new.topostationidx <- topo.idx[new.topostation.loc]
+        topo.station.df <- coord[new.topostationidx - 1, ]
+        topo.list <- list()
+        for(topo.list.idx in 1:length(new.topostation.loc)) {
+            if(topo.list.idx == length(new.topostation.loc)) {
+                topo.select.idx  <- new.topostationidx[topo.list.idx]:topo.idx[length(topo.idx)]
+            } else {
+                topo.select.idx  <- new.topostationidx[topo.list.idx]:topo.idx[new.topostation.loc[topo.list.idx + 1] - 1]
+            }
+            topo.list[[topo.list.idx]] <- coord[topo.select.idx, ]
+        }
+        coord <- coord[-topo.idx, ]
+        topo.fore <- data.frame(ns = 0,
+                           ihs = 1.7,
+                           nfb = 0,
+                           ihfb = topo.target.height,
+                           h = 0,
+                           z = 0,
+                           d = 0,
+                           k = "t"
+                           )
+        ## Topo measurements calculation
+        for(act.topo.station in 1:nrow(topo.station.df)) {
+        slop.dist <- sqrt((topo.list[[act.topo.station]][,"x"] - topo.station.df[act.topo.station, "x"])^2 +
+                          (topo.list[[act.topo.station]][,"y"] - topo.station.df[act.topo.station, "y"])^2 +
+                          (topo.list[[act.topo.station]][,"z"] - topo.station.df[act.topo.station, "z"])^2)
+        hor.angle <- -atan2(topo.list[[act.topo.station]][,"y"] - topo.station.df[act.topo.station, "y"],
+                            topo.list[[act.topo.station]][,"x"] - topo.station.df[act.topo.station, "x"])
+        zenit.for <- pi/2 - asin((topo.list[[act.topo.station]][,"z"] - topo.station.df[act.topo.station, "z"]) / slop.dist)
+        topo.fore <- rbind(topo.fore, data.frame(ns = topo.station.df[act.topo.station, "n"],
+                                                 ihs = 1.7,
+                                                 nfb = topo.list[[act.topo.station]][,"n"],
+                                                 ihfb = topo.target.height,
+                                                 h = hor.angle,
+                                                 z = zenit.for,
+                                                 d = slop.dist,
+                                                 k = topo.list[[act.topo.station]][,"k"]
+                                                 )
+                           )
+        }
+        topo.fore <- topo.fore[-1,]
     }
     if(length(ins.height.range) == nrow(coord)) {
         ins.height <- ins.height.range
@@ -174,12 +218,15 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, g
                       d = slop.dist,
                       k = coord$k[-nrow(coord)]
                       )
-    result <- rbind(fore, back[-nrow(back),])
+    result <- rbind(fore, back)
     if(orient) {
         result <- rbind(result, ori.fin[1,])
     }
-    result.ord <- result[order(result$ns, result$nf),]
-    result.ok <- rbind(result.ord, back[nrow(back), ])
+    if(topo) {
+        result <- rbind(result, topo.fore)
+    }
+    order.res <- order(result$ns, result$nfb)
+    result.ok <- result[order.res,]
     if(orient) {
         result.ok <- rbind(result.ok, ori.fin[nrow(ori.fin),])
     }
