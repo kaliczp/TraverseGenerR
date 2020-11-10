@@ -61,9 +61,9 @@ for(ttnev in 1:nrow(nevsor)) {
     haz[,"x"] <- haz[,"x"] + nevsor[ttnev, "easting"]
     haz[,"y"] <- haz[,"y"] + nevsor[ttnev, "northing"]
     ## Északról délre növekvő a pontszám miatt
-    haz <- haz[order(haz$y, decreasing = TRUE),]
-    haz$n <- 1001:(1001 + nrow(haz) - 1)
-    travfulltopo <- rbind(travfull[1:3,], haz[1:6,], travfull[4,], haz[7:10,])
+    haz.pnum <- haz[order(haz$y, decreasing = TRUE),]
+    haz.pnum$n <- 1001:(1001 + nrow(haz.pnum) - 1)
+    travfulltopo <- rbind(travfull[1:3,], haz.pnum[1:6,], travfull[4,], haz.pnum[7:10,])
     row.names(travfulltopo) <- NULL
     ## 1 tájékozó és három SP
     ttres <- meascalc(travfulltopo, orient = TRUE, generror = TRUE, topo = TRUE)
@@ -79,18 +79,18 @@ for(ttnev in 1:nrow(nevsor)) {
     write(paste0(export.m5(paste0("Kalicz",Sys.Date()), angle =ttres.degree, coor = travfull[c(1:2,4),]),"\r"), paste0(StudentFilename,".m5"), sep="\n")
 }
 
-plot(haz[,1:2], asp=T, xlim = c(-60, 150), ylim=c(0,hosszu+20), ask = TRUE)
-text(x = haz[,"x"], y = haz[,"y"], lab=row.names(haz), adj=c(0,1))
+plot(haz.pnum[,1:2], asp=T, xlim = c(-60, 150), ylim=c(0,hosszu+20), ask = TRUE)
+text(x = haz.pnum[,"x"], y = haz[,"y"], lab=row.names(haz), adj=c(0,1))
 points(travhaz[,1:2])
 points(travorient[,1:2])
 
 plot(travfull[,1:2],asp=T)
 points(haz[,1:2])
 
-plot(haz[,1:2], asp=T, type="n")
+plot(haz.pnum[,1:2], asp=T, type="n")
 grid()
-text(haz$x, haz$y, haz$k)
-text(haz$x, haz$y, haz$n, adj=c(1,0))
+text(haz.pnum$x, haz.pnum$y, haz.pnum$k)
+text(haz.pnum$x, haz.pnum$y, haz.pnum$n, adj=c(1,0))
 
 
 
