@@ -97,3 +97,11 @@ text(haz.pnum$x, haz.pnum$y, haz.pnum$n, adj=c(1,0))
 ## GeoEasy teszt
 write(export.coo.gizi(travhaz[1:2,]), paste0(StudentFilename,".coo"), sep="\n")
 write(export.geo.gizi(ttres), paste0(StudentFilename,".geo"), sep="\n")
+
+## dat teszt
+hazdat <- haz[c(1:6,5:6),]
+hazdat[5:6,"y"] <- hazdat[1:2,"y"]
+row.names(hazdat) <- NULL
+plot(hazdat[,1:2], asp=T)
+text(hazdat[,1], hazdat[,2], row.names(hazdat), adj=c(0,1))
+hazdatgen(hazdat, "tesztfile")
