@@ -319,7 +319,7 @@ hazdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student 
     ## Boundaries
     WriteDATRow("T_HATAR")
     ## First poly
-    WriteDATRow("1*1*1*-")
+    WriteDATRow("1*1*1*+")
     WriteDATRow("1*2*2*+")
     WriteDATRow("1*3*3*+")
     WriteDATRow("1*4*4*+")
@@ -329,10 +329,10 @@ hazdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student 
     WriteDATRow("2*3*7*+")
     WriteDATRow("2*4*3*-")
     ## Third
-    WriteDATRow("3*1*8*-")
+    WriteDATRow("3*1*8*+")
     WriteDATRow("3*2*9*+")
     WriteDATRow("3*3*10*+")
-    WriteDATRow("3*4*2*+")
+    WriteDATRow("3*4*2*-")
     ## Polys
     WriteDATRow("T_FELULET")
     WriteDATRow("1*1*1*+")
