@@ -37,11 +37,9 @@ for(ttnev in 1:nrow(nevsor)) {
     topo.eov$x <- round(topo.eov$x,3) + nevsor[ttnev, "easting"]
     topo.eov$y <- round(topo.eov$y,3) + nevsor[ttnev, "northing"]
     topo.eov$z <- round(topo.eov$z,3)
-    ## act.ang <- nevsor[ttnev, "Angle"] * pi /180
-    ## topo.eov$x <- topo.eov$x * cos(act.ang) -
-    ##     topo.eov$y * sin(act.ang)
-    ## topo.eov$y <- topo.eov$x * sin(act.ang) +
-    ##     topo.eov$y * cos(act.ang)
+    ## Rotation
+    ## act.ang <- nevsor[ttnev, "Angle"]
+    ## topo.eov <- eovrotate(topo.eov, act.ang)
     datgen(topo.eov[topo.eov$dat,], StudentFilename,
            settlement = nevsor[ttnev, "Telep"],
            student = nevsor[ttnev, "Név"])
@@ -55,10 +53,8 @@ for(ttnev in 1:nrow(nevsor)) {
     travnoo.eov$x <- round(travnoo.eov$x,3) + nevsor[ttnev, "easting"]
     travnoo.eov$y <- round(travnoo.eov$y,3) + nevsor[ttnev, "northing"]
     travnoo.eov$z <- round(travnoo.eov$z,3)
-    ## travnoo.eov$x <- travnoo.eov$x * cos(act.ang) -
-    ##     travnoo.eov$y * sin(act.ang)
-    ## travnoo.eov$y <- travnoo.eov$x * sin(act.ang) +
-    ##     travnoo.eov$y * cos(act.ang)
+    ## Rotate
+    ## travnoo.eov <- eovrotate(travnoo.eov, act.ang)
     ## travnoo.eov$x <- round(travnoo.eov$x,3)
     ## travnoo.eov$y <- round(travnoo.eov$y,3)
     write(export.coo.gizi(travnoo.eov[travnoo.eov$k == "AP",]), paste0(StudentFilename,".coo"), sep="\n")
