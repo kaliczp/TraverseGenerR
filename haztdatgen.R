@@ -1,5 +1,17 @@
 haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "Kis Pista", teacher = "Kalicz Péter") {
     act.date <- Sys.Date()
+    ## Data preparation
+    ## Create sf
+    elso.mat <- as.matrix(rbind(x[1:4,1:3], x[1,1:3]))
+    row.names(elso.mat) <- c((1:4),11)
+    elso.poly <- st_polygon(list(elso.mat))
+    masodik.poly <- st_polygon(list(as.matrix(rbind(x[c(5,1,4,7),1:3], x[5,1:3]))))
+    harmadik.poly <- st_polygon(list(as.matrix(rbind(x[c(2,6,8,3),1:3], x[2,1:3]))))
+    x_sfc <- st_sfc(elso.poly,masodik.poly, harmadik.poly, crs=23700)
+    ## calculate centroids
+    x.centr <- st_coordinates(st_centroid(x_sfc))
+    x.centr <- cbind(x.centr, x[1:3,3])
+    colnames(x.centr) <- c("x","y","z")
     ## Write row wiht cat
     WriteDATRow <- function(x, append = TRUE)
         cat(paste0(x,"*\r"), file = fileConn, sep = "\n", append = append)
@@ -20,14 +32,16 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
     WriteDATRow(init, append = FALSE)
     ## Points
     WriteDATRow("T_PONT")
-    sorsz <- 1:nrow(x)
+    xfull <- rbind(x[,1:3], x.centr)
+    sorsz <- 1:nrow(xfull)
     WriteDATRow(paste(sorsz,
-                      x$y,
-                      x$x,
-                      x$z,
+                      xfull$y,
+                      xfull$x,
+                      xfull$z,
                       "0*0",
                       sep="*")
                 )
+    sorsz <- 1:nrow(x)
     ## Border lines
     WriteDATRow("T_HATARVONAL")
     ## Central poly edges
@@ -69,7 +83,7 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
     WriteDATRow("T_OBJ_ATTRAC")
     objkod.pt <- seq(objkod, by = 1, length.out = length(sorsz))
     WriteDATRow(paste(sorsz,
-                      "AC04",
+                      "AC02",
                       objkod.pt,
                       sorsz,
                       "1*3*0*1*0*0**4315",
@@ -88,11 +102,11 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
     mod.date  <- format(mod.Dat, "%Y%m%d")
     law.code <- paste(sample(2:20,1),sample(300:500,1),format(mod.Dat, "%Y"), sep="/")
     WriteDATRow(paste(1,
-                      "BD02",
+                      "BD01",
                       1, # area id
                       HRSZ1,
                       "",
-                      2, # location rural
+                      1, # location
                       area1,
                       "********2*1*487",
                       mod.date,
@@ -102,11 +116,11 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
                       sep = "*")
                 )
     WriteDATRow(paste(2,
-                      "BD02",
+                      "BD01",
                       2, # area id
                       HRSZ2,
                       "",
-                      2, # location rural
+                      1, # location
                       area2,
                       "********2*1*487",
                       mod.date,
@@ -116,65 +130,16 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
                       sep = "*")
                 )
     WriteDATRow(paste(3,
-                      "BD02",
+                      "BD01",
                       3, # area id
                       HRSZ3,
                       "",
-                      2, # location rural
+                      1, # location
                       area3,
                       "********2*1*487",
                       mod.date,
                       law.code, # Changing law
                       "***0*114*",
-                      "", # codepoint
-                      sep = "*")
-                )
-    WriteDATRow("T_OBJ_ATTRBE")
-    WriteDATRow(paste(1,
-                      "BE03",
-                      1, # area id
-                      "-",
-                      HRSZ1,
-                      area1,
-                      "", # value
-                      8, # Forest
-                      2, # location rural
-                      1,
-                      1, # prev. valid rec.
-                      mod.date,
-                      "***0*120*",
-                      "", # codepoint
-                      sep = "*")
-                )
-    WriteDATRow(paste(2,
-                      "BE03",
-                      2, # area id
-                      "-",
-                      HRSZ2,
-                      area2,
-                      "", # value
-                      8, # Forest
-                      2, # location rural
-                      1,
-                      1, # prev. valid rec.
-                      mod.date,
-                      "***0*120*",
-                      "", # codepoint
-                      sep = "*")
-                )
-    WriteDATRow(paste(3,
-                      "BE03",
-                      3, # area id
-                      "-",
-                      HRSZ3,
-                      area3,
-                      "", # value
-                      8, # Forest
-                      2, # location rural
-                      1,
-                      1, # prev. valid rec.
-                      mod.date,
-                      "***0*120*",
                       "", # codepoint
                       sep = "*")
                 )
@@ -182,14 +147,14 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
     WriteDATRow(paste(1,
                       "BF01",
                       1, # area id
-                      4, # quality code
-                      8, # forest
-                      1, # rural
-                      1,
+                      0, # quality code
+                      9, # kivett
+                      1, # elhat elozetes
+                      1, # módja
                       1, # last valid
                       0,
                       118,
-                      "",
+                      1,
                       "",
                       HRSZ1,
                       area1,
@@ -199,13 +164,13 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
                       "BF01",
                       2, # area id
                       5, # quality code
-                      8, # forest
+                      9, # kivett
                       1, # rural
                       1,
                       1, # last valid
                       0,
                       118,
-                      "",
+                      1,
                       "",
                       HRSZ2,
                       area2,
@@ -215,7 +180,7 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
                       "BF01",
                       3, # area id
                       5, # quality code
-                      8, # forest
+                      9, # kivett
                       1, # rural
                       1,
                       1, # last valid
@@ -230,29 +195,18 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
     WriteDATRow("T_FELIRAT")
     WriteDATRow(paste(1,
                       HRSZ1,
-                      1, # lower left corner point id
+                      9, # lower left corner point id
                       90, # orientation
                       6, # font size
                       0, # valid date
                       "T_OBJ_ATTRBD",
                       1, # row id
                       11, # property HRSZ
-                      sep = "*")
-                )
-    WriteDATRow(paste(2,
-                      "E",
-                      1, # lower left corner point id
-                      90, # orientation
-                      2, # font size
-                      0, # valid date
-                      "T_OBJ_ATTRBD",
-                      1, # row id
-                      14, # property HRSZ
                       sep = "*")
                 )
     WriteDATRow(paste(3,
                       HRSZ2,
-                      5, # lower left corner point id
+                      10, # lower left corner point id
                       90, # orientation
                       6, # font size
                       0, # valid date
@@ -261,20 +215,9 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
                       11, # property HRSZ
                       sep = "*")
                 )
-    WriteDATRow(paste(4,
-                      "E",
-                      5, # lower left corner point id
-                      90, # orientation
-                      2, # font size
-                      0, # valid date
-                      "T_OBJ_ATTRBD",
-                      2, # row id
-                      14, # property HRSZ
-                      sep = "*")
-                )
-        WriteDATRow(paste(5,
+    WriteDATRow(paste(5,
                       HRSZ3,
-                      2, # lower left corner point id
+                      11, # lower left corner point id
                       90, # orientation
                       6, # font size
                       0, # valid date

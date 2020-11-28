@@ -81,7 +81,7 @@ for(ttnev in 1:nrow(nevsor)) {
     hazdat <- haz[c(1:6,5:6),]
     hazdat[5:6,"y"] <- hazdat[1:2,"y"]
     row.names(hazdat) <- NULL
-    hazdatgen(hazdat, StudentFilename)
+    haztobbdatgen(hazdat, StudentFilename)
 }
 
 plot(haz.pnum[,1:2], asp=T, xlim = c(-60, 150), ylim=c(0,hosszu+20), ask = TRUE)
