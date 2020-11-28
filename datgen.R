@@ -314,7 +314,7 @@ hazdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student 
     WriteDATRow("7*1*5*1*0*") # south line
     ## Right poly plus
     WriteDATRow("8*1*2*6*0*") # south short
-    WriteDATRow("9*1*6*8*0*") # east short
+    WriteDATRow("9*1*6*8*0*") # east edge
     WriteDATRow("10*1*8*3*0*") # north edge
     ## Boundaries
     WriteDATRow("T_HATAR")
@@ -327,7 +327,7 @@ hazdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student 
     WriteDATRow("2*1*5*+")
     WriteDATRow("2*2*6*+")
     WriteDATRow("2*3*7*+")
-    WriteDATRow("2*4*3*-")
+    WriteDATRow("2*4*4*-")
     ## Third
     WriteDATRow("3*1*8*+")
     WriteDATRow("3*2*9*+")
@@ -435,6 +435,22 @@ hazdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student 
                       "", # codepoint
                       sep = "*")
                 )
+    WriteDATRow(paste(3,
+                      "BE03",
+                      3, # area id
+                      "-",
+                      HRSZ3,
+                      area3,
+                      "", # value
+                      8, # Forest
+                      2, # location rural
+                      1,
+                      1, # prev. valid rec.
+                      mod.date,
+                      "***0*120*",
+                      "", # codepoint
+                      sep = "*")
+                )
     WriteDATRow("T_OBJ_ATTRBF")
     WriteDATRow(paste(1,
                       "BF01",
@@ -452,7 +468,7 @@ hazdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student 
                       area1,
                       sep = "*")
                 )
-    WriteDATRow(paste(1,
+    WriteDATRow(paste(2,
                       "BF01",
                       2, # area id
                       5, # quality code
@@ -468,20 +484,20 @@ hazdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student 
                       area2,
                       sep = "*")
                 )
-    WriteDATRow("T_OBJ_ATTRDC")
-    WriteDATRow(paste(1,
-                      "DC07",
+    WriteDATRow(paste(3,
+                      "BF01",
                       3, # area id
-                      1, # length id
-                      0, # szam
-                      12, # pavement
-                      "**", # Additional data
-                      "*", #
+                      5, # quality code
+                      8, # forest
+                      1, # rural
                       1,
+                      1, # last valid
                       0,
-                      114,
+                      118,
                       "",
                       "",
+                      HRSZ3,
+                      area3,
                       sep = "*")
                 )
     WriteDATRow("T_FELIRAT")
@@ -527,6 +543,17 @@ hazdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student 
                       "T_OBJ_ATTRBD",
                       2, # row id
                       14, # property HRSZ
+                      sep = "*")
+                )
+    WriteDATRow(paste(5,
+                      HRSZ3,
+                      2, # lower left corner point id
+                      90, # orientation
+                      6, # font size
+                      0, # valid date
+                      "T_OBJ_ATTRBD",
+                      2, # row id
+                      11, # property HRSZ
                       sep = "*")
                 )
     close(fileConn)
