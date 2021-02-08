@@ -12,7 +12,7 @@ eovrotate <- function(x, degree = 10) {
     shifted.coo$y <- (temporary$x * sin(radian.angle)) +
         (temporary$y * cos(radian.angle))
     ## Translate back
-    x$x <- shifted.coo$x + col.means["x"]
-    x$y <- shifted.coo$y + col.means["y"]
+    x$x <- round(shifted.coo$x + col.means["x"], 3)
+    x$y <- round(shifted.coo$y + col.means["y"], 3)
     x
 }
