@@ -61,7 +61,7 @@ write.csv(tteszt, "newteszt.csv", row.names = FALSE, quote = FALSE)
 meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, generror = FALSE, topo = FALSE, topo.target.height = 1.7) {
     if(orient) {
         ## Are there orient really?
-        orient.idx <- coord$k == "OP"
+        orient.idx <- coord$k == "op"
         if(!any(orient.idx)) {
             orient = FALSE
             warning("There are not any orientation points!")
