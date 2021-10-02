@@ -1,3 +1,5 @@
+## https://geocompr.robinlovelace.net/geometric-operations.html#affine-transformations
+## More simpler solution
 eovrotate <- function(x, degree = 10) {
     radian.angle <- degree * (pi / 180)
     ## Calculate means

@@ -28,7 +28,7 @@ for(ttnev in 1:nrow(nevsor)) {
     Bose.max <- min(felmer.df$y) - 10
     Bose.nr <- round(Bose.max / 20)
     Bose.df <- data.frame(x = rep(szeles / 4, Bose.nr),
-                          y = seq(0, Bose.max, length.out = Bose.nr)
+                          y = seq(0.2, Bose.max, length.out = Bose.nr)
                           )
     Bose.df$x <- Bose.df$x + rnorm(nrow(Bose.df), sd = 2)
     Bose.df$y <- Bose.df$y + rnorm(nrow(Bose.df), sd = 1)
@@ -150,7 +150,6 @@ for(ttnev in 1:nrow(nevsor)) {
     felmerall.df$x <- round(felmerall.df$x,2) + nevsor[ttnev, "easting"]
     felmerall.df$y <- round(felmerall.df$y,2) + nevsor[ttnev, "northing"]
     felmerall.df$z <- round(felmerall.df$z,2)
-    felmerall.df <- felmerall.df[!is.na(felmerall.df$z),]
 ### Generation of point numbers
     felmer.nr <- nrow(felmer.df)
     felmerS.nr <- nrow(felmerS.df)
@@ -171,6 +170,7 @@ for(ttnev in 1:nrow(nevsor)) {
     colnames(felmerall.df) <- c("nr", "EOV.Y", "EOV.X", "Z", "k")
     felmerall.df <- felmerall.df[order(felmerall.df$nr),]
     felmerall.df$nr <- felmerall.df$nr + 2000
+    felmerall.df <- felmerall.df[!is.na(felmerall.df$Z),]
     write.csv2(felmerall.df, paste0(StudentFilename,"points.csv"), row.names = FALSE, quot = FALSE)
 }
 
