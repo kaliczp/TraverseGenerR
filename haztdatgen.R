@@ -87,7 +87,7 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
                       "AC02",
                       objkod.pt,
                       sorsz,
-                      "1*3*0*1*0*0**4315",
+                      "1*3*0*1*0*0**3215",
                       sep = "*")
                 )
     ## Area attributes
