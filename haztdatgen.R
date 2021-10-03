@@ -11,6 +11,7 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
     ## calculate centroids
     x.centr <- st_coordinates(st_centroid(x_sfc))
     x.centr <- cbind(x.centr, x[1:3,3])
+    x.centr <- round(x.centr, 3)
     colnames(x.centr) <- c("x","y","z")
     ## Write row wiht cat
     WriteDATRow <- function(x, append = TRUE)
