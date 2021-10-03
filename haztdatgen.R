@@ -1,4 +1,4 @@
-haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "Kis Pista", teacher = "Kalicz Péter") {
+haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "Kis Pista", teacher = "Kalicz Péter", parcels = 3) {
     act.date <- Sys.Date()
     ## Data preparation
     ## Create sf
@@ -12,6 +12,10 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
     x.centr <- st_coordinates(st_centroid(x_sfc))
     x.centr <- cbind(x.centr, x[1:3,3])
     x.centr <- round(x.centr, 3)
+    ## Points for address-coordinates m rounded centroids
+    x.addrcoo <- round(x.centr)
+    x.addrcoo[,3] <- 0
+    x.centr <- rbind(x.centr, x.addrcoo)
     colnames(x.centr) <- c("x","y","z")
     ## Write row wiht cat
     WriteDATRow <- function(x, append = TRUE)
@@ -34,8 +38,8 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
     ## Points
     WriteDATRow("T_PONT")
     xfull <- rbind(x[,1:3], x.centr)
-    sorsz <- 1:nrow(xfull)
-    WriteDATRow(paste(sorsz,
+    sorsz.full <- 1:nrow(xfull)
+    WriteDATRow(paste(sorsz.full,
                       xfull$y,
                       xfull$x,
                       xfull$z,
@@ -88,6 +92,28 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
                       objkod.pt,
                       sorsz,
                       "1*3*0*1*0*0**3215",
+                      sep = "*")
+                )
+    ## Address-coordinates attributes
+    sorsz.addrcoo <- 1:parcels
+    ## ID of last points
+    max.point.id <- sorsz.full[length(sorsz.full)]
+    pointid.addrcoo <- (max.point.id - parcels + 1):max.point.id
+    WriteDATRow("T_OBJ_ATTRAD")
+    WriteDATRow(paste(sorsz.addrcoo,
+                      "AD01",
+                      1, # Name of the point
+                      "5411", # Addr-coo (54), not-signed (1), generated (1)
+                      pointid.addrcoo,
+                      "", # date of invalidity
+                      195, # Graphical representation
+                      "", # Description optional
+                      "", # parcel_id1
+                      sorsz.addrcoo, # parcel_id2 number!
+                      "", # building id
+                      "", # other prop id
+                      sorsz.addrcoo, # last valid id,
+                      "", # survey id
                       sep = "*")
                 )
     ## Area attributes
