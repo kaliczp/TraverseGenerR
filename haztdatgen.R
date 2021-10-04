@@ -1,4 +1,4 @@
-haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "Kis Pista", teacher = "Kalicz Péter", parcels = 3) {
+haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, student = "Kis Pista", teacher = "Kalicz Péter", parcels = 3, addcoo = TRUE) {
     act.date <- Sys.Date()
     ## Data preparation
     ## Create sf
@@ -13,9 +13,11 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
     x.centr <- cbind(x.centr, x[1:3,3])
     x.centr <- round(x.centr, 3)
     ## Points for address-coordinates m rounded centroids
-    x.addrcoo <- round(x.centr)
-    x.addrcoo[,3] <- 0
-    x.centr <- rbind(x.centr, x.addrcoo)
+    if(addcoo) {
+        x.addrcoo <- round(x.centr)
+        x.addrcoo[,3] <- 0
+        x.centr <- rbind(x.centr, x.addrcoo)
+    }
     colnames(x.centr) <- c("x","y","z")
     ## Write row wiht cat
     WriteDATRow <- function(x, append = TRUE)
@@ -95,27 +97,29 @@ haztobbdatgen <- function(x, file, settlement = "Sehonna", objkod = 105201, stud
                       sep = "*")
                 )
     ## Address-coordinates attributes
-    sorsz.addrcoo <- 1:parcels
-    ## ID of last points
-    max.point.id <- sorsz.full[length(sorsz.full)]
-    pointid.addrcoo <- (max.point.id - parcels + 1):max.point.id
-    WriteDATRow("T_OBJ_ATTRAD")
-    WriteDATRow(paste(sorsz.addrcoo,
-                      "AD01",
-                      1, # Name of the point
-                      "5411", # Addr-coo (54), not-signed (1), generated (1)
-                      pointid.addrcoo,
-                      "", # date of invalidity
-                      195, # Graphical representation
-                      "", # Description optional
-                      "", # parcel_id1
-                      sorsz.addrcoo, # parcel_id2 number!
-                      "", # building id
-                      "", # other prop id
-                      sorsz.addrcoo, # last valid id,
-                      "", # survey id
-                      sep = "*")
-                )
+    if(addcoo) {
+        sorsz.addrcoo <- 1:parcels
+        ## ID of last points
+        max.point.id <- sorsz.full[length(sorsz.full)]
+        pointid.addrcoo <- (max.point.id - parcels + 1):max.point.id
+        WriteDATRow("T_OBJ_ATTRAD")
+        WriteDATRow(paste(sorsz.addrcoo,
+                          "AD01",
+                          1, # Name of the point
+                          "5411", # Addr-coo (54), not-signed (1), generated (1)
+                          pointid.addrcoo,
+                          "", # date of invalidity
+                          195, # Graphical representation
+                          "", # Description optional
+                          "", # parcel_id1
+                          sorsz.addrcoo, # parcel_id2 number!
+                          "", # building id
+                          "", # other prop id
+                          sorsz.addrcoo, # last valid id,
+                          "", # survey id
+                          sep = "*")
+                    )
+    }
     ## Area attributes
     WriteDATRow("T_OBJ_ATTRBD")
     ## Generate data
