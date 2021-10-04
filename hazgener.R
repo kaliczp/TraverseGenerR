@@ -35,14 +35,14 @@ for(ttnev in 1:nrow(nevsor)) {
                               hosszu/2 - sample(0:(hosszu/4),1)  # Udvar
                               ) + rnorm(2),
                           z = magas,
-                          k = "SP",
+                          k = "sp",
                           n = c(110, 120)
                           )
     travhaz[,"x"] <- round(travhaz[,"x"], 3)
     travhaz[,"y"] <- round(travhaz[,"y"], 3)
     ## Tájékozó pontok
     travorient <- travhaz
-    travorient[1, "k"] <- "OP"
+    travorient[1, "k"] <- "op"
     travorient[, "n"] <- c(sample(1:9,1)*10, 100)
     travorient[2, "y"]  <- travorient[1, "y"] + sample(2:10,1) #Utca vége y
     travorient[2, "x"]  <- travorient[1, "x"] + sample(50:100,1) #Utca vége x

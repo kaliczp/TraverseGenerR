@@ -35,7 +35,7 @@ gener <- function(slope=6, firstnr = 100, angledist = NULL, fulldist = NULL, ox=
             rnorm(orient.nr, sd = 50)
         orie.z <- mean(frame$z) + rnorm(orient.nr, 20, 1)
         orient.df <- data.frame(x = orie.x, y = orie.y, z = orie.z,
-                                k = rep("OP", orient.nr),
+                                k = rep("op", orient.nr),
                                 n = 1:orient.nr)
         if(orient[1] > 0)
             frame <- rbind(orient.df[1:orient[1],], frame)
@@ -386,8 +386,8 @@ plot.traverse <- function(traverse, tofile = NULL, north = NULL) {
     x.mean <- mean(traverse$x)
     y.mean <- mean(traverse$y)
     ## Filter orientation points out
-    traverse.xy <- traverse[traverse$k != "OP", 1:2]
-    traverse.lab <- traverse[traverse$k != "OP", 4:5]
+    traverse.xy <- traverse[traverse$k != "op", 1:2]
+    traverse.lab <- traverse[traverse$k != "op", 4:5]
     ## Extend traverse with mean and lower then x minima.
     trav.extend <- data.frame(x = c(x.mean, min(traverse.xy$x - 30)),
                                     y = rep(y.mean, 2))
@@ -400,7 +400,7 @@ plot.traverse <- function(traverse, tofile = NULL, north = NULL) {
     text(traverse.xy, lab=traverse.lab$n, adj=c(1.2,0))
     ## Point codes
     text(traverse.xy, lab=traverse.lab$k, adj=c(1.2,1.2))
-    if(any(traverse$k == "OP")) {
+    if(any(traverse$k == "op")) {
         ## First orientation arrow
         arrows(traverse[2,1], traverse[2,2], # from
                traverse[2,1]+40, traverse[2,2], # to
@@ -460,7 +460,7 @@ ttres <- meascalc(tteszt.first)
 tteszt.addpt <- rbind(tteszt[1:2,],tteszt[addpt.nr, ], tteszt[4,], tteszt[nrow(tteszt),])
 ttres.addpt <- meascalc(tteszt.addpt)
 ttres.addpt <- ttres.addpt[-nrow(ttres.addpt),]
-write(export.coo.gizi(tteszt[tteszt$k == "AP" | tteszt$k == "OP" ,]), "newteszt.coo", sep="\n")
+write(export.coo.gizi(tteszt[tteszt$k == "ap" | tteszt$k == "op" ,]), "newteszt.coo", sep="\n")
 write(export.geo.gizi(ttres), "newteszt.geo", sep="\n")
 write(export.geo.gizi(ttres.addpt), "newtesztadd.geo", sep="\n")
 plot.traverse(tteszt.first, north = 0)
