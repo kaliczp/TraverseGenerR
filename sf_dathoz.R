@@ -11,9 +11,30 @@ elso.pl <- st_polygon(list(elso.mat))
 masodik.pl <- elso.pl + c(diff(as.numeric(elso.mat[c(1,3),"x"])),0,0)
 elozo.pl <- elso.pl - c(diff(as.numeric(elso.mat[c(1,3),"x"])),0,0)
 
-## Földrészletek
-telek.df <- st_sf(data.frame(HRSZ = c(10,11,12), st_sfc(elozo.pl, elso.pl,masodik.pl, crs=23700)))
+## Alsó szomszédok
+eltol <- c(0,diff(as.numeric(elso.mat[c(1,2),"y"])),0)
+elozoalatt.pl <- elozo.pl - eltol
+elsoalatt.pl <- elso.pl - eltol
+masodikalatt.pl <- masodik.pl - eltol
 
+## Közterület
+
+## Lista
+telkek.list <- list(elozo.pl,
+                    elso.pl,
+                    masodik.pl,
+                    elozoalatt.pl,
+                    elsoalatt.pl,
+                    masodikalatt.pl)
+
+## Földrészletek
+telek.df <- st_sf(data.frame(HRSZ = c(10,11,12,20,21,22),
+                             st_sfc(telkek.list,
+                                    crs=23700)))
+
+## Adatkinyerés
+st_coordinates(st_cast(telek.df[telek.df$HRSZ == 11,], to="LINESTRING"))
+st_coordinates(st_cast(telek.df[telek.df$HRSZ == 11,], to="MULTIPOINT"))
 
 ### Kérdések:
 ## Pontkód hogyan?
