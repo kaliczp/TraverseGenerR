@@ -8,8 +8,17 @@ row.names(elso.mat) <- c(1:4,11)
 elso.pl <- st_polygon(list(elso.mat))
 
 ## Szomszédok generálása
-masodik.pl <- elso.pl + c(diff(as.numeric(elso.mat[c(1,3),"x"])),0,0)
-elozo.pl <- elso.pl - c(diff(as.numeric(elso.mat[c(1,3),"x"])),0,0)
+parc.gener <- function(x, dir) {
+    coord.mat <- st_coordinates(x)
+    if(dir == "right") {
+        x + c(diff(as.numeric(coord.mat[c(1,3),"X"])),0,0)
+    } else {
+        x - c(diff(as.numeric(coord.mat[c(1,3),"X"])),0,0)
+    }
+}
+
+masodik.pl <- parc.gener(elso.pl, "right")
+elozo.pl <- parc.gener(elso.pl, "left")
 
 ## Alsó szomszédok
 eltol <- c(0,diff(as.numeric(elso.mat[c(1,2),"y"])),0)
