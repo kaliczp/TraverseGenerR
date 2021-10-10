@@ -11,6 +11,8 @@ elso.pl <- st_polygon(list(elso.mat))
 parc.gener <- function(x, dir) {
     coord.mat <- st_coordinates(x)
     switch(dir,
+        up = x + c(0,diff(as.numeric(coord.mat[c(1,2),"Y"])),0),
+        down = x - c(0,diff(as.numeric(coord.mat[c(1,2),"Y"])),0),
         right = x + c(diff(as.numeric(coord.mat[c(1,3),"X"])),0,0),
         left = x - c(diff(as.numeric(coord.mat[c(1,3),"X"])),0,0)
         )
@@ -20,10 +22,9 @@ masodik.pl <- parc.gener(elso.pl, "right")
 elozo.pl <- parc.gener(elso.pl, "left")
 
 ## Alsó szomszédok
-eltol <- c(0,diff(as.numeric(elso.mat[c(1,2),"y"])),0)
-elozoalatt.pl <- elozo.pl - eltol
-elsoalatt.pl <- elso.pl - eltol
-masodikalatt.pl <- masodik.pl - eltol
+elozoalatt.pl <- parc.gener(elozo.pl, "down")
+elsoalatt.pl <- parc.gener(elso.pl, "down")
+masodikalatt.pl <- parc.gener(masodik.pl, "down")
 
 ## Közterület
 
