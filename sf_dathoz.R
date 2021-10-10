@@ -10,11 +10,10 @@ elso.pl <- st_polygon(list(elso.mat))
 ## Szomszédok generálása
 parc.gener <- function(x, dir) {
     coord.mat <- st_coordinates(x)
-    if(dir == "right") {
-        x + c(diff(as.numeric(coord.mat[c(1,3),"X"])),0,0)
-    } else {
-        x - c(diff(as.numeric(coord.mat[c(1,3),"X"])),0,0)
-    }
+    switch(dir,
+        right = x + c(diff(as.numeric(coord.mat[c(1,3),"X"])),0,0),
+        left = x - c(diff(as.numeric(coord.mat[c(1,3),"X"])),0,0)
+        )
 }
 
 masodik.pl <- parc.gener(elso.pl, "right")
