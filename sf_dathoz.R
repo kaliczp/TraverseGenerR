@@ -45,6 +45,9 @@ telek.df <- st_sf(data.frame(HRSZ = c(10,11,12,20,21,22),
 st_coordinates(st_cast(telek.df[telek.df$HRSZ == 11,], to="LINESTRING"))
 st_coordinates(st_cast(telek.df[telek.df$HRSZ == 11,], to="MULTIPOINT"))
 
+## HRSZ csere
+telek.df$HRSZ <- telek.df$HRSZ + 10
+
 ### Kérdések:
 ## Pontkód hogyan?
 
