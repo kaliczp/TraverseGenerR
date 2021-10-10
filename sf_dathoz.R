@@ -27,6 +27,13 @@ elsoalatt.pl <- parc.gener(elso.pl, "down")
 masodikalatt.pl <- parc.gener(masodik.pl, "down")
 
 ## Közterület
+kozter.list <- list(parc.gener(elozo.pl, "up"),
+                    parc.gener(elso.pl, "up"),
+                    parc.gener(masodik.pl, "up"))
+kozter.df <- st_sf(data.frame(HRSZ = c(9, 9, 9),
+                             st_sfc(kozter.list,
+                                    crs=23700)))
+st_coordinates(st_cast(kozter.df, to="MULTIPOINT"))
 
 ## Lista
 telkek.list <- list(elozo.pl,
@@ -40,6 +47,8 @@ telkek.list <- list(elozo.pl,
 telek.df <- st_sf(data.frame(HRSZ = c(10,11,12,20,21,22),
                              st_sfc(telkek.list,
                                     crs=23700)))
+
+full.df <- rbind(telek.df, kozter.df)
 
 ## Adatkinyerés
 st_coordinates(st_cast(telek.df[telek.df$HRSZ == 11,], to="LINESTRING"))
