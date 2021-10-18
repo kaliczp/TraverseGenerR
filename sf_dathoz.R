@@ -15,12 +15,12 @@ telek.df <- st_sf(data.frame(HRSZ = 11,
 parc.gener <- function(x, dir, pid, newpid) {
     curr.geom <- x[x$HRSZ == pid, "geometry"]
     curr.pl <- st_cast(curr.geom[["geometry"]], to="POLYGON")
-    coord.mat <- st_coordinates(st_cast(curr.pl, to="MULTIPOINT"))
+    coord.mat <- st_coordinates(st_cast(curr.pl, to="MULTIPOINT"))[,1:3]
     new.mat <- switch(dir,
-                     up = coord.mat + c(0,diff(as.numeric(coord.mat[c(1,2),"Y"])),0,0),
-                     down = coord.mat - c(0,diff(as.numeric(coord.mat[c(1,2),"Y"])),0,0),
-                     right = coord.mat + c(diff(as.numeric(coord.mat[c(1,3),"X"])),0,0,0),
-                     left = coord.mat - c(diff(as.numeric(coord.mat[c(1,3),"X"])),0,0,0)
+                     up = coord.mat + matrix(c(0,diff(as.numeric(coord.mat[c(1,2),"Y"])),0), nr =5, nc = 3, byrow = TRUE),
+                     down = coord.mat - matrix(c(0,diff(as.numeric(coord.mat[c(1,2),"Y"])),0), nr =5, nc = 3, byrow = TRUE),
+                     right = coord.mat + matrix(c(diff(as.numeric(coord.mat[c(1,3),"X"])),0,0), nr =5, nc = 3, byrow = TRUE),
+                     left = coord.mat - matrix(c(diff(as.numeric(coord.mat[c(1,3),"X"])),0,0), nr =5, nc = 3, byrow = TRUE)
                      )
     new.pl <- st_polygon(list(new.mat))
     out.list <- list(new.pl)
@@ -34,9 +34,9 @@ telek.df <- parc.gener(telek.df, "left", 11, 10)
 telek.df <- parc.gener(telek.df, "right", 11, 12)
 
 ## Alsó szomszédok
-elozoalatt.pl <- parc.gener(telek.df, "down",10,13)
-elsoalatt.pl <- parc.gener(elso.pl, "down")
-masodikalatt.pl <- parc.gener(masodik.pl, "down")
+telek.df <- parc.gener(telek.df, "down",10,13)
+telek.df <- parc.gener(telek.df, "down", 11, 14)
+telek.df <- parc.gener(telek.df, "down", 12, 15)
 
 ## Közterület
 kozter.list <- list(parc.gener(elozo.pl, "up"),
