@@ -39,28 +39,11 @@ telek.df <- parc.gener(telek.df, "down", 11, 14)
 telek.df <- parc.gener(telek.df, "down", 12, 15)
 
 ## Közterület
-kozter.list <- list(parc.gener(elozo.pl, "up"),
-                    parc.gener(elso.pl, "up"),
-                    parc.gener(masodik.pl, "up"))
-kozter.df <- st_sf(data.frame(HRSZ = c(9, 9, 9),
-                             st_sfc(kozter.list,
-                                    crs=23700)))
-st_coordinates(st_cast(kozter.df, to="MULTIPOINT"))
+telek.df <- parc.gener(telek.df, "up",10,9)
+telek.df <- parc.gener(telek.df, "up", 11, 9)
+telek.df <- parc.gener(telek.df, "up", 12, 9)
 
-## Lista
-telkek.list <- list(elozo.pl,
-                    elso.pl,
-                    masodik.pl,
-                    elozoalatt.pl,
-                    elsoalatt.pl,
-                    masodikalatt.pl)
-
-## Földrészletek
-telek.df <- st_sf(data.frame(HRSZ = c(10,11,12,20,21,22),
-                             st_sfc(telkek.list,
-                                    crs=23700)))
-
-full.df <- rbind(telek.df, kozter.df)
+st_coordinates(st_cast(telek.df[telek.df$HRSZ == 9,], to="MULTIPOINT"))
 
 ## Adatkinyerés
 st_coordinates(st_cast(telek.df[telek.df$HRSZ == 11,], to="LINESTRING"))
