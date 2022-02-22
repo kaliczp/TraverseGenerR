@@ -4,7 +4,7 @@ rownames(hazdatr) <- NULL
 
 ## Az első négy pont és a záró
 elso.mat <- as.matrix(rbind(hazdatr[1:4,1:3], hazdatr[1,1:3]))
-row.names(elso.mat) <- c(1:4,11)
+row.names(elso.mat) <- c(5001:5004,5001)
 elso.pl <- st_polygon(list(elso.mat))
 telkek.list <- list(elso.pl)
 telek.df <- st_sf(data.frame(HRSZ = 11,
@@ -22,6 +22,12 @@ parc.gener <- function(x, dir, pid, newpid) {
                      right = coord.mat + matrix(c(diff(as.numeric(coord.mat[c(1,3),"X"])),0,0), nr =5, nc = 3, byrow = TRUE),
                      left = coord.mat - matrix(c(diff(as.numeric(coord.mat[c(1,3),"X"])),0,0), nr =5, nc = 3, byrow = TRUE)
                      )
+    row.names(new.mat) <- switch(dir,
+                                 up = as.numeric(row.names(new.mat)) + 4,
+                                 down = as.numeric(row.names(new.mat)) - 4,
+                                 right = as.numeric(row.names(new.mat)) + 4,
+                                 left = as.numeric(row.names(new.mat)) - 4
+                                 )
     new.pl <- st_polygon(list(new.mat))
     out.list <- list(new.pl)
     out.df <- st_sf(data.frame(HRSZ = newpid,
