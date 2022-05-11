@@ -145,7 +145,7 @@ for(ttnev in 1:nrow(nevsor)) {
                           BoseE2,
                           felmerS.df)
     Bose.df$k <- "s"
-    felmertopo.df$k  <- "f"
+    felmertopo.df$k  <- "t"
     felmerall.df <- rbind(felmertopo.df, Bose.df)
     felmerall.df$x <- round(felmerall.df$x,2) + nevsor[ttnev, "easting"]
     felmerall.df$y <- round(felmerall.df$y,2) + nevsor[ttnev, "northing"]
