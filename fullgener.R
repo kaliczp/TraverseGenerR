@@ -172,6 +172,10 @@ for(ttnev in 1:nrow(nevsor)) {
     felmerall.df$nr <- felmerall.df$nr + 2000
     felmerall.df <- felmerall.df[!is.na(felmerall.df$Z),]
     write.csv2(felmerall.df, paste0(StudentFilename,"points.csv"), row.names = FALSE, quot = FALSE)
+    ttres.degree.dot <- ttres
+    ttres.degree.dot$h <- angleconv(ttres.degree.dot$h, format = "dot", round.sec = 1)
+    ttres.degree.dot$z <- angleconv(ttres.degree.dot$z, format = "dot", round.sec = 1)
+    write(paste0(export.m5(paste0(StudentFilename,Sys.Date()), angle =ttres.degree.dot, coor = travnoo.eov[travnoo.eov$k == "AP",]),"\r"), paste0(StudentFilename,".m5"), sep="\n")
 }
 
 ### Export to gizi
@@ -209,6 +213,9 @@ ttres.degree$h <- angleconv(ttres.degree$h, format = "dot", round.sec = 1)
 ttres.degree$z <- angleconv(ttres.degree$z, format = "dot", round.sec = 1)
 
 write(paste0(export.m5(paste0("KaliczPéter",Sys.Date()), angle =ttres.degree, coor = travnoo.eov[travnoo.eov$k == "AP",]),"\r"), "data.m5", sep="\n")
+
+## Csomópont nem OK
+write(paste0(export.m5(paste0("KaliczPéter",Sys.Date()), angle =ttres.full.degree, coor = trav.eov),"\r"), "data.m5", sep="\n")
 
 export.m5(paste0("KaliczPéter",Sys.Date()), angle = ttres.degree, coor = travnoo.eov[travnoo.eov$k == "AP",])
 
