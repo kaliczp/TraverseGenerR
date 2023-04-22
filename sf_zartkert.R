@@ -7,7 +7,7 @@ parc.gen <- function(kezd, veg) {
                           c(kezd ,parctetej),
                           c(kezd,parcalj))
                     )
-    while(parctetej <= (parcellamag - 30)) {
+    while(parctetej <= (parcellamag - 50)) {
         parcalj <- parctetej
         parctetej <- parcalj + round(runif(1,10,40),2)
         pollist[[length(pollist) + 1]]  <- rbind(c(kezd,parcalj),
