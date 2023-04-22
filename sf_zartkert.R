@@ -49,5 +49,9 @@ poltomb2.1 <- parc.gen(kezd = aktkezd, veg = aktveg)
 aktkezd <- aktveg
 aktveg <- aktkezd + parcellaszel2
 poltomb2.2 <- parc.gen(kezd = aktkezd, veg = aktveg)
-zkall <- st_multipolygon(list(polut1, poltomb1.1, poltomb1.2, polut2, poltomb2.1, poltomb2.2))
+aktkezd <- aktveg
+aktveg <- aktkezd + utszel1
+p1 <- rbind(c(aktkezd,0), c(aktveg,0), c(aktveg, parcellamag), c(aktkezd ,parcellamag), c(aktkezd,0))
+polut3 <-st_polygon(list(p1))
+zkall <- st_multipolygon(list(polut1, poltomb1.1, poltomb1.2, polut2, poltomb2.1, poltomb2.2,polut3))
 plot(zkall)
