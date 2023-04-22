@@ -20,5 +20,9 @@ aktkezd <- aktveg
 aktveg <- aktkezd + parcellaszel2
 p1 <- rbind(c(aktkezd,0), c(aktveg,0), c(aktveg, parcellamag), c(aktkezd ,parcellamag), c(aktkezd,0))
 poltomb2.1 <-st_polygon(list(p1))
-zkall <- st_multipolygon(list(polut1, poltomb1.1, poltomb1.2, polut2, poltomb2.1))
+aktkezd <- aktveg
+aktveg <- aktkezd + parcellaszel2
+p1 <- rbind(c(aktkezd,0), c(aktveg,0), c(aktveg, parcellamag), c(aktkezd ,parcellamag), c(aktkezd,0))
+poltomb2.2 <-st_polygon(list(p1))
+zkall <- st_multipolygon(list(polut1, poltomb1.1, poltomb1.2, polut2, poltomb2.1, poltomb2.2))
 plot(zkall)
