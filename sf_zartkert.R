@@ -55,3 +55,5 @@ p1 <- rbind(c(aktkezd,0), c(aktveg,0), c(aktveg, parcellamag), c(aktkezd ,parcel
 polut3 <-st_polygon(list(p1))
 zkall <- st_multipolygon(list(polut1, poltomb1.1, poltomb1.2, polut2, poltomb2.1, poltomb2.2,polut3))
 plot(zkall)
+
+coor <- st_coordinates(zkall)
