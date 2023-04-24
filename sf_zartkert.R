@@ -77,3 +77,19 @@ travzk <- data.frame(x = round(rep(c(min(coor[coor$l2 == 4,"x"] + 0.2),
                      k = "sp",
                      n = 10:(9 + length(travzky)) * 10
                      )
+
+## Tájékozó pontok
+travorientzk <- travzk[c(1,nrow(travzk)),]
+travorientzk[1, "k"] <- "op"
+travorientzk[1, "n"] <- sample(1:8,1)*10
+travorientzk[1, "x"] <- sample(-1500:1500,1)
+travorientzk[1, "y"] <- sample(-1500:-2600,1)
+travorientzk[1, "z"] <- travorientzk[1, "z"] + sample(10:30, 1)
+travorientzk[2, "k"] <- "op"
+travorientzk[2, "n"] <- travorientzk[1, "n"] + 10
+travorientzk[2, "x"] <- sample(-1500:1500,1)
+travorientzk[2, "y"] <- sample(1500:2600,1)
+travorientzk[2, "z"] <- travorientzk[2, "z"] + sample(10:30, 1)
+travorientzk[, "x"] <- travorientzk[, "x"] + round(rnorm(2),3)
+travorientzk[, "y"] <- travorientzk[, "y"] + round(rnorm(2),3)
+travorientzk[, "z"] <- travorientzk[, "z"] + round(rnorm(2),3)
