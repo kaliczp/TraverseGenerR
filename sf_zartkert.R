@@ -61,3 +61,19 @@ names(coor) <- tolower(names(coor))
 
 ## Terep
 coor$z <- round(coor$y * 0.001 + rnorm(nrow(coor), sd = 0.01), 3) + 80
+
+## Sokszög
+travzky <- -5
+while(travzky[length(travzky)] <= (parcellamag - 120)) {
+    travzky <- c(travzky, travzky[length(travzky)] + runif(1, 60 ,80))
+}
+travzky <- c(travzky, parcellamag + 5)
+travzk <- data.frame(x = round(rep(c(min(coor[coor$l2 == 4,"x"] + 0.2),
+                                     max(coor[coor$l2 == 4,"x"] - 0.2)
+                                     ), length.out = length(travzky)) + rnorm(length(travzky), sd = 0.01)
+                             , 3),
+                     y = round(travzky, 3),
+                     z = round(travzky * 0.001 + rnorm(length(travzky), sd = 0.01), 3) + 80,
+                     k = "sp",
+                     n = 10:(9 + length(travzky)) * 10
+                     )
