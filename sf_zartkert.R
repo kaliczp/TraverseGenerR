@@ -58,3 +58,6 @@ plot(zkall)
 
 coor <- as.data.frame(st_coordinates(zkall))
 names(coor) <- tolower(names(coor))
+
+## Terep
+coor$z <- round(coor$y * 0.001 + rnorm(nrow(coor), sd = 0.01), 3) + 80
