@@ -59,9 +59,6 @@ plot(zkall)
 coor <- as.data.frame(st_coordinates(zkall))
 names(coor) <- tolower(names(coor))
 
-## Terep
-coor$z <- round(coor$y * 0.001 + rnorm(nrow(coor), sd = 0.01), 3) + 80
-
 ## Sokszög
 travzky <- -5
 while(travzky[length(travzky)] <= (parcellamag - 120)) {
@@ -93,3 +90,9 @@ travorientzk[2, "z"] <- travorientzk[2, "z"] + sample(10:30, 1)
 travorientzk[, "x"] <- travorientzk[, "x"] + round(rnorm(2),3)
 travorientzk[, "y"] <- travorientzk[, "y"] + round(rnorm(2),3)
 travorientzk[, "z"] <- travorientzk[, "z"] + round(rnorm(2),3)
+
+## A középső út körüli
+coor.csak <- coor[coor$l2 == 3 | coor$l2 == 5 ,c("x","y")]
+coor.csak <- unique(coor.csak[order(coor.csak$y),])
+## Terep
+coor.csak$z <- round(coor.csak$y * 0.001 + rnorm(nrow(coor.csak), sd = 0.01), 3) + 80
