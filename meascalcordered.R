@@ -1,4 +1,5 @@
-meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, generror = FALSE, topo = FALSE, topo.target.height = 1.7) {
+meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, generror = FALSE, topo = TRUE, topo.target.height = 1.7) {
+    oricoord <- coord
     if(orient) {
         ## Are there orient really?
         orient.idx <- coord$k == "op"
