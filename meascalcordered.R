@@ -28,9 +28,11 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
         ## Select station numbers for topo points
         new.topostation <- topo.idx[diff(topo.idx) > 1]
         if(length(new.topostation) > 0) {
-            new.topostation.loc <- c(1, new.topostation - 1)
+            ## Two or more stations with topo points
+            new.topostation.loc <- c(topo.idx[1], new.topostation + 2)
         } else {
-            new.topostation.loc <- 1
+            ## Only one station for topo points need correction
+            new.topostation.loc <- topo.idx[1]
         }
         new.topostationidx <- topo.idx[new.topostation.loc]
         topo.station.df <- coord[new.topostationidx - 1, ]
