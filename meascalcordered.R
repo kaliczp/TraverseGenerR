@@ -34,17 +34,15 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
             ## Only one station for topo points need correction
             new.topostation.loc <- topo.idx[1]
         }
-        new.topostationidx <- topo.idx[new.topostation.loc]
-        topo.station.df <- coord[new.topostationidx - 1, ]
+        topo.station.df <- coord[new.topostation.loc - 1, ]
         topo.list <- list()
-        for(topo.list.idx in 1:length(new.topostation.loc)) {
-            if(topo.list.idx == length(new.topostation.loc)) {
-                topo.select.idx  <- new.topostationidx[topo.list.idx]:topo.idx[length(topo.idx)]
-            } else {
-                topo.select.idx  <- new.topostationidx[topo.list.idx]:topo.idx[new.topostation.loc[topo.list.idx + 1] - 1]
-            }
+        for(topo.list.idx in 1:(length(new.topostation.loc)-1)) {
+            topo.select.idx <- new.topostation.loc[topo.list.idx]:(new.topostation.loc[topo.list.idx+1]-2)
             topo.list[[topo.list.idx]] <- coord[topo.select.idx, ]
         }
+        topo.list.idx  <- length(new.topostation.loc)
+        topo.select.idx <- new.topostation.loc[topo.list.idx]:nrow(coord)
+        topo.list[[topo.list.idx]] <- coord[topo.select.idx, ]
         coord <- coord[-topo.idx, ]
         topo.fore <- data.frame(ns = 0,
                            ihs = 1.7,
