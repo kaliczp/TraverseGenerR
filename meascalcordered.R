@@ -169,7 +169,9 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
     order.res <- order(result$ns, result$nfb)
     result.ok <- result[order.res,]
     if(orient) {
-        result.ok <- rbind(result.ok, ori.fin[nrow(ori.fin),])
+        if(nrow(ori.fin) > 1) {
+            result.ok <- rbind(result.ok, ori.fin[nrow(ori.fin),])
+            }
     }
     ## Are there any negative angle?
     negh.row <- result.ok$h < 0
