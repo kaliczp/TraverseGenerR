@@ -122,3 +122,10 @@ travzkmeas <- rbind(travzkmeas, ttselect)
 row.names(travzkmeas) <- NULL
 ## Traverse generation
 ttres <- meascalc.ordered(travzkmeas)
+ttres.degree <- ttres
+ttres.degree$h <- angleconv(ttres.degree$h, format = "dot", round.sec = 1)
+ttres.degree[-1,"z"] <- angleconv(ttres.degree[-1,"z"], format = "dot", round.sec = 1)
+ttres.degree[1,"z"] <- NA
+ttres.degree[,"d"] <- round(ttres[,"d"], 3)
+## Export
+write(paste0(export.m5(paste0("Kalicz",Sys.Date()), angle =ttres.degree, coor = travzkmeas[c(1:2,137:138),]),"\r"), paste0(StudentFilename,".m5"), sep="\n")
