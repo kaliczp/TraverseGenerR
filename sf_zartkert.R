@@ -101,6 +101,7 @@ coor.csak$z <- round(coor.csak$y * 0.001 + rnorm(nrow(coor.csak), sd = 0.01), 3)
 tthatarprev <- min(travzk[, "y"]) - 1
 ttnumprev <- 2001
 travzkmeas <- travzk[1,]
+travzkmeas <- rbind(travzkmeas, travorientzk[1,])
 for(tti in 1:(nrow(travzk)-1)) {
     tthatar <- mean(c(travzk[tti, "y"], travzk[tti+1, "y"]))
     ## Pont válogatás
@@ -112,6 +113,7 @@ for(tti in 1:(nrow(travzk)-1)) {
     travzkmeas <- rbind(travzkmeas, ttselect, travzk[tti + 1,])
     tthatarprev <- tthatar
 }
+travzkmeas <- rbind(travzkmeas, travorientzk[2,])
 ttselect <- coor.csak[coor.csak$y > tthatarprev,]
 ttselect$k <- "f"
 ttnumend <- ttnumprev + (nrow(ttselect) - 1)
