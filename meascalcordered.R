@@ -167,23 +167,26 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
                       k = coord$k[-nrow(coord)]
                       )
     result <- rbind(fore, back)
-    ## Orientation at the beginning
-    if(orient) {
-        result <- rbind(result, ori.fin[1,])
-    }
     ## Topo points if available
     if(topo) {
         result <- rbind(result, topo.fore)
     }
     ## Ordering data frame station number (ns) and measured point number (nfb)
     order.res <- order(result$ns, result$nfb)
-    result.ok <- result[order.res,]
-    ## Put the final orientation
+    ## Use ordering to put orientation or simple order by orer.res
     if(orient) {
-        if(nrow(ori.fin) > 1) {
-            result.ok <- rbind(result.ok, ori.fin[nrow(ori.fin),])
-            }
+        ## Orientation row number calculation
+        for(tti in 1:nrow(ori.fin)) {
+            number.akt.orient.sp <- which(result$ns == ori.fin[tti,"ns"] & result$k == "sp")
+            orient.place <- which(order.res == number.akt.orient.sp)
+            order.res <- c(order.res[1:orient.place], # Rows until orientation station
+                           nrow(result) + 1, # Orientation measurement
+                           order.res[(orient.place + 1):length(order.res)] # Rows after orientation
+                           )
+            result <- rbind(result, ori.fin[tti,])
+        }
     }
+    result.ok <- result[order.res,]
     ## Are there any negative angle?
     negh.row <- result.ok$h < 0
     if(any(negh.row)) {
