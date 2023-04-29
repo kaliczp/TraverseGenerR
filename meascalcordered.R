@@ -80,7 +80,7 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
         warning("Instrument height generated!")
         ins.height  <- sample(seq(ins.height.range[1],
                                   ins.height.range[2], by=.001),
-                              nrow(coord))
+                              nrow(coord), replace = TRUE)
     }
     coord$z <- coord$z + ins.height
     slop.dist <- sqrt(diff(coord$x)^2 + diff(coord$y)^2 + diff(coord$z)^2)
