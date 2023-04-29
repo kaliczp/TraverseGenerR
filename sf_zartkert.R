@@ -119,3 +119,6 @@ ttselect$k <- "f"
 ttnumend <- ttnumprev + (nrow(ttselect) - 1)
 ttselect$n <- ttnumprev:ttnumend
 travzkmeas <- rbind(travzkmeas, ttselect)
+row.names(travzkmeas) <- NULL
+## Traverse generation
+ttres <- meascalc.ordered(travzkmeas)
