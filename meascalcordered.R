@@ -74,6 +74,8 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
         }
         topo.fore <- topo.fore[-1,]
     }
+### Traverse generation
+    ## Instrument height added
     if(length(ins.height.range) == nrow(coord)) {
         ins.height <- ins.height.range
     } else {
@@ -83,12 +85,16 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
                               nrow(coord), replace = TRUE)
     }
     coord$z <- coord$z + ins.height
+    ## Sloped distance generation
     slop.dist <- sqrt(diff(coord$x)^2 + diff(coord$y)^2 + diff(coord$z)^2)
     slop.dist <- round(slop.dist,3)
+    ## Horizontal angle generation forward and backward
     hor.angle <- -atan2(diff(coord$y),diff(coord$x))
     hor.angle.back <- hor.angle + pi
+    ## Zenit angle
     zenit.for <- pi/2 - asin(diff(coord$z)/slop.dist)
     zenit.back <- pi/2 + asin(diff(coord$z)/slop.dist)
+### Orientation point
     if(orient) {
         ## Are multiple points orientated?
         orient.sep <- diff(orient.idx) > 1
@@ -141,6 +147,7 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
                       )
         }
     }
+### Assemble traverse from calculated values
     fore <- data.frame(ns = coord$n[-nrow(coord)],
                       ihs = ins.height[-length(ins.height)],
                       nfb = coord$n[-1],
@@ -160,14 +167,18 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
                       k = coord$k[-nrow(coord)]
                       )
     result <- rbind(fore, back)
+    ## Orientation at the beginning
     if(orient) {
         result <- rbind(result, ori.fin[1,])
     }
+    ## Topo points if available
     if(topo) {
         result <- rbind(result, topo.fore)
     }
+    ## Ordering data frame station number (ns) and measured point number (nfb)
     order.res <- order(result$ns, result$nfb)
     result.ok <- result[order.res,]
+    ## Put the final orientation
     if(orient) {
         if(nrow(ori.fin) > 1) {
             result.ok <- rbind(result.ok, ori.fin[nrow(ori.fin),])
@@ -179,6 +190,7 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
         ## Correct negative angles
         result.ok[negh.row, "h"]  <- result.ok[negh.row, "h"] + 2*pi
     }
+    ## Generate errors
     if(generror) {
         sec.rad <- (1/60/60)*pi/180 # one second in rad
         result.ok$h <- result.ok$h + rnorm(nrow(result.ok), sd = 12 * sec.rad)
