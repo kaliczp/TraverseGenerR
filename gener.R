@@ -247,6 +247,7 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, g
 
 (ttres <- meascalc(tteszt))
 
+
 twoface <- function(measdata) {
     meas.face <- cbind(measdata[,1:4], fce = NA, measdata[, 5:ncol(measdata)])
     meas.face$fce <- factor(rep(c("I"), nrow(meas.face)), levels = c("I","II"))
@@ -305,7 +306,7 @@ angleconv <- function(angle, round.sec = 0, input = "radian", output = "sexagesi
         } else {
             if(round.sec > 0)
                 secs.asc <- sub("\\.","", secs.asc)
-            sexagesimal.asc <- paste(angle.trunc, paste0(mins.asc, secs.asc), sep=".")
+            sexagesimal.asc <- ifelse(is.na(angle.trunc), NA, paste(angle.trunc, paste0(mins.asc, secs.asc), sep="."))
             return(sexagesimal.asc)
         }
     } else {
