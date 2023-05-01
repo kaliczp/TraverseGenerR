@@ -57,14 +57,14 @@ for(ttnev in 1:nrow(nevsor)) {
     ## travnoo.eov <- eovrotate(travnoo.eov, act.ang)
     ## travnoo.eov$x <- round(travnoo.eov$x,3)
     ## travnoo.eov$y <- round(travnoo.eov$y,3)
-    write(export.coo.gizi(travnoo.eov[travnoo.eov$k == "AP",]), paste0(StudentFilename,".coo"), sep="\n")
+##    write(export.coo.gizi(travnoo.eov[travnoo.eov$k == "AP",]), paste0(StudentFilename,".coo"), sep="\n")
     ttres <- meascalc(travnoo.eov, orient = FALSE, generror = TRUE)
-    write(export.geo.gizi(ttres), paste0(StudentFilename,".geo"), sep="\n")
-    write.csv2(travnoo.eov[travnoo.eov$k == "AP",], paste0(StudentFilename,"coo.csv"), row.names = FALSE)
+##    write(export.geo.gizi(ttres), paste0(StudentFilename,".geo"), sep="\n")
+##    write.csv2(travnoo.eov[travnoo.eov$k == "AP",], paste0(StudentFilename,"coo.csv"), row.names = FALSE)
     ttres.degree <- ttres
     ttres.degree$h <- angleconv(ttres.degree$h)
     ttres.degree$z <- angleconv(ttres.degree$z)
-    write.csv2(ttres.degree, paste0(StudentFilename,"geo.csv"), row.names = FALSE, quot = FALSE)
+##    write.csv2(ttres.degree, paste0(StudentFilename,"geo.csv"), row.names = FALSE, quot = FALSE)
 ######################################################################
 ### Orientation
     ## Additional point plotted
@@ -79,6 +79,7 @@ for(ttnev in 1:nrow(nevsor)) {
     addpt.df$z <- round(predict(topo.loess, addpt.df[,1:3]),3)
     tteszt.addpt <- rbind(tteszt[1:2,], addpt.df, tteszt[4,],
                           tteszt[c(nrow(tteszt)-2,nrow(tteszt)),])
+## wrong length in ins.height.range!!!!!
     ttres.addpt <- meascalc(tteszt.addpt, ins.height.range = c(
                                               ttres[1, "ihs"],
                                               sample(1500:1600, 2)/1000,
@@ -106,11 +107,11 @@ for(ttnev in 1:nrow(nevsor)) {
     trav.eov$x <- round(trav.eov$x,3) + nevsor[ttnev, "easting"]
     trav.eov$y <- round(trav.eov$y,3) + nevsor[ttnev, "northing"]
     trav.eov$z <- round(trav.eov$z,3)
-    write.csv2(trav.eov, paste0(StudentFilename,"coo.csv"), row.names = FALSE)
+##    write.csv2(trav.eov, paste0(StudentFilename,"coo.csv"), row.names = FALSE)
     ttres.full.degree <- ttres.full
     ttres.full.degree$h <- angleconv(ttres.full.degree$h)
     ttres.full.degree$z <- angleconv(ttres.full.degree$z)
-    write.csv2(ttres.full.degree, paste0(StudentFilename,"geo.csv"), row.names = FALSE, quot = FALSE)
+##    write.csv2(ttres.full.degree, paste0(StudentFilename,"geo.csv"), row.names = FALSE, quot = FALSE)
 ### Bose plus points
     Bose.df$y <- abs(Bose.df$y)
     Bose.df$z <- Bose.df$z + rnorm(nrow(Bose.df), sd = 0.04)
