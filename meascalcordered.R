@@ -94,7 +94,33 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
     ## Zenit angle
     zenit.for <- pi/2 - asin(diff(coord$z)/slop.dist)
     zenit.back <- pi/2 + asin(diff(coord$z)/slop.dist)
-### Orientation point
+### Assemble traverse from calculated values
+    fore <- data.frame(ns = coord$n[-nrow(coord)],
+                      ihs = ins.height[-length(ins.height)],
+                      nfb = coord$n[-1],
+                      ihfb = ins.height[-1],
+                      h = hor.angle,
+                      z = zenit.for,
+                      d = slop.dist,
+                      k = coord$k[-1]
+                      )
+    back <- data.frame(ns = coord$n[-1],
+                      ihs = ins.height[-1],
+                      nfb = coord$n[-nrow(coord)],
+                      ihfb = ins.height[-length(ins.height)],
+                      h = hor.angle.back,
+                      z = zenit.back,
+                      d = slop.dist,
+                      k = coord$k[-nrow(coord)]
+                      )
+    result <- rbind(fore, back)
+    ## Topo points if available
+    if(topo) {
+        result <- rbind(result, topo.fore)
+    }
+    ## Ordering data frame station number (ns) and measured point number (nfb)
+    order.res <- order(result$ns, result$nfb)
+### Orientation point generation
     if(orient) {
         ## Are multiple points orientated?
         orient.sep <- diff(orient.idx) > 1
@@ -146,35 +172,7 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
                                   k = orient.df[1, "k"]
                       )
         }
-    }
-### Assemble traverse from calculated values
-    fore <- data.frame(ns = coord$n[-nrow(coord)],
-                      ihs = ins.height[-length(ins.height)],
-                      nfb = coord$n[-1],
-                      ihfb = ins.height[-1],
-                      h = hor.angle,
-                      z = zenit.for,
-                      d = slop.dist,
-                      k = coord$k[-1]
-                      )
-    back <- data.frame(ns = coord$n[-1],
-                      ihs = ins.height[-1],
-                      nfb = coord$n[-nrow(coord)],
-                      ihfb = ins.height[-length(ins.height)],
-                      h = hor.angle.back,
-                      z = zenit.back,
-                      d = slop.dist,
-                      k = coord$k[-nrow(coord)]
-                      )
-    result <- rbind(fore, back)
-    ## Topo points if available
-    if(topo) {
-        result <- rbind(result, topo.fore)
-    }
-    ## Ordering data frame station number (ns) and measured point number (nfb)
-    order.res <- order(result$ns, result$nfb)
-    ## Use ordering to put orientation or simple order by orer.res
-    if(orient) {
+        ## Use ordering to put orientation or simple order by order.res
         ## Orientation row number calculation
         for(tti in 1:nrow(ori.fin)) {
             number.akt.orient.sp <- which(result$ns == ori.fin[tti,"ns"] & result$k == "sp")
