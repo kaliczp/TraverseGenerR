@@ -61,12 +61,13 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                 )
     ## Processing coordinates
     if(!is.null(coordinates)) {
-        for(coordrow.num in 1:nrow(coordinates)) {
-            act.field1 <- paste0(align.field(coordinates[coordrow.num, "k"],
+        coo.only <- coordinates[c(which(coordinates$k == "op"), which(coordinates$k == "op") - 1),]
+        for(coordrow.num in 1:nrow(coo.only)) {
+            act.field1 <- paste0(align.field(coo.only[coordrow.num, "k"],
                                              width = 5,
                                              alignment = "right"
                                              ),
-                                 align.field(coordinates[coordrow.num, "n"],
+                                 align.field(coo.only[coordrow.num, "n"],
                                              width = 12,
                                              alignment = "right"
                                              )
@@ -76,11 +77,11 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                                  field1 = act.field1,
                                  f1align = "right",
                                  code2 = "Y",
-                                 field2 = coordinates[coordrow.num, "x"],
+                                 field2 = coo.only[coordrow.num, "x"],
                                  code3 = "X",
-                                 field3 = coordinates[coordrow.num, "y"],
+                                 field3 = coo.only[coordrow.num, "y"],
                                  code4 = "Z",
-                                 field4 = coordinates[coordrow.num, "z"],
+                                 field4 = coo.only[coordrow.num, "z"],
                                  closing = "I"
                                  )
                         )
