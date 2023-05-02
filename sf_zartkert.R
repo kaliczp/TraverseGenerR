@@ -1,3 +1,5 @@
+nevsor <- read.csv2("nevsor.csv", strings = F)
+
 parc.gen <- function(kezd, veg) {
     parcalj <- 0
     parctetej <- round(runif(1,30,50),2)
@@ -26,6 +28,12 @@ parc.gen <- function(kezd, veg) {
                                          )
     st_polygon(pollist)
 }
+
+ttnev <- 12
+
+StudentFilename <- sub(" ", "",nevsor[ttnev, "Név"])
+set.seed(nevsor[ttnev, "seed"])
+
 
 utszel1 <- 6.5
 parcellamag <- 800
@@ -120,6 +128,11 @@ ttnumend <- ttnumprev + (nrow(ttselect) - 1)
 ttselect$n <- ttnumprev:ttnumend
 travzkmeas <- rbind(travzkmeas, ttselect)
 row.names(travzkmeas) <- NULL
+
+## Shift
+travzkmeas[,"x"] <- travzkmeas[,"x"] + nevsor[ttnev, "easting"]
+travzkmeas[,"y"] <- travzkmeas[,"y"] + nevsor[ttnev, "northing"]
+
 ## Traverse generation
 ttres <- meascalc.ordered(travzkmeas)
 ttres.degree <- ttres
