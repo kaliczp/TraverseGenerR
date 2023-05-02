@@ -127,4 +127,4 @@ ttres.degree$h <- angleconv(ttres.degree$h, format = "dot", round.sec = 1)
 ttres.degree$z <- angleconv(ttres.degree$z, format = "dot", round.sec = 1)
 ttres.degree[,"d"] <- round(ttres[,"d"], 3)
 ## Export
-write(paste0(export.m5(paste0("Kalicz",Sys.Date()), angle =ttres.degree, coor = travzkmeas[c(1:2,137:138),]),"\r"), paste0(StudentFilename,".m5"), sep="\n")
+write(paste0(export.m5(paste0("Kalicz",Sys.Date()), angle =ttres.degree, coor = travzkmeas),"\r"), paste0(StudentFilename,".m5"), sep="\n")

@@ -61,7 +61,21 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                 )
     ## Processing coordinates
     if(!is.null(coordinates)) {
-        coo.only <- coordinates[c(which(coordinates$k == "op"), which(coordinates$k == "op") - 1),]
+        orientation.rows  <- which(coordinates$k == "op") # Orientation point row(s)
+        ## Select first and last from sp rows
+        sp.rows <- which(coordinates$k == "sp")
+        sp.firstlast <- sp.rows[c(1,length(sp.rows))]
+        if(length(orientation.rows) > 0) {
+            ## There are orientation point(s)
+            selected.points <- c(orientation.rows,
+                                 orientation.rows - 1, # Station before orientation
+                                 sp.firstlast) # First and last station
+            selected.points <- unique(selected.points)
+        } else {
+            warning("No op codes! Only first and last sp are selected!")
+            selected.points <- sp.firstlast
+        }
+        coo.only <- coordinates[selected.points, ]
         for(coordrow.num in 1:nrow(coo.only)) {
             act.field1 <- paste0(align.field(coo.only[coordrow.num, "k"],
                                              width = 5,
