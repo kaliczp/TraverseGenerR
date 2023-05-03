@@ -14,6 +14,7 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
         orient.df <- coord[orient.idx, ]
         coord <- coord[-orient.idx, ]
     }
+### Topo point selection
     if(topo) {
         ## Are there topo points really?
         topo.idx <- coord$n > 1000
@@ -39,11 +40,26 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
         for(topo.list.idx in 1:(length(new.topostation.loc)-1)) {
             topo.select.idx <- new.topostation.loc[topo.list.idx]:(new.topostation.loc[topo.list.idx+1]-2)
             topo.list[[topo.list.idx]] <- coord[topo.select.idx, ]
+            ## Intstrument height at topo point is added
+            topo.list[[topo.list.idx]]$z + topo.target.height
         }
         topo.list.idx  <- length(new.topostation.loc)
         topo.select.idx <- new.topostation.loc[topo.list.idx]:nrow(coord)
         topo.list[[topo.list.idx]] <- coord[topo.select.idx, ]
         coord <- coord[-topo.idx, ]
+    }
+### Traverse
+    ## Instrument height added for traverse points
+    if(length(ins.height.range) == nrow(coord)) {
+        ins.height <- ins.height.range
+    } else {
+        warning("Instrument height generated!")
+        ins.height  <- sample(seq(ins.height.range[1],
+                                  ins.height.range[2], by=.001),
+                              nrow(coord), replace = TRUE)
+    }
+    coord$z <- coord$z + ins.height
+    if(topo){
         topo.fore <- data.frame(ns = 0,
                            ihs = 1.7,
                            nfb = 0,
@@ -53,6 +69,12 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
                            d = 0,
                            k = "t"
                            )
+        ## topo.station.df with instrument height
+        topo.station.fullhight <- merge(topo.station.df["n"],
+                                        coord[,c("n","z")], by = "n")
+        ## Recalculate instrument heights
+        topo.station.df$ih <- round(topo.station.fullhight$z - topo.station.df$z, 3)
+        topo.station.df$z <- topo.station.fullhight$z
         ## Topo measurements calculation
         for(act.topo.station in 1:nrow(topo.station.df)) {
         slop.dist <- sqrt((topo.list[[act.topo.station]][,"x"] - topo.station.df[act.topo.station, "x"])^2 +
@@ -62,7 +84,7 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
                             topo.list[[act.topo.station]][,"x"] - topo.station.df[act.topo.station, "x"])
         zenit.for <- pi/2 - asin((topo.list[[act.topo.station]][,"z"] - topo.station.df[act.topo.station, "z"]) / slop.dist)
         topo.fore <- rbind(topo.fore, data.frame(ns = topo.station.df[act.topo.station, "n"],
-                                                 ihs = 1.7,
+                                                 ihs = topo.station.df[act.topo.station, "ih"],
                                                  nfb = topo.list[[act.topo.station]][,"n"],
                                                  ihfb = topo.target.height,
                                                  h = hor.angle,
@@ -75,16 +97,6 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
         topo.fore <- topo.fore[-1,]
     }
 ### Traverse generation
-    ## Instrument height added
-    if(length(ins.height.range) == nrow(coord)) {
-        ins.height <- ins.height.range
-    } else {
-        warning("Instrument height generated!")
-        ins.height  <- sample(seq(ins.height.range[1],
-                                  ins.height.range[2], by=.001),
-                              nrow(coord), replace = TRUE)
-    }
-    coord$z <- coord$z + ins.height
     ## Sloped distance generation
     slop.dist <- sqrt(diff(coord$x)^2 + diff(coord$y)^2 + diff(coord$z)^2)
     slop.dist <- round(slop.dist,3)
