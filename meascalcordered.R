@@ -41,7 +41,7 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
             topo.select.idx <- new.topostation.loc[topo.list.idx]:(new.topostation.loc[topo.list.idx+1]-2)
             topo.list[[topo.list.idx]] <- coord[topo.select.idx, ]
             ## Intstrument height at topo point is added
-            topo.list[[topo.list.idx]]$z + topo.target.height
+            topo.list[[topo.list.idx]]$z <- topo.list[[topo.list.idx]]$z + topo.target.height
         }
         topo.list.idx  <- length(new.topostation.loc)
         topo.select.idx <- new.topostation.loc[topo.list.idx]:nrow(coord)
