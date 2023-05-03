@@ -156,7 +156,7 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
                                          diff(last.orient.df$x))
             ori.fin <- data.frame(ns = c(first.orient.df[nrow(first.orient.df), "n"],
                                          last.orient.df[nrow(first.orient.df), "n"]),
-                                  ihs = ins.height[1],
+                                  ihs = ins.height[c(1, length(ins.height))],
                                   nfb = c(first.orient.df[1, "n"],
                                           last.orient.df[1, "n"]),
                                   ihfb = 0,
