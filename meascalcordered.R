@@ -46,6 +46,7 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
         topo.list.idx  <- length(new.topostation.loc)
         topo.select.idx <- new.topostation.loc[topo.list.idx]:nrow(coord)
         topo.list[[topo.list.idx]] <- coord[topo.select.idx, ]
+        topo.list[[topo.list.idx]]$z <- topo.list[[topo.list.idx]]$z + topo.target.height
         coord <- coord[-topo.idx, ]
     }
 ### Traverse
