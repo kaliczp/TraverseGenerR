@@ -126,8 +126,11 @@ ttselect <- coor.csak[coor.csak$y > tthatarprev,]
 ttselect$k <- "f"
 ttnumend <- ttnumprev + (nrow(ttselect) - 1)
 ttselect$n <- ttnumprev:ttnumend
-travzkmeas <- rbind(travzkmeas, ttselect)
-row.names(travzkmeas) <- NULL
+travzkmeas.norot <- rbind(travzkmeas, ttselect)
+row.names(travzkmeas.norot) <- NULL
+
+## Rotate
+travzkmeas <- eovrotate(travzkmeas.norot, nevsor[ttnev, "Angle"])
 
 ## Shift
 travzkmeas[,"x"] <- travzkmeas[,"x"] + nevsor[ttnev, "easting"]
