@@ -137,7 +137,7 @@ travzkmeas[,"x"] <- travzkmeas[,"x"] + nevsor[ttnev, "easting"]
 travzkmeas[,"y"] <- travzkmeas[,"y"] + nevsor[ttnev, "northing"]
 
 ## Traverse generation
-ttres <- meascalc.ordered(travzkmeas)
+ttres <- meascalc.ordered(travzkmeas, generror = TRUE)
 ttres.degree <- twoface(ttres)
 ttres.degree$h <- angleconv(ttres.degree$h, format = "dot", round.sec = 1)
 ttres.degree$z <- angleconv(ttres.degree$z, format = "dot", round.sec = 1)
