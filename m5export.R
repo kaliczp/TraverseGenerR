@@ -101,6 +101,11 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                         )
         }
     }
+    ## Insert instrument type
+    result <- c(result, make.row(field1 = "Instr.type Trimble5600",
+                                 unit2 = "", unit3 = "", unit4 = ""
+                                 )
+                )
     ## Processing measurements
     if(!is.null(angle)) {
         station.nr <- -1
