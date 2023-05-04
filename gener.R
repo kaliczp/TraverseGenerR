@@ -255,9 +255,10 @@ twoface <- function(measdata) {
     result <- as.data.frame(matrix(ncol = length(meas.colnames)))
     colnames(result) <- meas.colnames
     for(row.num in 1:nrow(meas.face)){
+        actualrow <- meas.face[row.num, ]
+        if(actualrow$k == "sp" | actualrow$k == "op") {
         ## Angles
         act.error <- abs(rnorm(2,sd=20))*10^(-6)
-        actualrow <- meas.face[row.num, ]
         actualrow$h  <- actualrow$h + act.error[1]
         nextrow <- actualrow
         nextrow$h  <- nextrow$h + pi + act.error[1]
@@ -269,6 +270,9 @@ twoface <- function(measdata) {
         nextrow$d <- nextrow$d + dist.err[2]
         nextrow$fce <- "II"
         result <- rbind(result, actualrow, nextrow)
+        } else {
+            result <- rbind(result, actualrow)
+        }
     }
     result <- result[-1,]
     bigangle <- function(x) {
