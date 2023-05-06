@@ -113,6 +113,15 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
         for(anglerow.num in 1:nrow(angle)) {
             if(station.nr != angle[anglerow.num, "ns"]) {
                 ## New station
+                ## Insert prism constant in the first station
+                if(anglerow.num == 1) {
+                    result <- c(result, make.row(field1 = "REFLECTOR",
+                                                 unit2 = "", unit3 = "",
+                                                 code4 = "PC",
+                                                 field4 = "-0.0300"
+                                                 )
+                                )
+                }
                 station.nr <- angle[anglerow.num, "ns"]
                 act.field1 <- paste0(align.field("S",
                                                  width = 5,
