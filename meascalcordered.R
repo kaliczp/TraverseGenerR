@@ -60,6 +60,11 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
                               nrow(coord), replace = TRUE)
     }
     coord$z <- coord$z + ins.height
+    if(generror) {
+        ## Error in start and end height
+        coord[1, "z"] <- coord[1, "z"] + rnorm(1, sd = 0.015)
+        coord[nrow(coord), "z"] <- coord[nrow(coord), "z"] + rnorm(1, sd = 0.015)
+    }
     if(topo){
         topo.fore <- data.frame(ns = 0,
                            ihs = 1.7,
