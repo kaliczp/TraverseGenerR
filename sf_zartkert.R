@@ -62,7 +62,10 @@ aktveg <- aktkezd + utszel1
 p1 <- rbind(c(aktkezd,0), c(aktveg,0), c(aktveg, parcellamag), c(aktkezd ,parcellamag), c(aktkezd,0))
 polut3 <-st_polygon(list(p1))
 zkall <- st_multipolygon(list(polut1, poltomb1.1, poltomb1.2, polut2, poltomb2.1, poltomb2.2,polut3))
+
+pdf(paste0(StudentFilename, "trv.pdf"))
 plot(zkall)
+dev.off()
 
 coor <- as.data.frame(st_coordinates(zkall))
 names(coor) <- tolower(names(coor))
@@ -145,4 +148,4 @@ ttres.degree[,"d"] <- round(ttres.degree[,"d"], 3)
 ## Export
 write(paste0(export.m5(paste0("Kalicz",Sys.Date()), angle =ttres.degree, coor = travzkmeas),"\r"), paste0(StudentFilename,".m5"), sep="\n")
 
-plot.traverse(travzkmeas[travzkmeas$k == "sp" | travzkmeas$k == "op", ], tofile = paste0(StudentFilename, ".pdf"))
+plot.traverse(travzkmeas[travzkmeas$k == "sp" | travzkmeas$k == "op", ], tofile = paste0(StudentFilename, "trv.pdf"))
