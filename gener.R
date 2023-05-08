@@ -394,7 +394,7 @@ plot.traverse <- function(traverse, tofile = NULL, north = NULL) {
     traverse.xy <- traverse[traverse$k != "op", 1:2]
     traverse.lab <- traverse[traverse$k != "op", 4:5]
     ## Extend traverse with mean and lower then x minima.
-    trav.extend <- data.frame(x = c(x.mean, min(traverse.xy$x - 30)),
+    trav.extend <- data.frame(x = c(max(traverse.xy$x + 30), min(traverse.xy$x - 40)),
                                     y = rep(y.mean, 2))
     ## Plot traverse point with line
     plot(rbind(traverse.xy, trav.extend),
@@ -407,27 +407,27 @@ plot.traverse <- function(traverse, tofile = NULL, north = NULL) {
     text(traverse.xy, lab=traverse.lab$k, adj=c(1.2,1.2))
     if(any(traverse$k == "op")) {
         ## First orientation arrow
-        arrows(traverse[2,1], traverse[2,2], # from
-               traverse[2,1]+40, traverse[2,2], # to
+        arrows(traverse[1,1], traverse[1,2], # from
+               traverse[1,1]+30, traverse[1,2], # to
                lty="dashed", angle = 15)
         ## Text for first
         ## number
-        text(traverse[2, 1] + 40, traverse[2, 2],
-             lab=traverse[1, "n"], adj=c(0,0))
+        text(traverse[1, 1] + 30, traverse[1, 2],
+             lab=traverse[2, "n"], adj=c(0,0))
         ## code
-        text(traverse[2,1] + 40, traverse[2, 2],
-             lab=traverse[1, "k"], adj=c(0,1.2))
+        text(traverse[1,1] + 30, traverse[1, 2],
+             lab=traverse[2, "k"], adj=c(0,1.2))
         ## Second orientation arrow
         arrows(traverse[nrow(traverse)-1,1], traverse[nrow(traverse)-1,2], #from
-               traverse[nrow(traverse)-1,1]+40, traverse[nrow(traverse)-1,2], #to
+               traverse[nrow(traverse)-1,1]-40, traverse[nrow(traverse)-1,2], #to
                lty="dashed", angle = 15)
         ## Text for second
         ## number
-        text(traverse[nrow(traverse)-1,1] + 40, traverse[nrow(traverse)-1,2],
-             lab=traverse[nrow(traverse),"n"], adj=c(0,0))
+        text(traverse[nrow(traverse)-1,1] - 40, traverse[nrow(traverse)-1,2],
+             lab=traverse[nrow(traverse),"n"], adj=c(1.2,0))
         ## code
-        text(traverse[nrow(traverse)-1,1] + 40, traverse[nrow(traverse)-1,2],
-             lab=traverse[nrow(traverse),"k"], adj=c(0,1.2))
+        text(traverse[nrow(traverse)-1,1] - 40, traverse[nrow(traverse)-1,2],
+             lab=traverse[nrow(traverse),"k"], adj=c(1.2,1.2))
     }
     if(!is.null(north)) {
         x.arr.end <- x.mean - 20

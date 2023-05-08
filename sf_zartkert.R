@@ -144,3 +144,5 @@ ttres.degree$z <- angleconv(ttres.degree$z, format = "dot", round.sec = 1)
 ttres.degree[,"d"] <- round(ttres.degree[,"d"], 3)
 ## Export
 write(paste0(export.m5(paste0("Kalicz",Sys.Date()), angle =ttres.degree, coor = travzkmeas),"\r"), paste0(StudentFilename,".m5"), sep="\n")
+
+plot.traverse(travzkmeas[travzkmeas$k == "sp" | travzkmeas$k == "op", ], tofile = paste0(StudentFilename, ".pdf"))
