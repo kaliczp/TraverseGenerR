@@ -384,8 +384,15 @@ export.coo.gizi <- function(coordinates) {
 }
 
 plot.traverse <- function(traverse, tofile = NULL, north = NULL) {
-    if(!is.null(tofile))
-        pdf(file = tofile, width = 3)
+    if(!is.null(tofile)) {
+        if(diff(range(traverse$x)) < diff(range(traverse$x))) {
+            ## Portrait
+            pdf(file = tofile, width = 3)
+        } else {
+            ## Landscape
+            pdf(file = tofile, height = 2)
+        }
+    }
     par(mar=c(0,0,0,0))
     ## Mean points for plots
     x.mean <- mean(traverse$x)
