@@ -29,7 +29,7 @@ parc.gen <- function(kezd, veg) {
     st_polygon(pollist)
 }
 
-ttnev <- 12
+for(ttnev in 1:nrow(nevsor)) {
 
 StudentFilename <- sub(" ", "",nevsor[ttnev, "Név"])
 set.seed(nevsor[ttnev, "seed"])
@@ -63,7 +63,7 @@ p1 <- rbind(c(aktkezd,0), c(aktveg,0), c(aktveg, parcellamag), c(aktkezd ,parcel
 polut3 <-st_polygon(list(p1))
 zkall <- st_multipolygon(list(polut1, poltomb1.1, poltomb1.2, polut2, poltomb2.1, poltomb2.2,polut3))
 
-pdf(paste0(StudentFilename, "trv.pdf"))
+pdf(paste0(StudentFilename, "par.pdf"))
 plot(zkall)
 dev.off()
 
@@ -149,3 +149,4 @@ ttres.degree[,"d"] <- round(ttres.degree[,"d"], 3)
 write(paste0(export.m5(paste0("Kalicz",Sys.Date()), angle =ttres.degree, coor = travzkmeas),"\r"), paste0(StudentFilename,".m5"), sep="\n")
 
 plot.traverse(travzkmeas[travzkmeas$k == "sp" | travzkmeas$k == "op", ], tofile = paste0(StudentFilename, "trv.pdf"))
+}
