@@ -113,6 +113,11 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
         for(anglerow.num in 1:nrow(angle)) {
             if(station.nr != angle[anglerow.num, "ns"]) {
                 ## New station
+                result <- c(result, make.row(field1 = "STAT. KNWN. PNT.",
+                                             unit2 = "", unit3 = "", unit4 = ""
+                                             )
+                            )
+                ## Insert temperature and pressure?
                 ## Insert prism constant in the first station
                 if(anglerow.num == 1) {
                     result <- c(result, make.row(field1 = "REFLECTOR",
@@ -144,6 +149,18 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                                      unit3 = "DMS",
                                      code4 = "ih",
                                      field4 = angle[anglerow.num, "ihs"]
+                                     ),
+                            make.row(make.paramcode("PI", 1),
+                                     field1 = station.nr,
+                                     f1align = "right",
+                                     unit2 = "",
+                                     code3 = "so",
+                                     field3 = "0.00000",
+                                     unit3 = "DMS",
+                                     unit4 = ""
+                                     ),
+                            make.row(field1 = "COORDINATES/DETAIL PNTS/",
+                                     unit2 = "", unit3 = "", unit4 = ""
                                      )
                             )
             }
