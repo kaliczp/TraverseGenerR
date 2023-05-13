@@ -12,12 +12,24 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
                         ),
                       collapse = ""
                       ),
-                "10NMMunkanev        122111")
+                paste(c("10",
+                        "NM",
+                        align.field(projectname, width = 16),
+                        "122111" # options
+                        ),
+                      collapse = ""
+                      ),
+                paste(c("06", # Scale
+                        "NM",
+                        "1.00000000"
+                        ),
+                      collapse = ""
+                      )
+                )
 ### Coordinates
     if(!is.null(coordinates)) {
         ## Coordinate header
         result <- c(result,
-                    "06NM1.00000000",
                     "13OOPOZ,Mind POZ")
         coo.only <- select.coordinates(coordinates)
         for(coordrow.num in 1:nrow(coo.only)) {
