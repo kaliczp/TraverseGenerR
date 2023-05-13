@@ -13,6 +13,28 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
                       collapse = ""
                       ),
                 "10NMMunkanev        122111")
+### Coordinates
+    if(!is.null(coordinates)) {
+        ## Coordinate header
+        result <- c(result,
+                    "06NM1.00000000",
+                    "13OOPOZ,Mind POZ")
+        coo.only <- select.coordinates(coordinates)
+        for(coordrow.num in 1:nrow(coo.only)) {
+            result <- c(result,
+                        paste(c("08", # Type
+                                "KI", # Derv
+                                align.field(coo.only[coordrow.num, "n"], width = 16, alignment = "right"),
+                                align.field(coo.only[coordrow.num, "x"], width = 16),
+                                align.field(coo.only[coordrow.num, "y"], width = 16),
+                                align.field(coo.only[coordrow.num, "z"], width = 16),
+                                align.field(coo.only[coordrow.num, "k"], width = 16)
+                                ),
+                              collapse = ""
+                              )
+                        )
+        }
+    }
     ## Tail
     spec.C <- "\003"
     result <- c(result,
