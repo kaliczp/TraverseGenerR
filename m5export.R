@@ -1,17 +1,4 @@
 export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL) {
-    align.field <- function(fieldtext, width, alignment = "left") {
-        spaces <- paste0(rep(" ", width), collapse = "")
-        if(alignment == "left") {
-            textwithspace <- paste0(fieldtext, spaces)
-            aligned <- substr(textwithspace, 1, width)
-        } else {
-            textwithspace <- paste0(spaces, fieldtext)
-            length.txtwspc <- nchar(textwithspace)
-            first.char <- (length.txtwspc - width) + 1
-            aligned <- substr(textwithspace, first.char, length.txtwspc)
-        }
-        aligned
-    }
     make.paramcode <- function(code = "TI", num = "") {
         align.field(paste0(code, num), width = 3)
     }
@@ -61,21 +48,7 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                 )
     ## Processing coordinates
     if(!is.null(coordinates)) {
-        orientation.rows  <- which(coordinates$k == "op") # Orientation point row(s)
-        ## Select first and last from sp rows
-        sp.rows <- which(coordinates$k == "sp")
-        sp.firstlast <- sp.rows[c(1,length(sp.rows))]
-        if(length(orientation.rows) > 0) {
-            ## There are orientation point(s)
-            selected.points <- c(orientation.rows,
-                                 orientation.rows - 1, # Station before orientation
-                                 sp.firstlast) # First and last station
-            selected.points <- unique(selected.points)
-        } else {
-            warning("No op codes! Only first and last sp are selected!")
-            selected.points <- sp.firstlast
-        }
-        coo.only <- coordinates[selected.points, ]
+        coo.only <- select.coordinates(oordinates)
         for(coordrow.num in 1:nrow(coo.only)) {
             act.field1 <- paste0(align.field(coo.only[coordrow.num, "k"],
                                              width = 5,
