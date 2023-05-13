@@ -150,3 +150,6 @@ write(paste0(export.m5(paste0("Kalicz",Sys.Date()), angle =ttres.degree, coor = 
 
 plot.traverse(travzkmeas[travzkmeas$k == "sp" | travzkmeas$k == "op", ], tofile = paste0(StudentFilename, "trv.pdf"))
 }
+
+## Export sdr
+write(paste0(export.sdr(coor = travzkmeas),"\r"), paste0(StudentFilename,".sdr"), sep="\n")
