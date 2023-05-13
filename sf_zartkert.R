@@ -152,4 +152,7 @@ plot.traverse(travzkmeas[travzkmeas$k == "sp" | travzkmeas$k == "op", ], tofile 
 }
 
 ## Export sdr
-write(paste0(export.sdr(coor = travzkmeas),"\r"), paste0(StudentFilename,".sdr"), sep="\n")
+ttres.degree <- twoface(ttres)
+ttres.degree$h <- angleconv(ttres.degree$h, output = "degree")
+ttres.degree$z <- angleconv(ttres.degree$z, output = "degree")
+write(paste0(export.sdr(angle =ttres.degree,coor = travzkmeas),"\r"), paste0(StudentFilename,".sdr"), sep="\n")

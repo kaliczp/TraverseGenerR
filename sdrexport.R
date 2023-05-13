@@ -1,4 +1,45 @@
 export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL) {
+    ## Measurement processing function
+    meas.row <- function(x) {
+        ## Determine face
+        if(x$fce == "I") {
+            face  <-  "F1"
+        } else {
+            face <- "F2"
+        }
+        ## Slope sist if NA
+        if(is.na(x$d)) {
+            sl.dist <- ""
+        } else {
+            sl.dist <- x$d
+        }
+        ## If vertical observation is NA
+        if(is.na(x$z)) {
+            vert.angle <- ""
+        } else {
+            vert.angle <- x$z
+        }
+        ## Assembel row
+        paste(c("09", # Type
+                face, # Derv
+                align.field(station.nr, # Source point ID
+                            width = 16,
+                            alignment = "right"),
+                align.field(x$nfb, # Target point ID
+                            width = 16,
+                            alignment = "right"),
+                align.field(sl.dist, # Slope distance
+                            width = 16), 
+                align.field(vert.angle, # Vertical observation
+                            width = 16),
+                align.field(x$h, # Horizontal observation
+                            width = 16),
+                align.field(x$k, # Description
+                            width = 16)
+                ),
+              collapse = ""
+              )
+    }
     ## Initial character STX
     result <- c("\002")
     ## Header
@@ -45,6 +86,91 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
                               collapse = ""
                               )
                         )
+        }
+    }
+### Processing measurements
+    if(!is.null(angle)) {
+        station.nr <- -1
+        last.target <- -1
+        for(anglerow.num in 1:nrow(angle)) {
+            if(station.nr != angle[anglerow.num, "ns"]) {
+                ## New station STN
+                station.nr <- angle[anglerow.num, "ns"]
+                result <- c(result,
+                            paste(c("02", # Type
+                                    "SC", # Derv
+                                    align.field(station.nr, width = 16), # Point ID
+                                    align.field("", width = 16), # Northing
+                                    align.field("", width = 16), # Easting
+                                    align.field("", width = 16), # Elev
+                                    align.field(angle[anglerow.num, "ihs"], width = 16), # Theodolite height
+                                    align.field(angle[anglerow.num, "k"], width = 16) # Station description
+                                    ),
+                                  collapse = ""
+                                  ),
+                            paste(c("13", # Type
+                                    "PT", # Derv
+                                    "Atmoszf. korr. Alkalmazva: Nyomas= 1022.0 Homerseklet= 25"
+                                    ),
+                                  collapse = ""
+                                  )
+                            )
+                ## In the case of two face measurement, probably Set of observations
+                if(angle[anglerow.num, "nfb"] == angle[anglerow.num + 1, "nfb"]) {
+                    result <- c(result,
+                                paste(c("12", # Type
+                                        "SC", # Derv
+                                        align.field(station.nr, # Source point
+                                                    width = 16, alignment = "right"),
+                                        "004", # Count of observations
+                                        "001", # Number of set
+                                        "1", # Bad marker
+                                        "1", # Return sight made
+                                        "1" # Prompt order
+                                        ),
+                                      collapse = ""
+                                      )
+                                )
+                }
+                ## Save target height
+                result <- c(result,
+                            paste(c("03", # Type
+                                    "NM", # Derv
+                                    align.field(angle[anglerow.num, "ihfb"], width = 16)
+                                    ),
+                                  collapse = ""
+                                  )
+                            )
+                last.target <- angle[anglerow.num, "ihfb"]
+                ## Save orientation
+                result <- c(result,
+                            meas.row(angle[anglerow.num,])
+                            )
+            } else {
+                if(last.target != angle[anglerow.num, "ihfb"]) {
+                    result <- c(result,
+                                paste(c("03", # Type
+                                        "NM", # Derv
+                                        align.field(angle[anglerow.num, "ihfb"], width = 16)
+                                        ),
+                                      collapse = ""
+                                      )
+                                )
+                    last.target <- angle[anglerow.num, "ihfb"]
+                }
+                ## Orientation point measurement
+                if(angle[anglerow.num, "nfb"] < 1000) {
+                ## Case of set of observation
+                    result <- c(result,
+                                meas.row(angle[anglerow.num,])
+                                )
+                } else {
+                    ## Topo point measurement
+                    result <- c(result,
+                                meas.row(angle[anglerow.num,])
+                                )
+                }
+            }
         }
     }
     ## Tail
