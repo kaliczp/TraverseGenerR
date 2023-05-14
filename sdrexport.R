@@ -88,6 +88,24 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
                         )
         }
     }
+    ## Instrument type
+    result <- c(result,
+                paste(c("01", # Type
+                        "NM", # Derv
+                        ":", # EDM type?
+                        align.field("SET3000", width = 16), # EDM Description
+                        align.field("015737", width = 6), # EDM serial number
+                        align.field("", width = 16), # Theodolite descr
+                        "000000", # Theodolite serial number
+                        "3", # Mounting type
+                        "1", # Vertical angle
+                        align.field("", width = 16), # EDM offset
+                        align.field("", width = 16), # Reflector offset
+                        align.field("0.00000000", width = 16) # Prism constant
+                        ),
+                      collapse = ""
+                      )
+                )
 ### Processing measurements
     if(!is.null(angle)) {
         station.nr <- -1
