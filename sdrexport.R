@@ -19,7 +19,7 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
         } else {
             vert.angle <- x$z
         }
-        ## Assembel row
+        ## Assemble row
         paste(c("09", # Type
                 face, # Derv
                 align.field(station.nr, # Source point ID
@@ -110,6 +110,7 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
     if(!is.null(angle)) {
         station.nr <- -1
         last.target <- -1
+        ## Processing measurement data frame
         for(anglerow.num in 1:nrow(angle)) {
             if(station.nr != angle[anglerow.num, "ns"]) {
                 ## New station STN
@@ -165,7 +166,9 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
                             meas.row(angle[anglerow.num,])
                             )
             } else {
+                ## If there is no station change first check the target height change
                 if(last.target != angle[anglerow.num, "ihfb"]) {
+                    ## Save change of target height
                     result <- c(result,
                                 paste(c("03", # Type
                                         "NM", # Derv
@@ -178,7 +181,7 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
                 }
                 ## Orientation point measurement
                 if(angle[anglerow.num, "nfb"] < 1000) {
-                ## Case of set of observation
+                ## Case of set of observation for traverse
                     result <- c(result,
                                 meas.row(angle[anglerow.num,])
                                 )
@@ -194,6 +197,6 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
     ## Tail
     spec.C <- "\003"
     result <- c(result,
-                paste0(spec.C,"00000"))
+                paste0(spec.C,"00000")) # Save 0-s for disable checksum controll
     result
 }
