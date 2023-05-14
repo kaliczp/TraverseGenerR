@@ -48,7 +48,7 @@ export.m5 <- function(projectname = "Default", angle = NULL, coordinates = NULL)
                 )
     ## Processing coordinates
     if(!is.null(coordinates)) {
-        coo.only <- select.coordinates(oordinates)
+        coo.only <- select.coordinates(coordinates)
         for(coordrow.num in 1:nrow(coo.only)) {
             act.field1 <- paste0(align.field(coo.only[coordrow.num, "k"],
                                              width = 5,
