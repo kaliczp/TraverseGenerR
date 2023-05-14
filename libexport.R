@@ -18,6 +18,9 @@ select.coordinates <- function(allcordinates) {
 }
 
 align.field <- function(fieldtext, width, alignment = "left") {
+    if(is.numeric(fieldtext)) {
+        fieldtext <- round(fieldtext, 8)
+    }
     spaces <- paste0(rep(" ", width), collapse = "")
     if(alignment == "left") {
         textwithspace <- paste0(fieldtext, spaces)
