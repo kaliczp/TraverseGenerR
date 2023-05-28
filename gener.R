@@ -385,7 +385,7 @@ export.coo.gizi <- function(coordinates) {
 
 plot.traverse <- function(traverse, tofile = NULL, north = NULL) {
     if(!is.null(tofile)) {
-        if(diff(range(traverse$x)) < diff(range(traverse$x))) {
+        if(diff(range(traverse$x)) < diff(range(traverse$y))) {
             ## Portrait
             pdf(file = tofile, width = 3)
         } else {
