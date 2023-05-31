@@ -1,4 +1,4 @@
-export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL) {
+export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL, allcoords = FALSE) {
     ## Measurement processing function
     meas.row <- function(x) {
         ## Determine face
@@ -72,7 +72,7 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
         ## Coordinate header
         result <- c(result,
                     "13OOPOZ,Mind POZ")
-        coo.only <- select.coordinates(coordinates)
+        coo.only <- select.coordinates(coordinates, all = allcoords)
         for(coordrow.num in 1:nrow(coo.only)) {
             result <- c(result,
                         paste(c("08", # Type

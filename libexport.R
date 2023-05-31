@@ -1,9 +1,12 @@
-select.coordinates <- function(allcordinates) {
+select.coordinates <- function(allcordinates, all = FALSE) {
     ## Select op-s and first and last sp-s 
     orientation.rows  <- which(allcordinates$k == "op") # Orientation point row(s)
     ## Select first and last from sp rows
     sp.rows <- which(allcordinates$k == "sp")
     sp.firstlast <- sp.rows[c(1,length(sp.rows))]
+    if(all) {
+        selected.points <- 1:nrow(allcordinates)
+    } else {
     if(length(orientation.rows) > 0) {
         ## There are orientation point(s)
         selected.points <- c(orientation.rows,
@@ -13,6 +16,7 @@ select.coordinates <- function(allcordinates) {
     } else {
         warning("No op codes! Only first and last sp are selected!")
         selected.points <- sp.firstlast
+    }
     }
     allcordinates[selected.points, ]
 }
