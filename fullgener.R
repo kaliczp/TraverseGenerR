@@ -99,10 +99,10 @@ for(ttnev in 1:nrow(nevsor)) {
                         )
     ttres.full[nrow(ttres.full), "ihs"] <- ttres.full[nrow(ttres.full) - 1, "ihs"]
     ## Plot traverse with orientation and node
-    pdf(paste0(StudentFilename,".pdf"), width = 3)
+    pdf(paste0(StudentFilename,".pdf"))
     plot.traverse(tteszt.first, north = 0)
     ## Additional point plotted
-    lines(tteszt.addpt[-c(1,nrow(tteszt.addpt)), c("x","y")])
+    lines(tteszt.addpt[-c(1,nrow(tteszt.addpt)-c(1,0)), c("x","y")])
     points(tteszt.addpt[3:4, c("x","y")], pch = 4)
     text(tteszt.addpt[3:4, c("x","y")], lab=tteszt.addpt[3:4, "n"], adj=c(-0.2,0))
     text(tteszt.addpt[3:4, c("x","y")], lab=tteszt.addpt[3:4, "k"], adj=c(-0.2,1.2))
