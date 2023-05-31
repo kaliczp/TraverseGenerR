@@ -79,12 +79,17 @@ for(ttnev in 1:nrow(nevsor)) {
     addpt.df$z <- round(predict(topo.loess, addpt.df[,1:3]),3)
     tteszt.addpt <- rbind(tteszt[1:2,], addpt.df, tteszt[4,],
                           tteszt[c(nrow(tteszt)-2,nrow(tteszt)),])
-## wrong length in ins.height.range!!!!!
-    ttres.addpt <- meascalc(tteszt.addpt, ins.height.range = c(
-                                              ttres[1, "ihs"],
-                                              sample(1500:1600, 2)/1000,
-                                              ttres[c(4,nrow(ttres)), "ihs"]
-                                          )
+    ## Generated instrument heights
+    plusinsh <- sample(1390:1550, nrow(tteszt.addpt))/1000
+    ## Search identical instrument heights
+    for(ttpont in 1:nrow(tteszt.addpt)) {
+        ttaktpontnr <- tteszt.addpt[ttpont, "n"]
+        if(any(ttres$ns == ttaktpontnr)) {
+            ## Select ihs and unique in the case of two faces
+            plusinsh[ttpont] <- unique(ttres[ttres$ns == ttaktpontnr, "ihs"])
+        }
+    }
+    ttres.addpt <- meascalc(tteszt.addpt, ins.height.range = plusinsh
                             )
     ttres.full <- rbind(ttres.addpt[1:2,], # AP1 -> orient & AP1 -> add1
                         ttres[1:3,], # AP1 -> 100 ... to SP110
