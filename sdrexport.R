@@ -2,11 +2,7 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
     ## Measurement processing function
     meas.row <- function(x) {
         ## Determine face
-        if(x$fce == "I") {
-            face  <-  "F1"
-        } else {
-            face <- "F2"
-        }
+        face  <-  ifelse(x$fce == "I", "F1", "F2")
         ## Slope sist if NA
         if(is.na(x$d)) {
             sl.dist <- ""
