@@ -106,7 +106,7 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
                 result <- c(result,
                             paste(c("02", # Type
                                     "SC", # Derv
-                                    align.field(station.nr, width = 16), # Point ID
+                                    align.field(station.nr, width = 16,alignment = "right"), # Point ID
                                     align.field("", width = 16), # Northing
                                     align.field("", width = 16), # Easting
                                     align.field("", width = 16), # Elev
