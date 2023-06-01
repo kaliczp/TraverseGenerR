@@ -4,17 +4,9 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
         ## Determine face
         face  <-  ifelse(x$fce == "I", "F1", "F2")
         ## Slope sist if NA
-        if(is.na(x$d)) {
-            sl.dist <- ""
-        } else {
-            sl.dist <- x$d
-        }
+        sl.dist <- ifelse(is.na(x$d), "", x$d)
         ## If vertical observation is NA
-        if(is.na(x$z)) {
-            vert.angle <- ""
-        } else {
-            vert.angle <- x$z
-        }
+        vert.angle <- ifelse(is.na(x$z), "", x$z)
         ## Assemble row
         paste(c("09", # Type
                 face, # Derv
