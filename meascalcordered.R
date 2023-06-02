@@ -120,7 +120,7 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
                       h = hor.angle,
                       z = zenit.for,
                       d = slop.dist,
-                      k = coord$k[-1]
+                      k = coord$k[-nrow(coord)]
                       )
     back <- data.frame(ns = coord$n[-1],
                       ihs = ins.height[-1],
@@ -129,7 +129,7 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
                       h = hor.angle.back,
                       z = zenit.back,
                       d = slop.dist,
-                      k = coord$k[-nrow(coord)]
+                      k = coord$k[-1]
                       )
     result <- rbind(fore, back)
     ## Topo points if available
