@@ -98,11 +98,14 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
     if(!is.null(angle)) {
         station.nr <- -1
         last.target <- -1
+        topo <- TRUE # Measurement probably begins with orientation
         ## Processing measurement data frame
         for(anglerow.num in 1:nrow(angle)) {
             if(station.nr != angle[anglerow.num, "ns"]) {
                 ## New station STN
                 station.nr <- angle[anglerow.num, "ns"]
+                station.orient <- angle[anglerow.num, "nfb"] # station used for orientation
+                topo <- FALSE
                 result <- c(result,
                             paste(c("02", # Type
                                     "SC", # Derv
@@ -174,7 +177,23 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
                                 meas.row(angle[anglerow.num,])
                                 )
                 } else {
-                    ## Topo point measurement
+                    ## Topo point measurement first check is it the first in this station
+                    if(!topo) {
+                        topo <- TRUE
+                        ## Close traverse measurement
+                        result <- c(result,
+                                    paste(c("13", # Type
+                                            "AJ", # Derv
+                                            "Visszaszamit Haszn apk ",
+                                            station.nr,
+                                            " & ",
+                                            station.orient
+                                            ),
+                                          collapse = ""
+                                          )
+                                )
+                    }
+                    ## Save topo measurement
                     result <- c(result,
                                 meas.row(angle[anglerow.num,])
                                 )
