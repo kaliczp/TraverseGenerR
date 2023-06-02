@@ -256,7 +256,7 @@ twoface <- function(measdata) {
     colnames(result) <- meas.colnames
     for(row.num in 1:nrow(meas.face)){
         actualrow <- meas.face[row.num, ]
-        if(actualrow$k == "sp" | actualrow$k == "op") {
+        if(actualrow$k == "sp" | actualrow$k == "op" | actualrow$k == "ap" ) {
         ## Angles
         act.error <- abs(rnorm(2,sd=20))*10^(-6)
         actualrow$h  <- actualrow$h + act.error[1]
