@@ -1,8 +1,8 @@
 select.coordinates <- function(allcordinates, all = FALSE) {
     ## Select op-s and first and last sp-s 
     orientation.rows  <- which(allcordinates$k == "op") # Orientation point row(s)
-    ## Select first and last from sp rows
-    sp.rows <- which(allcordinates$k == "sp")
+    ## Select first and last from sp rows or ap rows
+    sp.rows <- which(allcordinates$k == "sp" | allcordinates$k == "ap")
     sp.firstlast <- sp.rows[c(1,length(sp.rows))]
     if(all) {
         selected.points <- 1:nrow(allcordinates)
