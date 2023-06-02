@@ -14,6 +14,23 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
         orient.df <- coord[orient.idx, ]
         coord <- coord[-orient.idx, ]
     }
+### Fixed point at the end with smaller number save and increase it
+    apname <- ifelse(any(coord$k == "ap"), TRUE, FALSE)
+    if(apname) {
+        ap.pos <- which(coord$k == "ap")
+        stopifnot(length(ap.pos) <= 2)
+        if(length(ap.pos) == 1) {
+            ap.mod <- ifelse(ap.pos == nrow(coord), ap.pos, NULL)
+        } else {
+            ap.mod <- ifelse(ap.pos[2] == nrow(coord), ap.pos[2], NULL)
+        }
+        if(!is.null(ap.mod)) {
+            new.ap.name <- max(coord$n) + 1
+            last.ap.names <- c(new.ap.name, coord[ap.mod, "n"])
+            coord[ap.mod, "n"] <- new.ap.name
+            warning("Controll ap-s number!")
+        }
+    }
 ### Topo point selection
     if(topo) {
         ## Are there topo points really?
@@ -203,6 +220,12 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
         }
     }
     result.ok <- result[order.res,]
+    if(apname) {
+        if(!is.null(ap.mod)) {
+            result.ok[result.ok$ns == last.ap.names[1], "ns"] <- last.ap.names[2]
+            result.ok[result.ok$nfb == last.ap.names[1], "nfb"] <- last.ap.names[2]
+        }
+    }
     ## Are there any negative angle?
     negh.row <- result.ok$h < 0
     if(any(negh.row)) {
