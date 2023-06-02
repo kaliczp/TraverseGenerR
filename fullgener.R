@@ -59,9 +59,20 @@ for(ttnev in 1:nrow(nevsor)) {
     ttres <- meascalc.ordered(travnoorot.eov, orient = FALSE, generror = TRUE, topo = FALSE)
 ##    write(export.geo.gizi(ttres), paste0(StudentFilename,".geo"), sep="\n")
 ##    write.csv2(travnoo.eov[travnoo.eov$k == "ap",], paste0(StudentFilename,"coo.csv"), row.names = FALSE)
-    ttres.degree <- ttres
-    ttres.degree$h <- angleconv(ttres.degree$h)
-    ttres.degree$z <- angleconv(ttres.degree$z)
+    if(nevsor[ttnev, "Meastype"] == "sdr") {
+        ttres.degree <- twoface(ttres)
+        ttres.degree$h <- angleconv(ttres.degree$h, output = "degree")
+        ttres.degree$z <- angleconv(ttres.degree$z, output = "degree")
+        write(paste0(export.sdr(angle =ttres.degree,coor = travnoorot.eov),"\r"), paste0(StudentFilename,".sdr"), sep="\n")
+    } else {
+        ttres.degree.dot <- twoface(ttres)
+        ttres.degree.dot$h <- angleconv(ttres.degree.dot$h, format = "dot", round.sec = 1)
+        ttres.degree.dot$z <- angleconv(ttres.degree.dot$z, format = "dot", round.sec = 1)
+    write(paste0(export.m5(paste0(StudentFilename,Sys.Date()), angle =ttres.degree.dot, coor = travnoorot.eov),"\r"), paste0(StudentFilename,".m5"), sep="\n")
+    }
+##        ttres.degree <- twoface(ttres)
+##        ttres.degree$h <- angleconv(ttres.degree$h)
+##        ttres.degree$z <- angleconv(ttres.degree$z)
 ##    write.csv2(ttres.degree, paste0(StudentFilename,"geo.csv"), row.names = FALSE, quot = FALSE)
 ######################################################################
 ### Orientation
