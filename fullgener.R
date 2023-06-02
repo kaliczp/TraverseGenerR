@@ -47,7 +47,6 @@ for(ttnev in 1:nrow(nevsor)) {
     ## Measurement generation
     ## Without orientation, old instrument
     trav.noorient <- tteszt[tteszt$k == "ap" | tteszt$k == "sp",]
-    plot.traverse(trav.noorient, tofile = paste0(StudentFilename,".pdf"))
     ## Traverse transformation
     travnoo.eov <- trav.noorient
     travnoo.eov$x <- round(travnoo.eov$x,3) + nevsor[ttnev, "easting"]
@@ -55,6 +54,7 @@ for(ttnev in 1:nrow(nevsor)) {
     travnoo.eov$z <- round(travnoo.eov$z,3)
     ## Rotate
     travnoorot.eov <- eovrotate(travnoo.eov, act.ang)
+    plot.traverse(travnoorot.eov, tofile = paste0(StudentFilename,".pdf"))
 ##    write(export.coo.gizi(travnoo.eov[travnoo.eov$k == "ap",]), paste0(StudentFilename,".coo"), sep="\n")
     ttres <- meascalc.ordered(travnoorot.eov, orient = FALSE, generror = TRUE, topo = FALSE)
 ##    write(export.geo.gizi(ttres), paste0(StudentFilename,".geo"), sep="\n")
