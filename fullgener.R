@@ -38,9 +38,9 @@ for(ttnev in 1:nrow(nevsor)) {
     topo.eov$y <- round(topo.eov$y,3) + nevsor[ttnev, "northing"]
     topo.eov$z <- round(topo.eov$z,3)
     ## Rotation
-    ## act.ang <- nevsor[ttnev, "Angle"]
-    ## topo.eov <- eovrotate(topo.eov, act.ang)
-    datgen(topo.eov[topo.eov$dat,], StudentFilename,
+    act.ang <- nevsor[ttnev, "Angle"]
+    toporot.eov <- eovrotate(topo.eov, act.ang)
+    datgen(toporot.eov[toporot.eov$dat,], StudentFilename,
            settlement = nevsor[ttnev, "Telep"],
            student = nevsor[ttnev, "Név"])
     ######################################################################
@@ -54,11 +54,9 @@ for(ttnev in 1:nrow(nevsor)) {
     travnoo.eov$y <- round(travnoo.eov$y,3) + nevsor[ttnev, "northing"]
     travnoo.eov$z <- round(travnoo.eov$z,3)
     ## Rotate
-    ## travnoo.eov <- eovrotate(travnoo.eov, act.ang)
-    ## travnoo.eov$x <- round(travnoo.eov$x,3)
-    ## travnoo.eov$y <- round(travnoo.eov$y,3)
+    travnoorot.eov <- eovrotate(travnoo.eov, act.ang)
 ##    write(export.coo.gizi(travnoo.eov[travnoo.eov$k == "ap",]), paste0(StudentFilename,".coo"), sep="\n")
-    ttres <- meascalc(travnoo.eov, orient = FALSE, generror = TRUE)
+    ttres <- meascalc.ordered(travnoorot.eov, orient = FALSE, generror = TRUE, topo = FALSE)
 ##    write(export.geo.gizi(ttres), paste0(StudentFilename,".geo"), sep="\n")
 ##    write.csv2(travnoo.eov[travnoo.eov$k == "ap",], paste0(StudentFilename,"coo.csv"), row.names = FALSE)
     ttres.degree <- ttres
