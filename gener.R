@@ -14,7 +14,7 @@ gener <- function(slope=6, firstnr = 100, angledist = NULL, fulldist = NULL, ox=
     frame$x <- frame$x + rnorm(nrow(frame), sd = 10)
     frame$y <- frame$y + rnorm(nrow(frame), sd = 5)
     frame$z <- -slope/100*frame$y
-    frame$k <- c("AP", rep("SP", segments.nr), "AP")
+    frame$k <- c("ap", rep("sp", segments.nr), "ap")
     fixpoints <- sort(sample(1:9,2))*10
     frame$n <- c(fixpoints[1], seq(firstnr, by = 10, length = segments.nr),
                  fixpoints[2])
@@ -24,7 +24,7 @@ gener <- function(slope=6, firstnr = 100, angledist = NULL, fulldist = NULL, ox=
         addtnl.df <- data.frame(x = addtnl["x"] + rnorm(1,sd = 5),
                                 y = addtnl["y"] + rnorm(1,sd = 5),
                                 z = addtnl["z"] + rnorm(1,sd = 5),
-                                k = "SPP",
+                                k = "spp",
                                 n = firstnr + 1)
         frame <- rbind(frame, addtnl.df)
     }
@@ -466,7 +466,7 @@ tteszt[2:(nrow(tteszt)-1), "z"] <- predict(topo.loess, data.frame(x=tteszt$x, y=
 points(tteszt[, c("x","y")], col=4)
 tteszt$x <- tteszt$x + 464800
 tteszt$y <- tteszt$y + 259400
-addpt.nr <- which(tteszt$k == "SPP")
+addpt.nr <- which(tteszt$k == "spp")
 tteszt.first <- tteszt[-addpt.nr, ]
 ttres <- meascalc(tteszt.first)
 tteszt.addpt <- rbind(tteszt[1:2,],tteszt[addpt.nr, ], tteszt[4,], tteszt[nrow(tteszt),])

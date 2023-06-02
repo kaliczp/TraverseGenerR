@@ -1,6 +1,6 @@
 ## Read in coordinates
 coo <- gizi.read("teszt.coo")
-coo[7, 1] <- "SP"
+coo[7, 1] <- "sp"
 coo[,"X37"] <- as.numeric(as.character(coo[,"X37"]))
 coo[,"X38"] <- as.numeric(as.character(coo[,"X38"]))
 coo[,"X39"] <- as.numeric(as.character(coo[,"X39"]))

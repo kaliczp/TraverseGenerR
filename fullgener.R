@@ -46,7 +46,7 @@ for(ttnev in 1:nrow(nevsor)) {
     ######################################################################
     ## Measurement generation
     ## Without orientation, old instrument
-    trav.noorient <- tteszt[tteszt$k == "AP" | tteszt$k == "SP",]
+    trav.noorient <- tteszt[tteszt$k == "ap" | tteszt$k == "sp",]
     plot.traverse(trav.noorient, tofile = paste0(StudentFilename,".pdf"))
     ## Traverse transformation
     travnoo.eov <- trav.noorient
@@ -57,10 +57,10 @@ for(ttnev in 1:nrow(nevsor)) {
     ## travnoo.eov <- eovrotate(travnoo.eov, act.ang)
     ## travnoo.eov$x <- round(travnoo.eov$x,3)
     ## travnoo.eov$y <- round(travnoo.eov$y,3)
-##    write(export.coo.gizi(travnoo.eov[travnoo.eov$k == "AP",]), paste0(StudentFilename,".coo"), sep="\n")
+##    write(export.coo.gizi(travnoo.eov[travnoo.eov$k == "ap",]), paste0(StudentFilename,".coo"), sep="\n")
     ttres <- meascalc(travnoo.eov, orient = FALSE, generror = TRUE)
 ##    write(export.geo.gizi(ttres), paste0(StudentFilename,".geo"), sep="\n")
-##    write.csv2(travnoo.eov[travnoo.eov$k == "AP",], paste0(StudentFilename,"coo.csv"), row.names = FALSE)
+##    write.csv2(travnoo.eov[travnoo.eov$k == "ap",], paste0(StudentFilename,"coo.csv"), row.names = FALSE)
     ttres.degree <- ttres
     ttres.degree$h <- angleconv(ttres.degree$h)
     ttres.degree$z <- angleconv(ttres.degree$z)
@@ -68,7 +68,7 @@ for(ttnev in 1:nrow(nevsor)) {
 ######################################################################
 ### Orientation
     ## Additional point plotted
-    addpt.nr <- which(tteszt$k == "SPP")
+    addpt.nr <- which(tteszt$k == "spp")
     tteszt.first <- tteszt[-addpt.nr, ]
     ## Another additional point
     addpt.df <- tteszt[addpt.nr, ]
@@ -108,7 +108,7 @@ for(ttnev in 1:nrow(nevsor)) {
     text(tteszt.addpt[3:4, c("x","y")], lab=tteszt.addpt[3:4, "k"], adj=c(-0.2,1.2))
     dev.off()
     ## Export.csv
-    trav.eov <- tteszt.addpt[tteszt.addpt$k == "AP" | tteszt.addpt$k == "OP",]
+    trav.eov <- tteszt.addpt[tteszt.addpt$k == "ap" | tteszt.addpt$k == "op",]
     trav.eov$x <- round(trav.eov$x,3) + nevsor[ttnev, "easting"]
     trav.eov$y <- round(trav.eov$y,3) + nevsor[ttnev, "northing"]
     trav.eov$z <- round(trav.eov$z,3)
@@ -181,11 +181,11 @@ for(ttnev in 1:nrow(nevsor)) {
     ttres.degree.dot <- ttres
     ttres.degree.dot$h <- angleconv(ttres.degree.dot$h, format = "dot", round.sec = 1)
     ttres.degree.dot$z <- angleconv(ttres.degree.dot$z, format = "dot", round.sec = 1)
-    write(paste0(export.m5(paste0(StudentFilename,Sys.Date()), angle =ttres.degree.dot, coor = travnoo.eov[travnoo.eov$k == "AP",]),"\r"), paste0(StudentFilename,".m5"), sep="\n")
+    write(paste0(export.m5(paste0(StudentFilename,Sys.Date()), angle =ttres.degree.dot, coor = travnoo.eov[travnoo.eov$k == "ap",]),"\r"), paste0(StudentFilename,".m5"), sep="\n")
 }
 
 ### Export to gizi
-trav.eov <- tteszt[tteszt$k == "AP" | tteszt$k == "OP",]
+trav.eov <- tteszt[tteszt$k == "ap" | tteszt$k == "op",]
 trav.eov$x <- round(trav.eov$x,3) + nevsor[ttnev, "easting"]
 trav.eov$y <- round(trav.eov$y,3) + nevsor[ttnev, "northing"]
 trav.eov$z <- round(trav.eov$z,3)
@@ -218,12 +218,12 @@ ttres.degree <- ttres
 ttres.degree$h <- angleconv(ttres.degree$h, format = "dot", round.sec = 1)
 ttres.degree$z <- angleconv(ttres.degree$z, format = "dot", round.sec = 1)
 
-write(paste0(export.m5(paste0("KaliczPéter",Sys.Date()), angle =ttres.degree, coor = travnoo.eov[travnoo.eov$k == "AP",]),"\r"), "data.m5", sep="\n")
+write(paste0(export.m5(paste0("KaliczPéter",Sys.Date()), angle =ttres.degree, coor = travnoo.eov[travnoo.eov$k == "ap",]),"\r"), "data.m5", sep="\n")
 
 ## Csomópont nem OK
 write(paste0(export.m5(paste0("KaliczPéter",Sys.Date()), angle =ttres.full.degree, coor = trav.eov),"\r"), "data.m5", sep="\n")
 
-export.m5(paste0("KaliczPéter",Sys.Date()), angle = ttres.degree, coor = travnoo.eov[travnoo.eov$k == "AP",])
+export.m5(paste0("KaliczPéter",Sys.Date()), angle = ttres.degree, coor = travnoo.eov[travnoo.eov$k == "ap",])
 
 ttfelmerall.df <- felmerall.df[,c(2:5,1),]
 names(ttfelmerall.df) <- c("x", "y", "z", "k", "n")
