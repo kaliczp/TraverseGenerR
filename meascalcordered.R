@@ -212,10 +212,17 @@ meascalc.ordered <- function(coord, ins.height.range = c(1.450, 1.620), orient =
         for(tti in 1:nrow(ori.fin)) {
             number.akt.orient.sp <- which(result$ns == ori.fin[tti,"ns"] & (result$k == "sp" | result$k == "ap" ))
             orient.place <- which(order.res == number.akt.orient.sp)
+            ## Calculate rows after orientation and determine order
+            if(length(order.res) == orient.place) {
+                order.res <- c(order.res[1:orient.place], # Rows until orientation station
+                               nrow(result) + 1 # Orientation measurement
+                               )
+            } else {
             order.res <- c(order.res[1:orient.place], # Rows until orientation station
                            nrow(result) + 1, # Orientation measurement
                            order.res[(orient.place + 1):length(order.res)] # Rows after orientation
                            )
+            }
             result <- rbind(result, ori.fin[tti,])
         }
     }
