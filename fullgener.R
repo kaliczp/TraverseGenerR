@@ -98,11 +98,11 @@ for(ttnev in 1:nrow(nevsor)) {
             plusinsh[ttpont] <- unique(ttres[ttres$ns == ttaktpontnr, "ihs"])
         }
     }
-    ttres.addpt <- meascalc(tteszt.addpt, ins.height.range = plusinsh
+    ttres.addpt <- meascalc.ordered(tteszt.addpt, ins.height.range = plusinsh
                             )
     ttres.full <- rbind(ttres.addpt[1:2,], # AP1 -> orient & AP1 -> add1
                         ttres[1:3,], # AP1 -> 100 ... to SP110
-                        ttres.addpt[c(3:6,8),], # additional points
+                        ttres.addpt[c(3:7),], # additional points
                         ttres[4:nrow(ttres),], # AP1 -> 100 ... to SP110
                         ttres.addpt[nrow(ttres.addpt),] # AP2 -> orient
                         )
