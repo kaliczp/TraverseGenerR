@@ -39,7 +39,8 @@ for(ttnev in 1:nrow(nevsor)) {
     topo.eov$z <- round(topo.eov$z,3)
     ## Rotation
     act.ang <- nevsor[ttnev, "Angle"]
-    toporot.eov <- eovrotate(topo.eov, act.ang)
+    toporot.eov <- eovrotate(topo.eov, act.ang,
+                             shiftcoo = data.frame(x=nevsor[ttnev,"easting"], y = nevsor[ttnev,"northing"]))
     datgen(toporot.eov[toporot.eov$dat,], StudentFilename,
            settlement = nevsor[ttnev, "Telep"],
            student = nevsor[ttnev, "Név"])
@@ -53,7 +54,8 @@ for(ttnev in 1:nrow(nevsor)) {
     travnoo.eov$y <- round(travnoo.eov$y,3) + nevsor[ttnev, "northing"]
     travnoo.eov$z <- round(travnoo.eov$z,3)
     ## Rotate
-    travnoorot.eov <- eovrotate(travnoo.eov, act.ang)
+    travnoorot.eov <- eovrotate(travnoo.eov, act.ang,
+                                shiftcoo = data.frame(x=nevsor[ttnev,"easting"], y = nevsor[ttnev,"northing"]))
     plot.traverse(travnoorot.eov, tofile = paste0(StudentFilename,".pdf"))
 ##    write(export.coo.gizi(travnoo.eov[travnoo.eov$k == "ap",]), paste0(StudentFilename,".coo"), sep="\n")
     ttres <- meascalc.ordered(travnoorot.eov, orient = FALSE, generror = TRUE, topo = FALSE)
@@ -118,9 +120,12 @@ for(ttnev in 1:nrow(nevsor)) {
     dev.off()
     ## Export.csv
     trav.eov <- tteszt.addpt[tteszt.addpt$k == "ap" | tteszt.addpt$k == "op",]
-    trav.eov$x <- round(trav.eov$x,3) + nevsor[ttnev, "easting"]
-    trav.eov$y <- round(trav.eov$y,3) + nevsor[ttnev, "northing"]
+    trav.eov$x <- trav.eov$x + nevsor[ttnev, "easting"]
+    trav.eov$y <- trav.eov$y + nevsor[ttnev, "northing"]
     trav.eov$z <- round(trav.eov$z,3)
+    ## Rotate
+    addpt.rot <- eovrotate(trav.eov, act.ang,
+                           shiftcoo = data.frame(x=nevsor[ttnev,"easting"], y = nevsor[ttnev,"northing"]))
 ##    write.csv2(trav.eov, paste0(StudentFilename,"coo.csv"), row.names = FALSE)
     ttres.full.degree <- ttres.full
     ttres.full.degree$h <- angleconv(ttres.full.degree$h)
