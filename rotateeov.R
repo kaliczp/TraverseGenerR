@@ -10,8 +10,8 @@ eovrotate <- function(x, degree = 10, shiftcoo = NULL) {
     shifted.coo$x <- shifted.coo$x - col.means["x"]
     shifted.coo$y <- shifted.coo$y - col.means["y"]
     } else {
-        shifted.coo$x <- shifted.coo$x - shiftcoo["x"]
-        shifted.coo$y <- shifted.coo$y - shiftcoo["y"]
+        shifted.coo$x <- shifted.coo$x - shiftcoo[,"x"]
+        shifted.coo$y <- shifted.coo$y - shiftcoo[,"y"]
     }
     temporary <- shifted.coo
     shifted.coo$x <- (temporary$x * cos(radian.angle)) -
