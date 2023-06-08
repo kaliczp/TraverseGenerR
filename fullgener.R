@@ -127,9 +127,20 @@ for(ttnev in 1:nrow(nevsor)) {
     addpt.rot <- eovrotate(trav.eov, act.ang,
                            shiftcoo = data.frame(x=nevsor[ttnev,"easting"], y = nevsor[ttnev,"northing"]))
 ##    write.csv2(trav.eov, paste0(StudentFilename,"coo.csv"), row.names = FALSE)
-    ttres.full.degree <- ttres.full
-    ttres.full.degree$h <- angleconv(ttres.full.degree$h)
-    ttres.full.degree$z <- angleconv(ttres.full.degree$z)
+    if(nevsor[ttnev, "Meastype"] == "sdr") {
+        ttres.degree <- twoface(ttres.full)
+        ttres.degree$h <- angleconv(ttres.degree$h, output = "degree")
+        ttres.degree$z <- angleconv(ttres.degree$z, output = "degree")
+        write(paste0(export.sdr(angle =ttres.degree,coor = addpt.rot),"\r"), paste0(StudentFilename,"node.sdr"), sep="\n")
+    } else {
+        ttres.degree.dot <- twoface(ttres.full)
+        ttres.degree.dot$h <- angleconv(ttres.degree.dot$h, format = "dot", round.sec = 1)
+        ttres.degree.dot$z <- angleconv(ttres.degree.dot$z, format = "dot", round.sec = 1)
+    write(paste0(export.m5(paste0(StudentFilename,Sys.Date()), angle =ttres.degree.dot, coor = travnoorot.eov),"\r"), paste0(StudentFilename,"node.m5"), sep="\n")
+    }
+    ## ttres.full.degree <- ttres.full
+    ## ttres.full.degree$h <- angleconv(ttres.full.degree$h)
+    ## ttres.full.degree$z <- angleconv(ttres.full.degree$z)
 ##    write.csv2(ttres.full.degree, paste0(StudentFilename,"geo.csv"), row.names = FALSE, quot = FALSE)
 ### Bose plus points
     Bose.df$y <- abs(Bose.df$y)
