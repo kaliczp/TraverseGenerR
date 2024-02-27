@@ -1,5 +1,6 @@
 nevsor <- read.csv2("nevsor.csv", strings = F)
 
+haz.lst <- list()
 for(ttnev in 1:nrow(nevsor)) {
     StudentFilename <- sub(" ", "",nevsor[ttnev, "Név"])
     set.seed(nevsor[ttnev, "seed"])
@@ -57,6 +58,7 @@ for(ttnev in 1:nrow(nevsor)) {
     ## Forgatás
     travfulltopo.rot <- eovrotate(travfulltopo, nevsor[ttnev, "Angle"])
     travfull.rot <- travfulltopo.rot[travfulltopo.rot$n < 1000,]
+    haz.lst[[ttnev]] <- travfulltopo.rot[travfulltopo.rot$n > 1000,1:2]
     ## 1 tájékozó és három SP
     ttres <- meascalc(travfulltopo.rot, orient = TRUE, generror = TRUE, topo = TRUE)
     ttres <- ttres[-nrow(ttres),]
@@ -71,26 +73,13 @@ for(ttnev in 1:nrow(nevsor)) {
     write(paste0(export.m5(paste0("Kalicz",Sys.Date()), angle =ttres.degree, coor = travfull.rot[c(1:2,4),]),"\r"), paste0(StudentFilename,".m5"), sep="\n")
 }
 
-plot(haz.pnum[,1:2], asp=T, xlim = c(-60, 150), ylim=c(0,hosszu+20), ask = TRUE)
-text(x = haz.pnum[,"x"], y = haz[,"y"], lab=row.names(haz), adj=c(0,1))
-points(travhaz[,1:2])
-points(travorient[,1:2])
-
 plot(travfull.rot[,1:2],asp=T)
 points(travfulltopo.rot[travfulltopo.rot$n > 1000,1:2])
 
-plot(haz.pnum[,1:2], asp=T, type="n")
-grid()
-text(haz.pnum$x, haz.pnum$y, haz.pnum$k)
-text(haz.pnum$x, haz.pnum$y, haz.pnum$n, adj=c(1,0))
-
-
-
-## GeoEasy teszt
-write(export.coo.gizi(travhaz[1:2,]), paste0(StudentFilename,".coo"), sep="\n")
-write(export.geo.gizi(ttres), paste0(StudentFilename,".geo"), sep="\n")
-
-## dat teszt
-plot(hazdat[,1:2], asp=T)
-text(hazdat[,1], hazdat[,2], row.names(hazdat), adj=c(0,1))
-
+pdf(paper = "a4")
+par(mfrow = c(3,6), mar = c(0,0,0,0))
+for(ttnev in 1:length(haz.lst)) {
+    plot(haz.lst[[ttnev]][c(1:2,4:3,1),], type = "l", axes = FALSE, asp = TRUE, xlab = "", ylab = "")
+    legend("bottomleft", legend = nevsor[ttnev, "Név"], bty = "n")
+}
+dev.off()
