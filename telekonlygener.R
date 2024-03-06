@@ -1,9 +1,15 @@
 nevsor <- read.csv2("nevsor.csv", strings = F)
 
+muszer <- "sokkia" # "sokkia" vagy "trimble"
+
 haz.lst <- list()
 for(ttnev in 1:nrow(nevsor)) {
     StudentFilename <- sub(" ", "",nevsor[ttnev, "Név"])
-    set.seed(nevsor[ttnev, "seed"])
+    if(muszer == "sokkia") {
+        set.seed(nevsor[ttnev, "seed"] + 100)
+    } else {
+        set.seed(nevsor[ttnev, "seed"])
+    }
     ## Alap magasság
     magas <- sample((9:13)*10,1)
     ## Telek hossza, széle
@@ -64,13 +70,26 @@ for(ttnev in 1:nrow(nevsor)) {
     ttres <- ttres[-nrow(ttres),]
     ## Szög konvertálás
     ttres.degree <- ttres
+    if(muszer == "sokkia") {
+        ttres.degree <- twoface(ttres.degree)
+        ttres.degree$h <- angleconv(ttres.degree$h, output = "degree", round.sec = 1)
+        ttres.degree[-1,"z"] <- angleconv(ttres.degree[-1,"z"], output = "degree", round.sec = 1)
+    } else {
     ttres.degree$h <- angleconv(ttres.degree$h, format = "dot", round.sec = 1)
     ttres.degree[-1,"z"] <- angleconv(ttres.degree[-1,"z"], format = "dot", round.sec = 1)
+    }
     ttres.degree[1,"z"] <- NA
     ## Magassági hiba
     travfull$z <- round(travfull.rot$z + rnorm(nrow(travfull.rot), sd = 0.007),3)
     ## Exportálás
-    write(paste0(export.m5(paste0("Kalicz",Sys.Date()), angle =ttres.degree, coor = travfull.rot[c(1:2,4),]),"\r"), paste0(StudentFilename,".m5"), sep="\n")
+    if(muszer == "sokkia") {
+        meres <- export.sdr(angle =ttres.degree,coor = travfull.rot[c(1:2,4),])
+        kiterj <- ".sdr"
+    } else {
+        meres <- export.m5(paste0("Kalicz",Sys.Date()), angle =ttres.degree, coor = travfull.rot[c(1:2,4),])
+        kiterj <- ".m5"
+        }
+    write(paste0(meres,"\r"), paste0(StudentFilename, kiterj), sep="\n")
 }
 
 plot(travfull.rot[,1:2],asp=T)
