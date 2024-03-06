@@ -21,11 +21,11 @@ select.coordinates <- function(allcordinates, all = FALSE) {
     allcordinates[selected.points, ]
 }
 
-align.field <- function(fieldtext, width, alignment = "left") {
+align.field <- function(fieldtext, width, alignment = "left", fill.with = " ") {
     if(is.numeric(fieldtext)) {
         fieldtext <- round(fieldtext, 8)
     }
-    spaces <- paste0(rep(" ", width), collapse = "")
+    spaces <- paste0(rep(fill.with, width), collapse = "")
     if(alignment == "left") {
         textwithspace <- paste0(fieldtext, spaces)
         aligned <- substr(textwithspace, 1, width)
