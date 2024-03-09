@@ -62,7 +62,8 @@ for(ttnev in 1:nrow(nevsor)) {
     travfulltopo <- rbind(travfull[1:3,], haz.pnum[1:2,], travfull[4,],haz.pnum[3:4,])
     row.names(travfulltopo) <- NULL
     ## Forgatás
-    travfulltopo.rot <- eovrotate(travfulltopo, nevsor[ttnev, "Angle"])
+    forgscale <- ifelse(muszer == "sokkia", -1.1, 1)
+    travfulltopo.rot <- eovrotate(travfulltopo, forgscale * nevsor[ttnev, "Angle"])
     travfull.rot <- travfulltopo.rot[travfulltopo.rot$n < 1000,]
     haz.lst[[ttnev]] <- travfulltopo.rot[travfulltopo.rot$n > 1000,1:2]
     ## 1 tájékozó és három SP
