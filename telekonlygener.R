@@ -1,14 +1,13 @@
 nevsor <- read.csv2("nevsor.csv", strings = F)
 
-muszer <- "sokkia" # "sokkia" vagy "trimble"
-
 haz.lst <- list()
 for(ttnev in 1:nrow(nevsor)) {
+    muszer <- nevsor[ttnev, "Meastype"]
     StudentFilename <- sub(" ", "",nevsor[ttnev, "Név"])
     if(muszer == "sokkia") {
-        set.seed(nevsor[ttnev, "seed"] + 100)
+        set.seed(nevsor[ttnev, "seed"] + 30)
     } else {
-        set.seed(nevsor[ttnev, "seed"])
+        set.seed(nevsor[ttnev, "seed"] + 20)
     }
     ## Alap magasság
     magas <- sample((9:13)*10,1)
@@ -91,6 +90,7 @@ for(ttnev in 1:nrow(nevsor)) {
         kiterj <- ".m5"
         }
     write(paste0(meres,"\r"), paste0(StudentFilename, kiterj), sep="\n")
+    write.table(haz.lst[[ttnev]], paste0(StudentFilename, ".csv"), eol= "\r\n", quot = FALSE, row=FALSE, sep = ";", dec = ",")
 }
 
 plot(travfull.rot[,1:2],asp=T)
