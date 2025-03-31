@@ -1,5 +1,11 @@
 nevsor <- read.csv2("nevsor.csv", strings = F)
 
+## Szomszeddal sdr-be átírva
+szomszed <- TRUE
+nevsor$seed <- nevsor$seed + 1
+nevsor$easting <- nevsor$easting + 50
+nevsor$northing <- nevsor$northing + 50
+
 haz.lst <- list()
 for(ttnev in 1:nrow(nevsor)) {
     muszer <- nevsor[ttnev, "Meastype"]
@@ -17,6 +23,13 @@ for(ttnev in 1:nrow(nevsor)) {
     haz <- data.frame(x=rep(0,4), y=rep(0,4), z=rep(magas,4))
     haz[2:3,"x"] <- szeles
     haz[3:4,"y"] <- hosszu
+    ## Szomszéd telkek
+    if(szomszed) {
+        haz[5,"x"] <- round(haz[4,"x"] - szeles + rnorm(1),2)
+        haz[6,"x"] <- round(haz[3,"x"] + szeles + rnorm(1),2)
+        haz[5:6,"y"] <- hosszu
+        haz[5:6,"z"] <- magas
+    }
     haz$k  <- "t"
     ## z random
     haz[,"z"] <- round(haz[,"z"] + rnorm(nrow(haz), sd=.1), 3)
@@ -58,7 +71,11 @@ for(ttnev in 1:nrow(nevsor)) {
     ## Északról délre növekvő a pontszám miatt
     haz.pnum <- haz[order(haz$y, decreasing = TRUE),]
     haz.pnum$n <- 1001:(1001 + nrow(haz.pnum) - 1)
+    if(szomszed){
+        travfulltopo <- rbind(travfull[1:3,], haz.pnum[1:4,], travfull[4,],haz.pnum[5:6,])
+    } else {
     travfulltopo <- rbind(travfull[1:3,], haz.pnum[1:2,], travfull[4,],haz.pnum[3:4,])
+    }
     row.names(travfulltopo) <- NULL
     ## Forgatás
     forgscale <- ifelse(muszer == "sokkia", -1.1, 1)
