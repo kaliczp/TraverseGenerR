@@ -36,7 +36,8 @@ export.sdr <- function(projectname = "Default", angle = NULL, coordinates = NULL
                         "NM", # Derv
                         align.field("SDR33  V04-04.26", width = 16), # Ver
                         align.field("", width = 4), # serial number
-                        align.field("05-Mar-24 21:35", width = 16), # date-time
+                        align.field(format(Sys.time(), format = "%y-%m-%d %H:%M"),
+                                    width = 16), # date-time
                         "111121" # options
                         ),
                       collapse = ""
