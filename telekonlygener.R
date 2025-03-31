@@ -93,8 +93,8 @@ for(ttnev in 1:nrow(nevsor)) {
     write.table(haz.lst[[ttnev]], paste0(StudentFilename, ".csv"), eol= "\r\n", quot = FALSE, row=FALSE, sep = ";", dec = ",")
 }
 
-plot(travfull.rot[,1:2],asp=T)
-points(travfulltopo.rot[travfulltopo.rot$n > 1000,1:2])
+plot(travfull.rot[,1:2],asp=T, ylim = quantile(travfulltopo.rot$y, probs = c(0,1)))
+points(travfulltopo.rot[travfulltopo.rot$n > 1000,1:2], col = 2)
 
 pdf(paper = "a4")
 par(mfrow = c(3,6), mar = c(0,0,0,0))
