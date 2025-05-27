@@ -1,4 +1,5 @@
 ## Practice stakeout
+## Before use import sdrexport.R and libexport.R scripts!
 ## Required list
 ##        x        y      z  k    n
 ## 460975.9 253431.6 79.995 sp  100
