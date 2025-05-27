@@ -7,4 +7,5 @@
 kituz <- read.csv("NagyGyak/1_CS_kituz.txt", head = FALSE)
 kituzok <- kituz[, c(2,3,4,5,1)]
 names(kituzok) <- c("x", "y", "z", "k", "n")
-write(paste0(export.sdr("1_CS_kituz", coor = kituzok, allcoords = TRUE),"\r"), paste0(StudentFilename,".sdr"), sep="\n")
+Projectname <- "2CSKIT"
+write(paste0(export.sdr(Projectname, coor = kituzok, allcoords = TRUE),"\r"), paste0(Projectname,".sdr"), sep="\n")
