@@ -1,0 +1,3 @@
+* Synthetic Surveying Data Generator for Total Station Training
+
+R software for Complex Field Training course.
