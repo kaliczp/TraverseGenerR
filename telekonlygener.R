@@ -9,7 +9,7 @@ nevsor$northing <- nevsor$northing + 50
 haz.lst <- list()
 for(ttnev in 1:nrow(nevsor)) {
     muszer <- nevsor[ttnev, "Meastype"]
-    StudentFilename <- sub(" ", "",nevsor[ttnev, "Név"])
+    StudentFilename <- gsub(" ", "",nevsor[ttnev, "Név"])
     if(muszer == "sokkia") {
         set.seed(nevsor[ttnev, "seed"] + 30)
     } else {
