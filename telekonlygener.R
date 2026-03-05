@@ -114,7 +114,7 @@ plot(travfull.rot[,1:2],asp=T, ylim = quantile(travfulltopo.rot$y, probs = c(0,1
 points(travfulltopo.rot[travfulltopo.rot$n > 1000,1:2], col = 2)
 
 pdf(paper = "a4")
-par(mfrow = c(3,6), mar = c(0,0,0,0))
+par(mfrow = c(4,6), mar = c(0,0,0,0))
 for(ttnev in 1:length(haz.lst)) {
     plot(haz.lst[[ttnev]][c(1:2,4:3,1),], type = "l", axes = FALSE, asp = TRUE, xlab = "", ylab = "")
     legend("bottomleft", legend = nevsor[ttnev, "Név"], bty = "n")
