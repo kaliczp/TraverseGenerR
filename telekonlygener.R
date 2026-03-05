@@ -1,10 +1,10 @@
 nevsor <- read.csv2("nevsor.csv", strings = F)
 
 ## Szomszeddal sdr-be átírva
-szomszed <- TRUE
-nevsor$seed <- nevsor$seed + 1
-nevsor$easting <- nevsor$easting + 50
-nevsor$northing <- nevsor$northing + 50
+szomszed <- FALSE
+## nevsor$seed <- nevsor$seed + 1 # Ha kell
+nevsor$easting <- nevsor$easting + 150
+nevsor$northing <- nevsor$northing + 150
 
 haz.lst <- list()
 for(ttnev in 1:nrow(nevsor)) {
