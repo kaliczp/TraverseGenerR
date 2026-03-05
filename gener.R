@@ -1,4 +1,7 @@
+gener.test <- FALSE
+if(gener.test){
 newcoo <- coo[10:9,]
+}
 
 gener <- function(slope=6, firstnr = 100, angledist = NULL, fulldist = NULL, ox=464800,oy=259400, oz=250, orient = c(1,1), additional = TRUE){
     if(is.null(fulldist))
@@ -52,11 +55,12 @@ gener <- function(slope=6, firstnr = 100, angledist = NULL, fulldist = NULL, ox=
     frame
 }
 
+if(gener.test){
 tteszt <- gener()
 plot(tteszt[,1:2], asp=TRUE)
 
-
 write.csv(tteszt, "newteszt.csv", row.names = FALSE, quote = FALSE)
+}
 
 meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, generror = FALSE, topo = FALSE, topo.target.height = 1.7) {
     if(orient) {
@@ -245,8 +249,9 @@ meascalc <- function(coord, ins.height.range = c(1.450, 1.620), orient = TRUE, g
     result.ok
 }
 
+if(gener.test){
 (ttres <- meascalc(tteszt))
-
+}
 
 twoface <- function(measdata) {
     meas.face <- cbind(measdata[,1:4], fce = NA, measdata[, 5:ncol(measdata)])
@@ -286,10 +291,13 @@ twoface <- function(measdata) {
     result$z  <- bigangle(result$z)
     result
 }
+
+if(gener.test){
 ttface <- twoface(ttres)
 
 ttres$h <- angleconv(ttres$h)
 ttres$z <- angleconv(ttres$z)
+}
 
 angleconv <- function(angle, round.sec = 0, input = "radian", output = "sexagesimal", format = "dash") {
     if(input == "radian") {
@@ -450,6 +458,7 @@ plot.traverse <- function(traverse, tofile = NULL, north = NULL) {
         dev.off()
 }
 
+if(gener.test){
 ## Initial traverse
 tteszt <- gener(orient=c(0,0),firstnr=200,additional=FALSE)
 ttres <- meascalc(tteszt)
@@ -493,3 +502,4 @@ topo.eov$x <- round(topo.eov$x,3) + 464800
 topo.eov$y <- round(topo.eov$y,3) + 259400
 topo.eov$z <- round(topo.eov$z,3)
 datgen(topo.eov[topo.eov$dat,], "tesztfile")
+}
