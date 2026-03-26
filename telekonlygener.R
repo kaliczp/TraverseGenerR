@@ -107,7 +107,7 @@ for(ttnev in 1:nrow(nevsor)) {
         kiterj <- ".m5"
         }
     write(paste0(meres,"\r"), paste0(StudentFilename, kiterj), sep="\n")
-    write.table(haz.lst[[ttnev]], paste0(StudentFilename, ".csv"), eol= "\r\n", quot = FALSE, row=FALSE, sep = ";", dec = ",")
+    write.table(haz.lst[[ttnev]], paste0(StudentFilename, ".csv"), eol= "\r\n", quot = FALSE, row=FALSE, sep = ";", dec = ".")
 }
 
 plot(travfull.rot[,1:2],asp=T, ylim = quantile(travfulltopo.rot$y, probs = c(0,1)))
